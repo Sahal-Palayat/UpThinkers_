@@ -1,7 +1,7 @@
 import {} from 'react'
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
-import LoginPage from './Assets/UserLogin/LoginPage'
-import RegisterPage from './Assets/UserRegister/RegisterPage'
+import LoginPage from './Assets/User/UserLogin/LoginPage' 
+import RegisterPage from './Assets/User/UserRegister/RegisterPage' 
 
 
 function App() {

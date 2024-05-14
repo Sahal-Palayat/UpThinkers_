@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -32,28 +9,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterUser = void 0;
-const Validations = __importStar(require("../validations/UserValidations"));
-const ResponseFunctions = __importStar(require("../responses/Response/UserResponse"));
-const Repository = __importStar(require("../repository/User/UserRepository"));
-const RegisterUser = (_a) => __awaiter(void 0, [_a], void 0, function* ({ FirstName, LastName, Email, Mobile, Password }) {
-    try {
-        const errors = yield Validations.RegisterValidate({ FirstName, LastName, Email, Mobile, Password });
-        if (errors.length > 0) {
-            return ResponseFunctions.SignupRes({
-                errors: errors,
-                status: 201,
-                message: 'Invalid dataaaas'
-            });
-        }
-        return yield Repository.RegisterRepository({ FirstName, LastName, Email, Mobile, Password });
+exports.UserInteractorImpl = void 0;
+class UserInteractorImpl {
+    constructor(Repository, mailer) {
+        this.Repository = Repository;
+        this.mailer = mailer;
     }
-    catch (error) {
-        return {
-            errors: [],
-            message: 'Internal Server Error 1',
-            status: 500
-        };
+    register(userData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newUser = {
+                    FirstName: userData.FirstName,
+                    Email: userData.Email,
+                    Mobile: userData.Mobile,
+                    Password: userData.Password,
+                    CreatedAt: new Date()
+                };
+                console.log(newUser);
+                const { user, token } = yield this.Repository.save(newUser);
+                return { user, token };
+            }
+            catch (error) {
+                console.error('Error during signup:', error);
+                throw error;
+            }
+        });
     }
-});
-exports.RegisterUser = RegisterUser;
+    sendMail(signupData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('2', signupData);
+            const email = signupData.Email;
+            const userExists = yield this.Repository.userExists(email);
+            if (userExists) {
+                return { userExists: true, isMailSent: false };
+            }
+            try {
+                const { otp, success } = yield this.mailer.sendMail(email);
+                if (success) {
+                    const saveToDB = yield this.Repository.saveToDB(signupData, otp);
+                    return { userExists: false, isMailSent: true };
+                }
+                else {
+                    return { userExists: false, isMailSent: false };
+                }
+            }
+            catch (error) {
+                console.error('Error sending email:', error);
+                return { userExists: false, isMailSent: false };
+            }
+        });
+    }
+    verifyOtp(otp) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const isUser = yield this.Repository.verifyotp(otp);
+                if (isUser) {
+                    const { user, token } = yield this.Repository.save(isUser);
+                    if (user) {
+                        return { success: true, token };
+                    }
+                }
+                return { success: false, token: null };
+            }
+            catch (error) {
+                console.log(error);
+                return { success: false, token: null };
+            }
+        });
+    }
+}
+exports.UserInteractorImpl = UserInteractorImpl;

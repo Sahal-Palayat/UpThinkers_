@@ -1,56 +1,34 @@
 import nodemailer from 'nodemailer';
 import { Mailer, MailerInterface } from '../../config/mailer';
 
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: <MailerInterface>Mailer
-})
-
-
-export const SendVerificationLink: Function = async (Email: string, VerificationLink: string): Promise<boolean> => {
-
-    try {
-
-        const text = "Welcome to upthinkers learning hub.";
-        const footer = `Link : ${VerificationLink}. link will be expired `
-
-        const mailOptions = {
-            from: Mailer.user,
-            to: Email,
-            subject: "Welcome to upthinkers learning hub",
-            text: text,
-            html: footer
+async function sendMail(email: string,otp: string): Promise <{success:boolean}>{
+    const transporter=nodemailer.createTransport({
+        service :'Gmail',
+        auth:{
+            user:Mailer.user,
+            pass:Mailer.pass,
+        },
+        tls:{
+            rejectUnauthorized:false,
         }
+    })
 
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error('error sending mail', error.message);
-                return false
-            }
-            console.log('email successfully sent', info.response);
-
-        })
-
-        return true;
-
+    const mailOptions={
+        from : Mailer.user,
+        to: email,
+        subject: 'Heyy.. this is registration otp for UpThinkers',
+        text: `Your OTP is ${otp}`
+    }
+    try {
+        const info=await transporter.sendMail(mailOptions)
+        return {success:true}
+        
     } catch (error) {
-        console.log(error);
-        return false
+        console.error("Error sending email: ", error);
+        return { success: false };
         
     }
-
 }
 
-const htmlSender: Function= (OTP:number ,text:string ):string=> {
-    return `
-        <html>
-        <body>
-        <center><p style='text-decoration:underline'>OTP For Login Verification</p></center>
-            <center><h1 style="font-size: 36px; color: #ff0000;">${OTP}</h1></center>
-            <p>${text}</p>
-        </body>
-        </html>
-    `;
 
-}
+export default sendMail;

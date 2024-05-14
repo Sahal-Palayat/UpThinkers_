@@ -8,17 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateById = exports.insertData = exports.findOneData = void 0;
-const findOneData = (Db, query) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Db.findOne(query);
-});
-exports.findOneData = findOneData;
-const insertData = (Db, data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Db.insertMany(data);
-});
-exports.insertData = insertData;
-const updateById = (Db, id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Db.findByIdAndUpdate(id, { $set: data });
-});
-exports.updateById = updateById;
+exports.MailerImp = void 0;
+const CommonFunctions_1 = require("../functions/CommonFunctions");
+const SendMail_1 = __importDefault(require("../functions/SendMail"));
+class MailerImp {
+    sendMail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const otp = (0, CommonFunctions_1.genRandomOtp)();
+            const result = yield (0, SendMail_1.default)(email, otp);
+            return { otp: otp, success: result.success };
+        });
+    }
+}
+exports.MailerImp = MailerImp;

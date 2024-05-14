@@ -1,79 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import logo from '../../../public/logoo-removebg-preview.png'
-import { ErrorForm, RegisterForm, RegisterValidate } from './RegisterInterface'
-import { validateForm } from './Validations'
-import { useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie';
+import React from 'react'
+import * as logo from '/logoo.png'
 
+function LoginPage() {
 
-
-
-
-const validate: Function = ({ Form, errors, setErrors }: any) => {
-    const response: RegisterValidate = validateForm(Form)
-    if (!response.status) {
-        const error: ErrorForm = response.ErrorForm;
-        if (error.Main) {
-            setErrors({ ...errors, Main: error.Main });
-            return false;
-        }
-        setErrors(error);
-        return false;
-    }
-    return true
-}
-
-
-
-
-
-
-const RegisterPage: React.FC = () => {
-
-    const navigate = useNavigate()
-    // useEffect(()=>{
-    //     const token = Cookies.get('token')
-    //     if(token){
-    //         dispatch(AuthUser({token})).then((state:any)=>{
-    //             if (state.payload.user) {
-    //                 navigate('/')
-    //             }
-    //         })
-    //     }
-    // },[])
-
-    const [Form, SetForm] = useState<RegisterForm>({
-        Name: "",
-        Email: "",
-        Password: "",
-        Mobile: null,
-        ConfirmPassword: ""
-    });
-    const [errors, setErrors] = useState<ErrorForm>({
-        Name: "",
-        Email: "",
-        Password: "",
-        Mobile: '',
-        ConfirmPassword: "",
-        Main: ""
-    });
 
 
 
     return (
-        <div className="h-screen bg-gray-100 text-gray-900 flex justify-center">
+        <div className="h-screen  bg-gray-100 overflow-hidden text-gray-900 flex justify-center">
             <div className="w-full  bg-white shadow sm:rounded-lg flex h-full  justify-center flex-1">
-                <div className="flex-1 text-center hidden lg:flex bg-contain bg-center bg-no-repeat " style={{ backgroundImage: "url('https://st.depositphotos.com/1015530/4696/i/450/depositphotos_46963461-stock-photo-little-boy-is-reading-a.jpg')" }}>
-
-
-                </div>
-                <div className="lg:w-1/2 xl:w-5/12 p-2 sm:p-12 ">
+                <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
                     <div>
                         <img src={logo} className="w-mx-auto" alt="Logo" style={{ width: '30%' }} />
                     </div>
-                    <div className="mt-7 flex flex-col items-start">
-                        <div className="w-full flex-1 justify-start items-start mt-4">
-                            <div className="flex flex-col items-start">
+                    <div className="mt-12 flex flex-col items-center">
+                        <div className="w-full flex-1 mt-8">
+                            <div className="flex flex-col items-center">
                                 <button
                                     className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-green-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                                     <div className="bg-white p-2 rounded-full">
@@ -99,26 +41,17 @@ const RegisterPage: React.FC = () => {
 
                             </div>
 
-                            <div className="my-12  text-start">
+                            <div className="mt-12 mb-7 border-b text-center">
                                 <div
-                                    className="leading-none px-2 ps-12 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
+                                    className="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
                                     Or sign In with Cartesian E-mail
                                 </div>
                             </div>
 
-                            <div className="justify-start max-w-xs">
+                            <div className="mx-auto max-w-xs">
                                 <input
                                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                    type="name" placeholder="Name" />
-                                <input
-                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                                     type="email" placeholder="Email" />
-                                <input
-                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    type="password" placeholder="Password" />
-                                <input
-                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    type="confirmPassword" placeholder="ConfirmPassword" />
                                 <input
                                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                                     type="password" placeholder="Password" />
@@ -148,10 +81,13 @@ const RegisterPage: React.FC = () => {
                         </div>
                     </div>
                 </div>
+                <div className="flex-1 text-center hidden lg:flex bg-no-repeat " style={{ backgroundImage: "url('https://www.goodnewsplanners.com/wp-content/uploads/2020/03/Kid_coloring.jpg')" }}>
+                    
 
+                </div>
             </div>
         </div>
     )
 }
 
-export default RegisterPage
+export default LoginPage

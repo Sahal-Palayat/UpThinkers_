@@ -13,5 +13,5 @@ const userSchema = new mongoose_1.Schema({
     UpdatedAt: Date,
     wishlist: []
 });
-const User = (0, mongoose_1.model)('users', userSchema);
-exports.default = User;
+const UserModel = (0, mongoose_1.model)('users', userSchema);
+exports.default = UserModel;
