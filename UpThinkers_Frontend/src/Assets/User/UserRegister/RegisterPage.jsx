@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import * as logo from '../../../../public/logoo.png'
+import logo from '/logoo.png'
 import { useNavigate } from 'react-router-dom'
 import { toast,ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
@@ -24,8 +24,8 @@ const RegisterPage = () => {
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
 
-    // const navigate = useNavigate()
-    // const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [userData, setUserData] = useState({
         next: false,
@@ -102,7 +102,7 @@ const RegisterPage = () => {
         if(!hasError){
             try {
                 console.log('vannnnn');
-                const response= await fetch('http://localhost:3030/user/sendMail',{
+                const response= await fetch('http://localhost:3030/sendMail',{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

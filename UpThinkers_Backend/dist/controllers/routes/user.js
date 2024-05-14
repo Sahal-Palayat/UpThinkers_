@@ -11,7 +11,7 @@ const mailer = new mailer_1.MailerImp();
 const interactor = new User_1.UserInteractorImpl(repository, mailer);
 const controller = new UserController_1.UserController(interactor);
 userRouter.post('/register', controller.register.bind(controller));
-userRouter.post('sendMail', controller.sendMail.bind(controller));
-userRouter.post('verifyOtp', controller.verifyOtp.bind(controller));
+userRouter.post('/sendMail', controller.sendMail.bind(controller));
+userRouter.post('/verifyOtp', controller.verifyOtp.bind(controller));
 // userRouter.post('/login')  
 exports.default = userRouter;
