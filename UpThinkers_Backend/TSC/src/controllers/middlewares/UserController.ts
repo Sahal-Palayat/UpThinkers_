@@ -9,10 +9,10 @@ export class UserController {
 
         try {
 
-            const { FirstName, Email, Mobile, Password } = req.body
+            const { name, email, mobile, password } = req.body
             console.log('bodyyy', req.body);
 
-            const { user, token } = await this.interactor.register({ FirstName, Password, Email, Mobile })
+            const { user, token } = await this.interactor.register({ Name:name, Password:password,Email: email,Mobile: mobile })
             console.log(user, token, 'returningggggg');
 
             res.status(200).json({ message: 'Signup successful', user, token })
@@ -25,8 +25,10 @@ export class UserController {
     async sendMail(req: Request, res: Response, next: NextFunction) {
         try {
           
-            console.log('ethi',req.body.email);
+            
             const signupData= req.body
+            console.log(req.body,'firsttttttttttttttt');
+            
             const { userExists, isMailSent } = await this.interactor.sendMail(signupData)
 
             if(userExists){
@@ -47,8 +49,6 @@ export class UserController {
         try {
             console.log('0000000')
             const {otp }=req.body
-            console.log(otp);
-            
             const {success,token}=await this.interactor.verifyOtp(otp)
             if(success){
                 res.status(200).json({success:true,message:'otp verification success',token})
@@ -59,6 +59,35 @@ export class UserController {
         } catch (error) {
             console.error('Error verifying OTP:', error);
             res.status(500).json({ success: false, message: 'Internal server error.' });
+        }
+    }
+
+
+    async login(req: Request, res: Response,next: NextFunction){
+        try {
+            console.log('entered login controller',req.body);
+
+            const {email,password}=req.body;
+            console.log(email,password);
+
+
+            const {user,message,token,refreshToken}= await this.interactor.login({email:email,password:password})
+            
+            if(user){
+                console.log('cntrllr user',user,token,refreshToken);
+                res.status(200).json({message:'Login Succefull',user,token:token,refreshToken})
+                
+            }else{
+                console.log('1111 no userrrr');
+
+                res.status(401).json({ message: message });
+            }
+
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
+            
         }
     }
 

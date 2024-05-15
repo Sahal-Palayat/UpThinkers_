@@ -10,16 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserInteractorImpl = void 0;
+const CommonFunctions_1 = require("../functions/CommonFunctions");
 class UserInteractorImpl {
     constructor(Repository, mailer) {
         this.Repository = Repository;
         this.mailer = mailer;
+        // this.Repository.save()
     }
     register(userData) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const newUser = {
-                    FirstName: userData.FirstName,
+                    Name: userData.Name,
                     Email: userData.Email,
                     Mobile: userData.Mobile,
                     Password: userData.Password,
@@ -40,11 +42,13 @@ class UserInteractorImpl {
             console.log('2', signupData);
             const email = signupData.email;
             const userExists = yield this.Repository.userExists(email);
+            console.log(userExists, "userData");
             if (userExists) {
                 return { userExists: true, isMailSent: false };
             }
             try {
                 const { otp, success } = yield this.mailer.sendMail(email);
+                console.log(otp);
                 if (success) {
                     const saveToDB = yield this.Repository.saveToDB(signupData, otp);
                     return { userExists: false, isMailSent: true };
@@ -74,6 +78,23 @@ class UserInteractorImpl {
             catch (error) {
                 console.log(error);
                 return { success: false, token: null };
+            }
+        });
+    }
+    login(credentials) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log('userloginn');
+                console.log(credentials.email);
+                console.log(credentials.password);
+                const { user, message, token } = yield this.Repository.findCredentials(credentials.email, credentials.password);
+                console.log(user, token, message, 'loggggg');
+                const refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user);
+                return { user, message, token, refreshToken };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
             }
         });
     }

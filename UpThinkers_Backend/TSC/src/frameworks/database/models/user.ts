@@ -3,8 +3,8 @@ import { ObjectId } from "mongoose";
 import UserDocument from "../../../entities/user";
 
 const userSchema= new Schema<UserDocument>({
-    FirstName:String,
-    LastName:String,
+    Name:String,
+    
     Email:String,
     Mobile:Number,
     Password:String,

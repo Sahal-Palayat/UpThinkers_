@@ -1,17 +1,4 @@
 "use strict";
-// import * as UserEntity  from '../../../controllers/interfaces/UserInterfaces';
-// import * as DatabaseFunctions from '../../functions/DatabaseFunctions';
-// import * as ResponseFunctions from '../../responses/Response/UserResponse';
-// import * as Responses from '../../responses/Interfaces/UserResponsesInterface'
-// import UserAuth from '../../../frameworks/database/models/UnverifiedUsers';
-// import * as Response from '../../responses/Interfaces/UserResponsesInterface';
-// import * as CommonFunctions from '../../functions/CommonFunctions'
-// import UnverifiedUsers from '../../../entities/UnverifiedUsers';
-// import { CreatePayload } from '../../functions/JWT';
-// import auth from '../../../config/auth';
-// import UserDocument from '../../../entities/user';
-// import { VerifyUser } from '../../functions/UserFunctions';
-// import { ObjectId } from 'mongodb';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,8 +21,10 @@ class UserRepositoryImpl {
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('repositoryy');
-            const { FirstName, LastName, Email, Mobile, Password } = user;
-            const newUser = new user_1.default({ FirstName, LastName, Email, Mobile, Password });
+            const { Name, Email, Mobile, Password } = user;
+            console.log(user, 'lasttt');
+            const newUser = new user_1.default({ Name, Email, Mobile, Password });
+            console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
             yield newUser.save();
             let token = yield (0, CommonFunctions_1.genAccessToken)(user);
             console.log('tokennn', token);
@@ -44,7 +33,6 @@ class UserRepositoryImpl {
     }
     userExists(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('3', email);
             const userExists = yield user_1.default.findOne({ email: email });
             return !!userExists;
         });
@@ -52,8 +40,10 @@ class UserRepositoryImpl {
     saveToDB(signupData, otp) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { FirstName, email, Password, Mobile, otp } = signupData;
-                const isAddedToDb = yield otp_1.default.create({ Name: FirstName, Email: email, Password: Password, Mobile: Mobile });
+                console.log('redyyy');
+                const { name, email, password, mobile } = signupData;
+                console.log(signupData);
+                const isAddedToDb = yield otp_1.default.insertMany({ Name: name, Email: email, Password: password, Mobile: mobile, otp: otp });
                 return isAddedToDb ? true : false;
             }
             catch (error) {
@@ -65,7 +55,7 @@ class UserRepositoryImpl {
     verifyotp(otp) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log('3');
+                console.log('3', otp);
                 const user = yield otp_1.default.findOne({ otp: otp });
                 console.log('user', user);
                 return user ? user : null;
@@ -73,6 +63,36 @@ class UserRepositoryImpl {
             catch (error) {
                 console.error('Error verifying OTP from database:', error);
                 return null;
+            }
+        });
+    }
+    findCredentials(email, password) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log('user repositoryyyy');
+            console.log(email, password);
+            const user = yield user_1.default.findOne({ email: email });
+            console.log(user);
+            let message = '';
+            let token = null;
+            if (!user) {
+                message = ' invalid user';
+            }
+            else {
+                if (password !== user.Password) {
+                    console.log('invalid password');
+                    message = 'Invalid Password';
+                }
+                else {
+                    token = yield (0, CommonFunctions_1.genAccessToken)(user);
+                    console.log('token', token);
+                }
+            }
+            if (user && !message) {
+                return { user: user.toObject(), message, token };
+            }
+            else {
+                console.log('message', message);
+                return { user: null, message, token };
             }
         });
     }

@@ -1,9 +1,10 @@
 import React from 'react'
-import * as logo from '/logoo.png'
+import logo from '/logoo.png'
+import { useNavigate } from 'react-router-dom'
 
 function LoginPage() {
 
-
+const navigate= useNavigate()
 
 
     return (
@@ -68,21 +69,19 @@ function LoginPage() {
                                     </span>
                                 </button>
                                 <p className="mt-6 text-xs text-gray-600 text-center">
-                                    I agree to abide by Cartesian Kinetics
-                                    <a href="#" className="border-b border-gray-500 border-dotted">
-                                        Terms of Service
+                                    Dont have an Account clink_
+                                    <a href="" className="text-blue-500 text-sm font-semibold">
+                                        <button onClick={() => navigate('/register')}>SignUp</button>
                                     </a>
-                                    and its
-                                    <a href="#" className="border-b border-gray-500 border-dotted">
-                                        Privacy Policy
-                                    </a>
+
                                 </p>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div className="flex-1 text-center hidden lg:flex bg-no-repeat " style={{ backgroundImage: "url('https://www.goodnewsplanners.com/wp-content/uploads/2020/03/Kid_coloring.jpg')" }}>
-                    
+
 
                 </div>
             </div>

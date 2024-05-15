@@ -6,4 +6,5 @@ export interface UserRepository{
     userExists(email: string): Promise<boolean>;
     saveToDB(signupData: SignupData, otp: string): Promise<boolean>;
     verifyotp(otp: string): Promise<User | null>;
+    findCredentials (email : string,password: string): Promise <{user:User | null,message:string, token : string | null}> 
 }

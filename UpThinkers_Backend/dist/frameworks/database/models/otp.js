@@ -7,23 +7,18 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const otpSchema = new mongoose_1.default.Schema({
     otp: {
         type: String,
-        required: true,
     },
     Name: {
         type: String,
-        required: true,
     },
     Email: {
         type: String,
-        required: true,
     },
     Mobile: {
         type: String,
-        required: true,
     },
-    password: {
+    Password: {
         type: String,
-        required: true,
     }
 });
 const otpModel = mongoose_1.default.model('otps', otpSchema);

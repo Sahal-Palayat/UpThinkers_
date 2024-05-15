@@ -17,7 +17,7 @@ const otpSchema = new mongoose.Schema({
         type:String,
         
     },
-    password:{
+    Password:{
         type:String,
         
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import logo from '/logoo.png'
 import { useNavigate } from 'react-router-dom'
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import Otp from '../Otp/Otp';
@@ -18,11 +18,15 @@ const RegisterPage = () => {
     const [email, setEmail] = useState('');
     const [mobile, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
 
     const [emailError, setEmailError] = useState('');
     const [nameError, setNameError] = useState('');
-    const [usernameError, setUsernameError] = useState('');
+    const [mobileError, setMobileError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -54,55 +58,82 @@ const RegisterPage = () => {
                 break;
             case 'mobile':
                 setUsername(value);
-                setUsernameError('');
+                setMobileError('');
                 break;
             case 'password':
                 setPassword(value);
                 setPasswordError('');
                 break;
+            case 'confirmPassword':
+                setConfirmPassword(value);
+                setConfirmPasswordError('');
+                break;
+            case 'image':
             default:
                 break;
         }
     }
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         let hasError = false;
 
-        if (!email) {
+
+        if (!email.trim()) {
             setEmailError('Email is required');
+            hasError = true;
+        } else if (!/\b[A-Za-z0-9._%+-]+@gmail\.com\b/.test(email.trim())) {
+            setEmailError('Email must be in the format example@gmail.com');
             hasError = true;
         } else {
             setEmailError('');
         }
 
-        if (!name) {
+
+        if (!name.trim()) {
             setNameError('Name is required');
             hasError = true;
         } else {
             setNameError('');
         }
 
-        if (!mobile) {
-            setUsernameError('Username is required');
+        if (!mobile.trim()) {
+            setMobileError('Mobile is required');
+            hasError = true;
+        } else if (!/^\d{10}$/.test(mobile.trim())) {
+            setMobileError('Mobile number must be exactly 10 digits');
             hasError = true;
         } else {
-            setUsernameError('');
+            setMobileError('');
         }
 
-        if(!password){
+
+        if (!password.trim()) {
             setPasswordError('Password is required');
             hasError = true;
-        }else{
+        } else if (!/(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}/.test(password.trim())) {
+            setPasswordError('Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character');
+            hasError = true;
+        } else {
             setPasswordError('');
         }
 
+        if (!confirmPassword.trim()) {
+            setConfirmPasswordError('Confirm Password is required');
+            hasError = true;
+        } else if (confirmPassword.trim() !== password.trim()) {
+            setConfirmPasswordError('Passwords do not match');
+            hasError = true;
+        } else {
+            setConfirmPasswordError('');
+        }
 
-        if(!hasError){
+
+        if (!hasError) {
             try {
-                console.log('vannnnn');
-                const response= await fetch('http://localhost:3030/user/sendMail',{
+                console.log('vannnnn', signupData);
+                const response = await fetch('http://localhost:3030/user/sendMail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -110,15 +141,15 @@ const RegisterPage = () => {
                     body: JSON.stringify(signupData)
                 })
 
-                if(response.status ===200){
+                if (response.status === 200) {
                     console.log('email sent sucsess');
                     toast.success('Email sent sucsess')
                     setShowOTP(true)
-                }else if (response.status === 400){
+                } else if (response.status === 400) {
                     console.log('user already exist');
-                }else if (response.status===500){
+                } else if (response.status === 500) {
                     console.log('failed to send otp');
-                }else {
+                } else {
                     console.log('Unhandled status code:', response.status);
                 }
 
@@ -131,13 +162,13 @@ const RegisterPage = () => {
 
     }
 
-    if(showOTP){
+    if (showOTP) {
         return (
             <>
-                
+
                 <ToastContainer position="top-center" autoClose={1500} />
-                <Otp/>
-              
+                <Otp />
+
             </>
         )
     }
@@ -145,7 +176,7 @@ const RegisterPage = () => {
 
     return (
         <div className="h-screen bg-gray-100 text-gray-900 flex justify-center">
-                <div className="w-full bg-white shadow sm:rounded-lg flex h-screen justify-center flex-1">
+            <div className="w-full bg-white shadow sm:rounded-lg flex h-screen justify-center flex-1">
 
                 <div className="flex-1 text-center hidden lg:flex bg-contain  bg-center bg-no-repeat " style={{ backgroundImage: "url('https://st.depositphotos.com/1015530/4696/i/450/depositphotos_46963461-stock-photo-little-boy-is-reading-a.jpg')" }}>
 
@@ -186,73 +217,79 @@ const RegisterPage = () => {
                             {/* <div className="my-12  text-start">
                             </div> */}
                             <div className="justify-start max-w-xs">
-                            <form onSubmit={handleSubmit}>
+                                <form onSubmit={handleSubmit}>
 
-                                <input
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="name"
-                                    name="name"
-                                    placeholder="Name"
-                                    type="text"
-                                    value={name}
-                                    onChange={handleInputChange}
+                                    <input
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="name"
+                                        name="name"
+                                        placeholder="Full Name"
+                                        type="text"
+                                        value={name}
+                                        onChange={handleInputChange}
                                     />
-                                {nameError && <p className="text-xs text-red-500">{nameError}</p>}
-                                <input
-                                    autoFocus
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="email"
-                                    name="email"
-                                    placeholder="Email"
-                                    type="text"
-                                    value={email}
-                                    onChange={handleInputChange}
+                                    {nameError && <p className="text-xs text-red-500">{nameError}</p>}
+                                    <input
+                                        autoFocus
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        type="text"
+                                        value={email}
+                                        onChange={handleInputChange}
                                     />
-                                {emailError && <p className="text-xs text-red-500">{emailError}</p>}
-                                <input
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="mobile"
-                                    name="mobile"
-                                    placeholder="Mobile"
-                                    type="text"
-                                    value={mobile}
-                                    onChange={handleInputChange}
+                                    {emailError && <p className="text-xs text-red-500">{emailError}</p>}
+                                    <input
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="mobile"
+                                        name="mobile"
+                                        placeholder="Mobile"
+                                        type="text"
+                                        value={mobile}
+                                        onChange={handleInputChange}
                                     />
-                                {usernameError && <p className="text-xs text-red-500">{usernameError}</p>}
-                                <input
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    type="password"
-                                    value={password}
-                                    onChange={handleInputChange}
+                                    {mobileError && <p className="text-xs text-red-500">{mobileError}</p>}
+                                    <input
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Password"
+                                        type="password"
+                                        value={password}
+                                        onChange={handleInputChange}
                                     />
-                                {passwordError && <p className="text-xs text-red-500">{passwordError}</p>}
-                                {/* <input className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    type="confirmpassword" placeholder="Confirm Password" /> */}
-                                <button
-                                     type='submit' className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-2 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                                    <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                        <circle cx="8.5" cy="7" r="4" />
-                                        <path d="M20 8v6M23 11h-6" />
-                                    </svg>
-                                    <span className="ml-">
-                                        Sign In
-                                    </span>
-                                </button>
-                             </form>
+                                    {passwordError && <p className="text-xs text-red-500">{passwordError}</p>}
+                                    <input
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        placeholder="Confirm Password"
+                                        type="password"
+                                        value={confirmPassword}
+                                        onChange={handleInputChange}
+                                    />
+                                    {confirmPasswordError && <p className="text-xs text-red-500">{confirmPasswordError}</p>}
+                                    <button
+                                        type='submit' className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-2 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                                        <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                            <circle cx="8.5" cy="7" r="4" />
+                                            <path d="M20 8v6M23 11h-6" />
+                                        </svg>
+                                        <span className="ml-">
+                                            Sign In
+                                        </span>
+                                    </button>
+                                </form>
                                 <p className="mt-6 text-xs text-gray-600 text-center">
-                                    You have a Account click here
-                                    <a href="#" className="border-b border-gray-500 border-dotted">
-                                        Terms of Service
+                                    You have a Account click here--
+                                    <a href="" className="text-blue-500 text-sm font-semibold">
+                                        <button onClick={() => navigate('/login')}>Log In</button>
                                     </a>
-                                    and its
-                                    <a href="#" className="border-b border-gray-500 border-dotted">
-                                        Privacy Policy
-                                    </a>
+                                    
+                                    
                                 </p>
                             </div>
                         </div>

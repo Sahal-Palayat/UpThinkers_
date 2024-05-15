@@ -46,6 +46,9 @@ function Otp() {
       console.log(data)
       document.cookie = `token=${data.token}; path=/;`;
       toast.success('Successfully signed in')
+      setTimeout(()=>{
+        navigate('/home')
+      },2000)
 
     }
   }

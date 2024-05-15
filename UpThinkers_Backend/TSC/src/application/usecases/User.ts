@@ -1,18 +1,22 @@
 import { genRefreshToken } from '../functions/CommonFunctions'
+import { Response,Request,NextFunction } from 'express'
 import { SignupData } from '../entities/signupData'
 import { User } from '../entities/user'
 import { IMailer } from '../interfaces/external-lib/IMailer'
 import { UserRepository } from '../interfaces/repositories/user-repository'
 import { UserInteractor } from '../interfaces/usecases/UserInteractor'
+import UserModel from '../../frameworks/database/models/user'
 
 export class UserInteractorImpl implements UserInteractor {
-    constructor(private readonly Repository: UserRepository, private readonly mailer:IMailer){ }
-
-    async register (userData:{FirstName:string,Email:string,Mobile:number,Password:string}): Promise<{ user: User | null, token: string | null }>{
+    constructor(private readonly Repository: UserRepository, private readonly mailer:IMailer){
+        // this.Repository.save()
+     }
+    
+    async register (userData:{Name:string,Email:string,Mobile:number,Password:string}): Promise<{ user: User | null, token: string | null }>{
 
         try {
             const newUser = {
-                FirstName: userData.FirstName,
+                Name: userData.Name,
                 Email: userData.Email,
                 Mobile: userData.Mobile,
                 Password:  userData.Password,
@@ -34,15 +38,20 @@ export class UserInteractorImpl implements UserInteractor {
         console.log('2', signupData)
         const email = signupData.email;
         const userExists = await this.Repository.userExists(email);
+        console.log(userExists,"userData");
+        
         if (userExists) {
             return { userExists: true, isMailSent: false };
         }
 
         try {
+          
+            
             const { otp, success } = await this.mailer.sendMail(email);
+            console.log(otp);
             if (success) {
                 const saveToDB = await this.Repository.saveToDB(signupData, otp)
-                console.log(saveToDB);
+                
                 
                 return { userExists: false, isMailSent: true };
             } else {
@@ -75,6 +84,31 @@ export class UserInteractorImpl implements UserInteractor {
         }
     }
 
+
+    async login (credentials: {email:string,password:string}):Promise <{user : User| null ,message:string,token : string| null ,refreshToken:string | null}> {
+        try {
+
+            console.log('userloginn')
+            console.log(credentials.email);
+            console.log(credentials.password);
+
+
+            const {user,message,token}= await this.Repository.findCredentials(credentials.email,credentials.password)
+            console.log(user,token,message,'loggggg');
+
+
+            const refreshToken= await genRefreshToken(user)
+
+            return {user,message,token,refreshToken}
+          
+        } catch (error) {
+            console.log(error);
+            throw error            
+        }
+    }
+
+
+    
 
 
 }

@@ -1,7 +1,7 @@
 export interface SignupData {
-    FirstName : string;
+    name : string;
     email : string;
-    Password : string;
-    Mobile : string;
+    password : string;
+    mobile : string;
     otp : string;
 }

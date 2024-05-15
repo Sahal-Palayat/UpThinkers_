@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon dist/app.js",
+    "start": "concurrently \"tsc -w\" \"nodemon dist/app.js\"",
     "build": "npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "concurrently \"npm run build\" \"npm start\""

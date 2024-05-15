@@ -1,24 +1,10 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateById = exports.insertData = exports.findOneData = void 0;
-const findOneData = (Db, query) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Db.findOne(query);
-});
-exports.findOneData = findOneData;
-const insertData = (Db, data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Db.insertMany(data);
-});
-exports.insertData = insertData;
-const updateById = (Db, id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield Db.findByIdAndUpdate(id, { $set: data });
-});
-exports.updateById = updateById;
+// export const findOneData:Function = async (Db:any, query:object): Promise<any>=>{
+//     return await Db.findOne(query)
+// }
+// export const insertData: Function = async (Db: any, data: object): Promise<any> => {
+//     return await Db.insertMany(data)
+// }
+// export const updateById: Function = async (Db: any, id: string, data: object) => {
+//     return await Db.findByIdAndUpdate(id, { $set: data })
+// }
