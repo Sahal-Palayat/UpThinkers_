@@ -1,17 +1,3 @@
-// import * as UserEntity  from '../../../controllers/interfaces/UserInterfaces';
-// import * as DatabaseFunctions from '../../functions/DatabaseFunctions';
-// import * as ResponseFunctions from '../../responses/Response/UserResponse';
-// import * as Responses from '../../responses/Interfaces/UserResponsesInterface'
-// import UserAuth from '../../../frameworks/database/models/UnverifiedUsers';
-// import * as Response from '../../responses/Interfaces/UserResponsesInterface';
-// import * as CommonFunctions from '../../functions/CommonFunctions'
-// import UnverifiedUsers from '../../../entities/UnverifiedUsers';
-// import { CreatePayload } from '../../functions/JWT';
-// import auth from '../../../config/auth';
-// import UserDocument from '../../../entities/user';
-// import { VerifyUser } from '../../functions/UserFunctions';
-// import { ObjectId } from 'mongodb';
-
 import { User } from '../../entities/user';
 import UserModel from '../../../frameworks/database/models/user';
 import { UserRepository } from '../../interfaces/repositories/user-repository';
@@ -27,9 +13,9 @@ export class UserRepositoryImpl implements UserRepository {
     async save (user: User):Promise <{user:User| null,token :string|null}>{
         console.log('repositoryy');
 
-        const {FirstName,LastName,Email,Mobile,Password}=user
+        const {FirstName,Email,Mobile,Password}=user
 
-        const newUser = new UserModel({FirstName,LastName,Email,Mobile,Password})
+        const newUser = new UserModel({FirstName,Email,Mobile,Password})
         await newUser.save()
 
         let token = await genAccessToken(user)
@@ -48,8 +34,10 @@ export class UserRepositoryImpl implements UserRepository {
 
     async saveToDB (signupData:SignupData,otp : string):Promise<boolean> {
         try {
-            const {FirstName,Email,Password,Mobile,otp }= signupData
-            const isAddedToDb= await otpModel.create({Name:FirstName,Email:Email,Password:Password,Mobile:Mobile})
+            console.log('redyyy');
+            
+            const {FirstName,email,Password,Mobile,otp }= signupData
+            const isAddedToDb= await otpModel.create({Name:FirstName,Email:email,Password:Password,Mobile:Mobile,otp:otp})
             return isAddedToDb ? true : false
         
         } catch (error) {
@@ -65,7 +53,7 @@ export class UserRepositoryImpl implements UserRepository {
             const user = await otpModel.findOne({ otp: otp });
             console.log('user', user);
 
-            return user ? user.toObject() : null;
+            return user ? user as unknown as User : null;
         } catch (error) {
             console.error('Error verifying OTP from database:', error);
             return null;

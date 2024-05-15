@@ -52,8 +52,8 @@ class UserRepositoryImpl {
     saveToDB(signupData, otp) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { FirstName, Email, Password, Mobile, otp } = signupData;
-                const isAddedToDb = yield otp_1.default.create({ Name: FirstName, Email: Email, Password: Password, Mobile: Mobile });
+                const { FirstName, email, Password, Mobile, otp } = signupData;
+                const isAddedToDb = yield otp_1.default.create({ Name: FirstName, Email: email, Password: Password, Mobile: Mobile });
                 return isAddedToDb ? true : false;
             }
             catch (error) {
@@ -68,7 +68,7 @@ class UserRepositoryImpl {
                 console.log('3');
                 const user = yield otp_1.default.findOne({ otp: otp });
                 console.log('user', user);
-                return user ? user.toObject() : null;
+                return user ? user : null;
             }
             catch (error) {
                 console.error('Error verifying OTP from database:', error);

@@ -102,7 +102,7 @@ const RegisterPage = () => {
         if(!hasError){
             try {
                 console.log('vannnnn');
-                const response= await fetch('http://localhost:3030/sendMail',{
+                const response= await fetch('http://localhost:3030/user/sendMail',{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ const RegisterPage = () => {
                     body: JSON.stringify(signupData)
                 })
 
-                if(response ===200){
+                if(response.status ===200){
                     console.log('email sent sucsess');
                     toast.success('Email sent sucsess')
                     setShowOTP(true)
@@ -229,8 +229,8 @@ const RegisterPage = () => {
                                     onChange={handleInputChange}
                                     />
                                 {passwordError && <p className="text-xs text-red-500">{passwordError}</p>}
-                                <input className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    type="confirmpassword" placeholder="Confirm Password" />
+                                {/* <input className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                    type="confirmpassword" placeholder="Confirm Password" /> */}
                                 <button
                                      type='submit' className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-2 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                                     <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"

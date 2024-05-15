@@ -9,14 +9,14 @@ export class UserController {
 
         try {
 
-            const { FirstName, LastName, Email, Mobile, Password } = req.body
+            const { FirstName, Email, Mobile, Password } = req.body
             console.log('bodyyy', req.body);
 
             const { user, token } = await this.interactor.register({ FirstName, Password, Email, Mobile })
             console.log(user, token, 'returningggggg');
 
             res.status(200).json({ message: 'Signup successful', user, token })
-        } catch (error) {
+        } catch (error) { 
             console.error('Error during signup:', error);
             res.status(500).send('Internal server error');
         }
@@ -47,6 +47,8 @@ export class UserController {
         try {
             console.log('0000000')
             const {otp }=req.body
+            console.log(otp);
+            
             const {success,token}=await this.interactor.verifyOtp(otp)
             if(success){
                 res.status(200).json({success:true,message:'otp verification success',token})

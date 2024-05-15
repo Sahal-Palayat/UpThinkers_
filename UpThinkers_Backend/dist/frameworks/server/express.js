@@ -15,7 +15,7 @@ function expressConfig(app) {
     app.use((0, express_mongo_sanitize_1.default)());
     app.use((0, helmet_1.default)({ xssFilter: true }));
     app.use((0, cors_1.default)({
-        origin: 'http://localhost:3030',
+        origin: 'http://localhost:5173',
         credentials: true
     }));
 }

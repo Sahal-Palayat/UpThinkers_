@@ -32,7 +32,7 @@ export class UserInteractorImpl implements UserInteractor {
 
     async sendMail(signupData: SignupData): Promise<{ userExists: boolean, isMailSent: boolean }> {
         console.log('2', signupData)
-        const email = signupData.Email;
+        const email = signupData.email;
         const userExists = await this.Repository.userExists(email);
         if (userExists) {
             return { userExists: true, isMailSent: false };
@@ -42,6 +42,8 @@ export class UserInteractorImpl implements UserInteractor {
             const { otp, success } = await this.mailer.sendMail(email);
             if (success) {
                 const saveToDB = await this.Repository.saveToDB(signupData, otp)
+                console.log(saveToDB);
+                
                 return { userExists: false, isMailSent: true };
             } else {
                 return { userExists: false, isMailSent: false };

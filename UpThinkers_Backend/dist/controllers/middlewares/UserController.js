@@ -17,7 +17,7 @@ class UserController {
     register(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { FirstName, LastName, Email, Mobile, Password } = req.body;
+                const { FirstName, Email, Mobile, Password } = req.body;
                 console.log('bodyyy', req.body);
                 const { user, token } = yield this.interactor.register({ FirstName, Password, Email, Mobile });
                 console.log(user, token, 'returningggggg');
@@ -55,6 +55,7 @@ class UserController {
             try {
                 console.log('0000000');
                 const { otp } = req.body;
+                console.log(otp);
                 const { success, token } = yield this.interactor.verifyOtp(otp);
                 if (success) {
                     res.status(200).json({ success: true, message: 'otp verification success', token });

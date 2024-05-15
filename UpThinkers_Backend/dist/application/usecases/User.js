@@ -38,7 +38,7 @@ class UserInteractorImpl {
     sendMail(signupData) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('2', signupData);
-            const email = signupData.Email;
+            const email = signupData.email;
             const userExists = yield this.Repository.userExists(email);
             if (userExists) {
                 return { userExists: true, isMailSent: false };
