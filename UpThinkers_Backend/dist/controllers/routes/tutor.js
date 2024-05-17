@@ -2,15 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const tutorRouter = (0, express_1.Router)();
-// import {UserController} from '../middlewares/UserController'
-// import { MailerImp } from '../../application/external-lib/mailer'
-// import { UserRepositoryImpl } from '../../application/repository/User/UserRepository'
-// import { UserInteractorImpl } from '../../application/usecases/User'
-// const repository = new UserRepositoryImpl()
-// const mailer= new MailerImp()
-// const interactor= new UserInteractorImpl(repository,mailer)
-// const controller = new UserController(interactor)
-// tutorRouter.post('/register',controller.register.bind(controller))
-// tutorRouter.post('/sendMail',controller.sendMail.bind(controller))
-// tutorRouter.post('/verifyOtp',controller.verifyOtp.bind(controller))
+const TutorController_1 = require("../middlewares/TutorController");
+const mailer_1 = require("../../application/external-lib/mailer");
+const Tutor_1 = require("../../application/usecases/Tutor");
+const TutorRepository_1 = require("../../application/repository/Tutor/TutorRepository");
+const repository = new TutorRepository_1.TutorRepositoryImpl();
+const mailer = new mailer_1.MailerImp();
+const interactor = new Tutor_1.TutorInteractorImpl(repository, mailer);
+const controller = new TutorController_1.TutorController(interactor);
+tutorRouter.post('/register', controller.register.bind(controller));
+tutorRouter.post('/sendMail', controller.sendMail.bind(controller));
+tutorRouter.post('/verifyOtp', controller.verifyOtp.bind(controller));
+tutorRouter.post('/login', controller.login.bind(controller));
 exports.default = tutorRouter;

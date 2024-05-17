@@ -186,7 +186,7 @@ function LoginPage() {
                     </div>
 
                 </div>
-                <div className="flex-1 text-center hidden lg:flex bg-no-repeat " style={{ backgroundImage: "url('https://www.goodnewsplanners.com/wp-content/uploads/2020/03/Kid_coloring.jpg')" }}>
+                <div className="flex-1 text-center hidden lg:flex bg-no-repeat " style={{ backgroundImage: "url('https://www.goodnewsplanners.com/wp-content/uploads/2020/03/Kid_coloring.jpg')",height: '100vh', backgroundSize: 'cover', backgroundPosition: 'center' }}>
 
 
         

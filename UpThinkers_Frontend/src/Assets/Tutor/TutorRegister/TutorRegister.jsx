@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import logo from '/logoo.png'
-import { useNavigate } from 'react-router-dom'
-import { toast, ToastContainer } from 'react-toastify';
-import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import Otp from '../../Components/Otp';
+import { toast, ToastContainer } from 'react-toastify';
+import OtpTutor from '../../Components/OtpTutor';
 
 
+function TutorRegister() {
 
-
-
-
-
-
-const RegisterPage = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [mobile, setUsername] = useState('');
@@ -27,22 +21,13 @@ const RegisterPage = () => {
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
-    const [userData, setUserData] = useState({
-        next: false,
-        name: '',
-        mobile: '',
-        email: '',
-        password: '',
-        image: '',
-    });
 
     const [showOTP, setShowOTP] = useState(false);
 
     const signupData = { email, name, mobile, password }
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -73,6 +58,7 @@ const RegisterPage = () => {
                 break;
         }
     }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -133,7 +119,7 @@ const RegisterPage = () => {
         if (!hasError) {
             try {
                 console.log('vannnnn', signupData);
-                const response = await fetch('http://localhost:3030/user/sendMail', {
+                const response = await fetch('http://localhost:3030/tutor/sendMail', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -162,34 +148,32 @@ const RegisterPage = () => {
 
 
     }
-
     if (showOTP) {
         return (
             <>
 
                 <ToastContainer position="top-center" autoClose={1500} />
-                <Otp />
+                <OtpTutor />
 
             </>
         )
     }
 
 
+
+
     return (
         <div className="h-screen bg-gray-100 text-gray-900 flex justify-center">
             <div className="w-full bg-white shadow sm:rounded-lg flex h-screen justify-center flex-1">
-
-                <div className="flex-1 text-center hidden lg:flex bg-contain  bg-center bg-no-repeat " style={{ backgroundImage: "url('https://st.depositphotos.com/1015530/4696/i/450/depositphotos_46963461-stock-photo-little-boy-is-reading-a.jpg')" }}>
-
-
+                <div className="flex-1 text-center hidden lg:flex" style={{ backgroundImage: "url('https://www.corporatevision-news.com/wp-content/uploads/2020/07/online-learning-1.jpg')", height: '100vh', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 </div>
-                <div className="lg:w-1/2 xl:w-5/12 p-2 sm:p-12 ">
+                <div className="lg:w-1/2 xl:w-5/12 p-2 sm:p-12">
                     <div>
                         <img src={logo} className="w-mx-auto" alt="Logo" style={{ width: '30%' }} />
                     </div>
-                    <div className="mt-4 flex flex-col items-start">
+                    <div className="mt-4 flex flex-col items-center">
                         <div className="w-full flex-1 justify-start items-start mt-2">
-                            <div className="flex flex-col items-start">
+                            <div className="flex flex-col items-center mr-5">
                                 <button
                                     className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-green-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                                     <div className="bg-white p-2 rounded-full">
@@ -217,80 +201,80 @@ const RegisterPage = () => {
 
                             {/* <div className="my-12  text-start">
                             </div> */}
-                            <div className="justify-start max-w-xs">
+                            <div className="max-w-xs w-full bg-white shadow  p-2 ml-20">
                                 <form onSubmit={handleSubmit}>
 
-                                    <input
-                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                        id="name"
-                                        name="name"
-                                        placeholder="Full Name"
-                                        type="text"
-                                        value={name}
-                                        onChange={handleInputChange}
-                                    />
-                                    {nameError && <p className="text-xs text-red-500">{nameError}</p>}
-                                    <input
-                                        autoFocus
-                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                        id="email"
-                                        name="email"
-                                        placeholder="Email"
-                                        type="text"
-                                        value={email}
-                                        onChange={handleInputChange}
-                                    />
-                                    {emailError && <p className="text-xs text-red-500">{emailError}</p>}
-                                    <input
-                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                        id="mobile"
-                                        name="mobile"
-                                        placeholder="Mobile"
-                                        type="text"
-                                        value={mobile}
-                                        onChange={handleInputChange}
-                                    />
-                                    {mobileError && <p className="text-xs text-red-500">{mobileError}</p>}
-                                    <input
-                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                        id="password"
-                                        name="password"
-                                        placeholder="Password"
-                                        type="password"
-                                        value={password}
-                                        onChange={handleInputChange}
-                                    />
-                                    {passwordError && <p className="text-xs text-red-500">{passwordError}</p>}
-                                    <input
-                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                        id="confirmPassword"
-                                        name="confirmPassword"
-                                        placeholder="Confirm Password"
-                                        type="password"
-                                        value={confirmPassword}
-                                        onChange={handleInputChange}
-                                    />
-                                    {confirmPasswordError && <p className="text-xs text-red-500">{confirmPasswordError}</p>}
-                                    <button
-                                        type='submit' className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-2 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                                        <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                            <circle cx="8.5" cy="7" r="4" />
-                                            <path d="M20 8v6M23 11h-6" />
-                                        </svg>
-                                        <span className="ml-">
-                                            Sign In
-                                        </span>
-                                    </button>
+                                <input
+                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Full Name"
+                                    type="text"
+                                value={name}
+                                onChange={handleInputChange}
+                                />
+                                {nameError && <p className="text-xs text-red-500">{nameError}</p>}
+                                <input
+                                    autoFocus
+                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                    id="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    type="text"
+                                value={email}
+                                onChange={handleInputChange}
+                                />
+                                {emailError && <p className="text-xs text-red-500">{emailError}</p>}
+                                <input
+                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                    id="mobile"
+                                    name="mobile"
+                                    placeholder="Mobile"
+                                    type="text"
+                                value={mobile}
+                                onChange={handleInputChange}
+                                />
+                                {mobileError && <p className="text-xs text-red-500">{mobileError}</p>}
+                                <input
+                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    type="password"
+                                value={password}
+                                onChange={handleInputChange}
+                                />
+                                {passwordError && <p className="text-xs text-red-500">{passwordError}</p>}
+                                <input
+                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    placeholder="Confirm Password"
+                                    type="password"
+                                value={confirmPassword}
+                                onChange={handleInputChange}
+                                />
+                                {confirmPasswordError && <p className="text-xs text-red-500">{confirmPasswordError}</p>}
+                                <button
+                                    type='submit' className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-2 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                                    <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                        <circle cx="8.5" cy="7" r="4" />
+                                        <path d="M20 8v6M23 11h-6" />
+                                    </svg>
+                                    <span className="ml-">
+                                        Sign In
+                                    </span>
+                                </button>
                                 </form>
                                 <p className="mt-6 text-xs text-gray-600 text-center">
                                     You have a Account click here--
                                     <a href="" className="text-blue-500 text-sm font-semibold">
-                                        <button onClick={() => navigate('/login')}>Log In</button>
+                                        <button onClick={() => navigate('/tutor/login')}>Log In</button>
                                     </a>
-                                    
-                                    
+
+
                                 </p>
                             </div>
                         </div>
@@ -302,4 +286,4 @@ const RegisterPage = () => {
     )
 }
 
-export default RegisterPage
+export default TutorRegister
