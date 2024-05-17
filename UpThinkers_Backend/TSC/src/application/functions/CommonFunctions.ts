@@ -1,4 +1,6 @@
 import {hash ,compare } from 'bcrypt'
+import { User } from '../entities/user'
+import { Tutor } from '../entities/tutor'
 const jwt = require('jsonwebtoken')
 // export function genRandomString(length :number):string {
 //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -33,10 +35,17 @@ export const CalculateTime: Function = async (Password: string ,Hashed:string )=
 export function genAccessToken(user:any):string {
     return jwt.sign({ userId: user._id }, 'athee....', { expiresIn: '1d' });
 }
+export function genAccessTokenTutor(tutor:any):string {
+    return jwt.sign({ tutorId: tutor._id }, 'athee....', { expiresIn: '1d' });
+}
 
 
-export function genRefreshToken(user: any): string {
-    return jwt.sign({ userId: user.email }, 'athee...', { expiresIn: '7d' });
+export function genRefreshToken(user:User): string {
+    return jwt.sign({ userId: user.Email }, 'athee...', { expiresIn: '7d' });
+}
+
+export function genRefreshTokenTutor(tutor:Tutor): string {
+    return jwt.sign({ tutorId: tutor.Email }, 'athee...', { expiresIn: '7d' });
 }
 
 export const genRandomOtp:Function= ()=>{

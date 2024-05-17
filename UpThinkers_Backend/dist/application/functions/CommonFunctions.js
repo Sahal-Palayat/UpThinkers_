@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.genRandomOtp = exports.genRefreshToken = exports.genAccessToken = exports.CalculateTime = exports.HashPassword = void 0;
+exports.genRandomOtp = exports.genRefreshTokenTutor = exports.genRefreshToken = exports.genAccessTokenTutor = exports.genAccessToken = exports.CalculateTime = exports.HashPassword = void 0;
 const bcrypt_1 = require("bcrypt");
 const jwt = require('jsonwebtoken');
 // export function genRandomString(length :number):string {
@@ -41,10 +41,18 @@ function genAccessToken(user) {
     return jwt.sign({ userId: user._id }, 'athee....', { expiresIn: '1d' });
 }
 exports.genAccessToken = genAccessToken;
+function genAccessTokenTutor(tutor) {
+    return jwt.sign({ tutorId: tutor._id }, 'athee....', { expiresIn: '1d' });
+}
+exports.genAccessTokenTutor = genAccessTokenTutor;
 function genRefreshToken(user) {
-    return jwt.sign({ userId: user.email }, 'athee...', { expiresIn: '7d' });
+    return jwt.sign({ userId: user.Email }, 'athee...', { expiresIn: '7d' });
 }
 exports.genRefreshToken = genRefreshToken;
+function genRefreshTokenTutor(tutor) {
+    return jwt.sign({ tutorId: tutor.Email }, 'athee...', { expiresIn: '7d' });
+}
+exports.genRefreshTokenTutor = genRefreshTokenTutor;
 const genRandomOtp = () => {
     const otp = Math.floor(1000 + Math.random() * 9000);
     return otp.toString();

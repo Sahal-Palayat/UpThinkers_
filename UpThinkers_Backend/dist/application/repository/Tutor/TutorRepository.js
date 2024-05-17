@@ -12,30 +12,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserRepositoryImpl = void 0;
-const user_1 = __importDefault(require("../../../frameworks/database/models/user"));
+exports.TutorRepositoryImpl = void 0;
+const tutor_1 = __importDefault(require("../../../frameworks/database/models/tutor"));
 const CommonFunctions_1 = require("../../functions/CommonFunctions");
 const otp_1 = __importDefault(require("../../../frameworks/database/models/otp"));
-const jwt = require('jsonwebtoken');
-class UserRepositoryImpl {
+class TutorRepositoryImpl {
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('repositoryy');
             const { Name, Email, Mobile, Password } = user;
             console.log(user, 'lasttt');
-            const newUser = new user_1.default({ Name, Email, Mobile, Password });
-            console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
-            yield newUser.save();
-            let token = yield (0, CommonFunctions_1.genAccessToken)(user);
-            let refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user);
+            const newTutor = new tutor_1.default({ Name, Email, Mobile, Password });
+            console.log(newTutor, 'new userrrrrrrrrrrrrrrrrr');
+            yield newTutor.save();
+            let token = yield (0, CommonFunctions_1.genAccessTokenTutor)(user);
+            let refreshToken = yield (0, CommonFunctions_1.genRefreshTokenTutor)(user);
             console.log('tokennn', token);
-            return { user: newUser ? newUser.toObject() : null, token, refreshToken };
+            return { tutor: newTutor ? newTutor.toObject() : null, token, refreshToken };
         });
     }
-    userExists(email) {
+    tutorExists(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userExists = yield user_1.default.findOne({ email: email });
-            return !!userExists;
+            const tutorExists = yield tutor_1.default.findOne({ email: email });
+            return !!tutorExists;
         });
     }
     saveToDB(signupData, otp) {
@@ -57,9 +56,9 @@ class UserRepositoryImpl {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log('3', otp);
-                const user = yield otp_1.default.findOne({ otp: otp });
-                console.log('user', user);
-                return user ? user : null;
+                const tutor = yield otp_1.default.findOne({ otp: otp });
+                console.log('user', tutor);
+                return tutor ? tutor : null;
             }
             catch (error) {
                 console.error('Error verifying OTP from database:', error);
@@ -71,31 +70,31 @@ class UserRepositoryImpl {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('user repositoryyyy');
             console.log(email, password);
-            const user = yield user_1.default.findOne({ Email: email });
-            console.log(user);
+            const tutor = yield tutor_1.default.findOne({ Email: email });
+            console.log(tutor);
             let message = '';
             let token = null;
-            if (!user) {
+            if (!tutor) {
                 message = ' invalid user';
             }
             else {
-                if (password !== user.Password) {
+                if (password !== tutor.Password) {
                     console.log('invalid password');
                     message = 'Invalid Password';
                 }
                 else {
-                    token = yield (0, CommonFunctions_1.genAccessToken)(user);
+                    token = yield (0, CommonFunctions_1.genAccessTokenTutor)(tutor);
                     console.log('token', token);
                 }
             }
-            if (user && !message) {
-                return { user: user.toObject(), message, token };
+            if (tutor && !message) {
+                return { tutor: tutor.toObject(), message, token };
             }
             else {
                 console.log('message222', message);
-                return { user: null, message, token };
+                return { tutor: null, message, token };
             }
         });
     }
 }
-exports.UserRepositoryImpl = UserRepositoryImpl;
+exports.TutorRepositoryImpl = TutorRepositoryImpl;

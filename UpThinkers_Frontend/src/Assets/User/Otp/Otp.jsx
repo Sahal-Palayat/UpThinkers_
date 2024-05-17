@@ -1,12 +1,16 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
-
+import Cookies from 'js-cookie'
+import { AuthContext } from '../../../Context/AuthContext';
+import { setUser } from '../../../Store/userAuthSlice';
+import { useDispatch } from 'react-redux';
 function Otp() {
   const [otpValues, setOtpValues] = useState(['', '', '', ''])
-
+  const {setToken} = useContext(AuthContext)
   const inputs = useRef([])
+
 
   const navigate = useNavigate()
 
@@ -17,7 +21,7 @@ function Otp() {
       inputs.current[nextIndex].focus()
     }
   }
- 
+
   const handleChange = (e, index) => {
     const { value } = e.target
     if (value && value.length === 1) {
@@ -28,9 +32,10 @@ function Otp() {
 
     }
   }
-
+  const dispatch = useDispatch()
   const handleOtpSubmit = async () => {
     const otp = otpValues.join('')
+    alert('OtpSubmit')
     const response = await fetch('http://localhost:3030/user/verifyOtp', {
       method: 'POST',
       headers: {
@@ -43,13 +48,16 @@ function Otp() {
 
     if (response.ok) {
       const data = await response.json()
-      console.log(data)
-      document.cookie = `token=${data.token}; path=/;`;
-      toast.success('Successfully signed in')
-      setTimeout(()=>{
-        navigate('/home')
-      },2000)
-
+      Cookies.set('token', data.token)
+      Cookies.set('refreshToken', data.refreshToken)
+      toast.success('Signup successful',{
+        autoClose: true,
+        onClose:()=>{
+          dispatch(setUser(data.user))
+          setToken(data.refreshToken)
+          navigate('/home')
+        }
+      })
     }
   }
 

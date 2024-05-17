@@ -2,7 +2,7 @@ import { User } from '../../entities/user';
 import UserModel from '../../../frameworks/database/models/user';
 import { UserRepository } from '../../interfaces/repositories/user-repository';
 import { SignupData } from '../../entities/signupData';
-import { genAccessToken } from '../../functions/CommonFunctions';
+import { genAccessToken, genRefreshToken } from '../../functions/CommonFunctions';
 import otpModel from '../../../frameworks/database/models/otp';
 const jwt = require('jsonwebtoken') 
 
@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken')
 
 export class UserRepositoryImpl implements UserRepository {
 
-    async save (user: User):Promise <{user:User| null,token :string|null}>{
+    async save (user: User):Promise <{user:User| null,token :string|null,refreshToken :string|null}>{
         console.log('repositoryy');
 
         const {Name,Email,Mobile,Password}=user
@@ -23,8 +23,9 @@ export class UserRepositoryImpl implements UserRepository {
         await newUser.save()
 
         let token = await genAccessToken(user)
+        let refreshToken= await genRefreshToken(user)
         console.log('tokennn',token);
-        return {user:newUser ? newUser.toObject() as User:null,token}
+        return {user:newUser ? newUser.toObject() as User:null,token,refreshToken}
            
     }
 
@@ -69,7 +70,7 @@ export class UserRepositoryImpl implements UserRepository {
             console.log('user repositoryyyy');
             console.log(email,password);
     
-            const user = await UserModel.findOne({email:email})
+            const user = await UserModel.findOne({Email:email})
 
             console.log(user)
             
@@ -92,7 +93,7 @@ export class UserRepositoryImpl implements UserRepository {
           if(user && !message){
             return {user: user.toObject() as User,message,token}
           }  else {
-            console.log('message', message);
+            console.log('message222', message);
 
             return { user: null, message, token };
         }

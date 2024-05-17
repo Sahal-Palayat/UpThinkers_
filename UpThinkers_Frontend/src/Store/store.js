@@ -10,15 +10,15 @@ const rootReducer = combineReducers({
     user:userAuthSlice
 })
 
-// const persistConfig= {
-//     key:'root',
-//     storage
-// }
+const persistConfig= {
+    key:'root',
+    storage
+}
 
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-    reducer:rootReducer
+    reducer:persistedReducer
 })
 
 export default store

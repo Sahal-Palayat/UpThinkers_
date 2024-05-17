@@ -1,16 +1,105 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import logo from '/logoo.png'
 import { useNavigate } from 'react-router-dom'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { toast,ToastContainer } from 'react-toastify'
+import { userLogin,userLoginFailure,userLoginSuccess } from '../../../Store/userAuthSlice'
+import Cookies from 'js-cookie'
+import { AuthContext } from '../../../Context/AuthContext'
 function LoginPage() {
 
-const navigate= useNavigate()
 
+    const [email,setEmail]= useState('')    
+    const [password,setPassword]= useState('')
+    const [emailError,setEmailError]= useState('')
+    const [passwordError,setPasswordError]= useState('')
+
+
+
+    const dispatch =useDispatch()
+    const navigate= useNavigate()
+    const error= useSelector((state)=>state.user.error)
+    const {token,setToken} = useContext(AuthContext)
+
+    useEffect(()=>{
+        console.log('okkkk');
+        dispatch(userLoginFailure(null))
+    },[dispatch])
+
+    const handleLogin= async (e)=>{
+        e.preventDefault()
+        const minPasswordLength = 8;
+
+    let hasError= false
+
+    if (!email.trim()) {
+        setEmailError('Email is required');
+        hasError = true;
+    } else if (!/\b[A-Za-z0-9._%+-]+@gmail\.com\b/.test(email.trim())) {
+        setEmailError('Email must be in the format example@gmail.com');
+        hasError = true;
+    } else {
+        setEmailError('');
+    }
+
+    if (!password.trim()) {
+        setPasswordError('Password is required');
+        hasError = true;
+    } else if (password.length < 0) {
+        setPasswordError(`Password must be at least ${minPasswordLength} characters long`);
+        hasError = true;
+    } else {
+        setPasswordError('');
+    }
+
+    if(!hasError){
+        try {
+            await dispatch(userLogin({email,password})).then(({payload})=>{
+                // ({payload})=>{
+                //     if (payload.status) {
+                //         Cookies.set("token", payload.token, { expires: 7 });
+                //         Cookies.set("refreshToken", payload.refreshToken, { expires: 7 });
+                //       }
+                //       const key = payload.status ? "success" : "error";
+                //       toast[key](payload.message, {
+                //         autoClose: 1000,
+                //         onClose: () => {
+                //           if (payload.status) {
+                //             setToken(payload.token);
+                //             navigate("/");
+                //           }
+                //         },
+                //       });
+                // }
+                const type = payload.user ? 'success' : 'error';
+                toast[type](payload.message,{
+                    autoClose:1500,
+                    onClose:()=>{
+                        if(payload.user){
+                            setToken(payload.refreshToken)
+                            navigate('/home')
+                        }
+                    },
+                    pauseOnHover:false,
+                    draggable:false,
+                })
+            })
+        } catch (error) {
+            console.log('Failed to login');
+            toast.error('Invalid user')
+            // setLoginError('Login failed ,please try again later')
+            dispatch(userLoginFailure('Login failed,try again'))
+        }
+    }
+
+}
 
     return (
         <div className="h-screen  bg-gray-100 overflow-hidden text-gray-900 flex justify-center">
+             <ToastContainer autoClose={1500} onClose={() => navigate('/home')} />
             <div className="w-full  bg-white shadow sm:rounded-lg flex h-full  justify-center flex-1">
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
+              
                     <div>
                         <img src={logo} className="w-mx-auto" alt="Logo" style={{ width: '30%' }} />
                     </div>
@@ -48,16 +137,31 @@ const navigate= useNavigate()
                                     Or sign In with Cartesian E-mail
                                 </div>
                             </div>
+                        <form action='#' method='post'>
 
+                       
                             <div className="mx-auto max-w-xs">
                                 <input
                                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                    type="email" placeholder="Email" />
+                                    type="email" 
+                                    placeholder="Email"
+                                    onChange={(e)=>{setEmail(e.target.value);setEmailError('')}}
+                                    />
+                                    {emailError && <p className="error text-red-600">{emailError}</p>}
                                 <input
                                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    type="password" placeholder="Password" />
+                                    type="password"
+                                     placeholder="Password" 
+                                     onChange={(e)=>{setPassword(e.target.value);setPasswordError('')}}
+                                     />
+                                    {passwordError && <p className="error text-red-600">{passwordError}</p>}
+
                                 <button
+                                     onClick={handleLogin}
+                                     type='submit'
                                     className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                                    
+
                                     <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
                                         stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
@@ -68,6 +172,7 @@ const navigate= useNavigate()
                                         Sign In
                                     </span>
                                 </button>
+
                                 <p className="mt-6 text-xs text-gray-600 text-center">
                                     Dont have an Account clink_
                                     <a href="" className="text-blue-500 text-sm font-semibold">
@@ -76,6 +181,7 @@ const navigate= useNavigate()
 
                                 </p>
                             </div>
+                            </form>
                         </div>
                     </div>
 
@@ -83,6 +189,7 @@ const navigate= useNavigate()
                 <div className="flex-1 text-center hidden lg:flex bg-no-repeat " style={{ backgroundImage: "url('https://www.goodnewsplanners.com/wp-content/uploads/2020/03/Kid_coloring.jpg')" }}>
 
 
+        
                 </div>
             </div>
         </div>

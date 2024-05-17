@@ -145,6 +145,7 @@ const RegisterPage = () => {
                     console.log('email sent sucsess');
                     toast.success('Email sent sucsess')
                     setShowOTP(true)
+                    
                 } else if (response.status === 400) {
                     console.log('user already exist');
                 } else if (response.status === 500) {

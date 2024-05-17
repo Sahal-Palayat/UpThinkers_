@@ -9,27 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserInteractorImpl = void 0;
+exports.TutorInteractorImpl = void 0;
 const CommonFunctions_1 = require("../functions/CommonFunctions");
-class UserInteractorImpl {
+class TutorInteractorImpl {
     constructor(Repository, mailer) {
         this.Repository = Repository;
         this.mailer = mailer;
-        // this.Repository.save()
     }
-    register(userData) {
+    register(tutorData) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const newUser = {
-                    Name: userData.Name,
-                    Email: userData.Email,
-                    Mobile: userData.Mobile,
-                    Password: userData.Password,
+                    Name: tutorData.Name,
+                    Email: tutorData.Email,
+                    Mobile: tutorData.Mobile,
+                    Password: tutorData.Password,
                     CreatedAt: new Date()
                 };
                 console.log(newUser);
-                const { user, token } = yield this.Repository.save(newUser);
-                return { user, token };
+                const { tutor, token } = yield this.Repository.save(newUser);
+                return { tutor, token };
             }
             catch (error) {
                 console.error('Error during signup:', error);
@@ -41,25 +40,25 @@ class UserInteractorImpl {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('2', signupData);
             const email = signupData.email;
-            const userExists = yield this.Repository.userExists(email);
-            console.log(userExists, "userData");
-            if (userExists) {
-                return { userExists: true, isMailSent: false };
+            const tutorExists = yield this.Repository.tutorExists(email);
+            console.log(tutorExists, "tutorData");
+            if (tutorExists) {
+                return { tutorExists: true, isMailSent: false };
             }
             try {
                 const { otp, success } = yield this.mailer.sendMail(email);
                 console.log(otp);
                 if (success) {
                     const saveToDB = yield this.Repository.saveToDB(signupData, otp);
-                    return { userExists: false, isMailSent: true };
+                    return { tutorExists: false, isMailSent: true };
                 }
                 else {
-                    return { userExists: false, isMailSent: false };
+                    return { tutorExists: false, isMailSent: false };
                 }
             }
             catch (error) {
                 console.error('Error sending email:', error);
-                return { userExists: false, isMailSent: false };
+                return { tutorExists: false, isMailSent: false };
             }
         });
     }
@@ -68,9 +67,9 @@ class UserInteractorImpl {
             try {
                 const isUser = yield this.Repository.verifyotp(otp);
                 if (isUser) {
-                    const { user, token, refreshToken } = yield this.Repository.save(isUser);
-                    if (user && token) {
-                        return { success: true, token, refreshToken, user };
+                    const { tutor, token, refreshToken } = yield this.Repository.save(isUser);
+                    if (tutor && token) {
+                        return { success: true, token, refreshToken, tutor };
                     }
                 }
                 return { success: false, token: null, refreshToken: null };
@@ -84,10 +83,10 @@ class UserInteractorImpl {
     login(credentials) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { user, message, token } = yield this.Repository.findCredentials(credentials.email, credentials.password);
-                console.log(user, token, message, 'loggggg');
-                const refreshToken = user ? yield (0, CommonFunctions_1.genRefreshToken)(user) : '';
-                return { user, message, token, refreshToken };
+                const { tutor, message, token } = yield this.Repository.findCredentials(credentials.email, credentials.password);
+                console.log(tutor, token, message, 'loggggg');
+                const refreshToken = tutor ? yield (0, CommonFunctions_1.genRefreshTokenTutor)(tutor) : '';
+                return { tutor, message, token, refreshToken };
             }
             catch (error) {
                 console.log(error);
@@ -96,4 +95,4 @@ class UserInteractorImpl {
         });
     }
 }
-exports.UserInteractorImpl = UserInteractorImpl;
+exports.TutorInteractorImpl = TutorInteractorImpl;

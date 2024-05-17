@@ -13,5 +13,5 @@ const controller = new UserController_1.UserController(interactor);
 userRouter.post('/register', controller.register.bind(controller));
 userRouter.post('/sendMail', controller.sendMail.bind(controller));
 userRouter.post('/verifyOtp', controller.verifyOtp.bind(controller));
-// userRouter.post('/login')  
+userRouter.post('/login', controller.login.bind(controller));
 exports.default = userRouter;
