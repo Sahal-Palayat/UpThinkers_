@@ -201,7 +201,7 @@ function TutorRegister() {
 
                             {/* <div className="my-12  text-start">
                             </div> */}
-                            <div className="max-w-xs w-full bg-white shadow  p-2 ml-20">
+                            <div className="max-w-xs w-full   p-2 ml-20">
                                 <form onSubmit={handleSubmit}>
 
                                 <input

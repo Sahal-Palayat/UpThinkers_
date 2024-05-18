@@ -40,7 +40,8 @@ function OtpTutor() {
     const dispatch = useDispatch()
     const handleOtpSubmit = async () => {
         const otp = otpValues.join('')
-        alert('OtpSubmit')
+        console.log(otp);
+       
         const response = await fetch('http://localhost:3030/tutor/verifyOtp', {
             method: 'POST',
             headers: {

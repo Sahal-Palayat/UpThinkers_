@@ -1,10 +1,93 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import logo from '/logoo.png'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { tutorLogin, tutorLoginFailure } from '../../../Store/tutorAuthSlice'
+import { AuthContext } from '../../../Context/AuthContext'
+import { toast,ToastContainer } from 'react-toastify'
+
+
 
 function TutorLogin() {
+
+
+    
+    const [email,setEmail]= useState('')    
+    const [password,setPassword]= useState('')
+    const [emailError,setEmailError]= useState('')
+    const [passwordError,setPasswordError]= useState('')
+
+
+
+    const dispatch =useDispatch()
+    const navigate= useNavigate()
+    const error= useSelector((state)=>state.tutor.error)
+    const {token,setToken} = useContext(AuthContext)
+
+
+    
+    useEffect(()=>{
+        console.log('okkkk');
+        dispatch(tutorLoginFailure(null))
+    },[dispatch])
+
+
+    const handleLogin= async (e)=>{
+        e.preventDefault()
+        const minPasswordLength = 8;
+
+    let hasError= false
+
+    if (!email.trim()) {
+        setEmailError('Email is required');
+        hasError = true;
+    } else if (!/\b[A-Za-z0-9._%+-]+@gmail\.com\b/.test(email.trim())) {
+        setEmailError('Email must be in the format example@gmail.com');
+        hasError = true;
+    } else {
+        setEmailError('');
+    }
+
+    if (!password.trim()) {
+        setPasswordError('Password is required');
+        hasError = true;
+    } else if (password.length < 0) {
+        setPasswordError(`Password must be at least ${minPasswordLength} characters long`);
+        hasError = true;
+    } else {
+        setPasswordError('');
+    }
+
+    if(!hasError){
+        try {
+            await dispatch(tutorLogin({email,password})).then(({payload})=>{
+              
+                const type = payload.tutor ? 'success' : 'error';
+                toast[type](payload.message,{
+                    autoClose:1500,
+                    onClose:()=>{
+                        if(payload.tutor){
+                            setToken(payload.refreshToken)
+                            navigate('/tutor/home')
+                        }
+                    },
+                    pauseOnHover:false,
+                    draggable:false,
+                })
+            })
+        } catch (error) {
+            console.log('Failed to login');
+            toast.error('Invalid tutor')
+            // setLoginError('Login failed ,please try again later')
+            dispatch(tutorLoginFailure('Login failed,try again'))
+        }
+    }
+
+}
+
     return (
         <div className="h-screen  bg-gray-100 overflow-hidden text-gray-900 flex justify-center">
-            {/* <ToastContainer autoClose={1500} onClose={() => navigate('/home')} /> */}
+            <ToastContainer autoClose={1500} onClose={() => navigate('/home')} />
             <div className="w-full  bg-white shadow sm:rounded-lg flex h-full  justify-center flex-1">
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
 
@@ -53,19 +136,19 @@ function TutorLogin() {
                                         className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                                         type="email"
                                         placeholder="Email"
-                                        // onChange={(e) => { setEmail(e.target.value); setEmailError('') }}
+                                        onChange={(e) => { setEmail(e.target.value); setEmailError('') }}
                                     />
-                                    {/* {emailError && <p className="error text-red-600">{emailError}</p>} */}
+                                    {emailError && <p className="error text-red-600">{emailError}</p>}
                                     <input
                                         className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                                         type="password"
                                         placeholder="Password"
-                                        // onChange={(e) => { setPassword(e.target.value); setPasswordError('') }}
+                                        onChange={(e) => { setPassword(e.target.value); setPasswordError('') }}
                                     />
-                                    {/* {passwordError && <p className="error text-red-600">{passwordError}</p>} */}
+                                    {passwordError && <p className="error text-red-600">{passwordError}</p>}
 
                                     <button
-                                        // onClick={handleLogin}
+                                        onClick={handleLogin}
                                         type='submit'
                                         className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
 
@@ -84,7 +167,7 @@ function TutorLogin() {
                                     <p className="mt-6 text-xs text-gray-600 text-center">
                                         Dont have an Account clink_
                                         <a href="" className="text-blue-500 text-sm font-semibold">
-                                            {/* <button onClick={() => navigate('/register')}>SignUp</button> */}
+                                            <button onClick={() => navigate('/tutor/register')}>SignUp</button>
                                         </a>
 
                                     </p>

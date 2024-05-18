@@ -10,6 +10,10 @@ const userSchema = new mongoose_1.Schema({
     CreatedAt: Date,
     Image: String,
     UpdatedAt: Date,
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
     wishlist: []
 });
 const UserModel = (0, mongoose_1.model)('users', userSchema);

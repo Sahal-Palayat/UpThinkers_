@@ -105,6 +105,7 @@ const tutorSlice= createSlice({
                 state.error=null
             })
            .addCase(tutorRegister.fulfilled,(state,action)=>{
+            alert('11')
                 state.loading=false
                 state.msg=action.payload.message;
                 state.tutor=action.payload.tutor

@@ -7,6 +7,10 @@ export default interface UserDocument extends   Document {
    Password: string;
    Status:boolean;
    CreatedAt:Date;
+   isAdmin:{
+    type:Boolean,
+    default:false
+   }
    Image:string;
    UpdatedAt:Date;
    wishlist:ObjectId;

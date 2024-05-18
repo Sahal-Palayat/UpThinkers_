@@ -87,7 +87,7 @@ function LoginPage() {
         } catch (error) {
             console.log('Failed to login');
             toast.error('Invalid user')
-            // setLoginError('Login failed ,please try again later')
+            setLoginError('Login failed ,please try again later')
             dispatch(userLoginFailure('Login failed,try again'))
         }
     }

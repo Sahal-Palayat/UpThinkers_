@@ -17,7 +17,7 @@ function TutorNavbar() {
         Cookies.remove('token')
         setToken(null)
         dispatch(clearTutor())
-        navigate('/login')
+        navigate('/tutor/login')
     }
 
   return (
