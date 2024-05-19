@@ -20,7 +20,7 @@ class AdminRepositoryImpl {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('user repositoryyyy');
             console.log(email, password);
-            const user = yield user_1.default.findOne({ Email: email });
+            const user = yield user_1.default.findOne({ Email: email, isAdmin: true });
             console.log(user);
             let message = '';
             let token = null;
@@ -43,6 +43,18 @@ class AdminRepositoryImpl {
             else {
                 console.log('message222', message);
                 return { user: null, message, token };
+            }
+        });
+    }
+    getUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const users = yield user_1.default.find();
+                return users;
+            }
+            catch (error) {
+                console.error('Error fetching users:', error);
+                return [];
             }
         });
     }

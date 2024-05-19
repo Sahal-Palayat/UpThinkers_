@@ -280,7 +280,7 @@ const RegisterPage = () => {
                                             <path d="M20 8v6M23 11h-6" />
                                         </svg>
                                         <span className="ml-">
-                                            Sign In
+                                            Sign Up
                                         </span>
                                     </button>
                                 </form>

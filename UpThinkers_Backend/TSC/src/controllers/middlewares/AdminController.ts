@@ -33,6 +33,17 @@ export class AdminController{
         }
     }
 
-
+    async getUsers(req: Request, res: Response,next: NextFunction){
+        try {
+            const users= await this.interactor.getUsers()
+            res.status(200).json({users})
+            
+        } catch (error) {
+            console.log(error);
+            throw error
+            
+            
+        }
+    }
 
 }

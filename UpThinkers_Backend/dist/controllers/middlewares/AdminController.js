@@ -36,5 +36,17 @@ class AdminController {
             }
         });
     }
+    getUsers(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const users = yield this.interactor.getUsers();
+                res.status(200).json({ users });
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
 }
 exports.AdminController = AdminController;

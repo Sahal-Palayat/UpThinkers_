@@ -37,4 +37,18 @@ export class AdminInteractorImpl implements AdminInteractor {
         }
     }
 
+    async getUsers(): Promise<User[] |[]> {
+        try {
+            const user = await this.Repository.getUsers()
+            if(user) {
+                return user
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            throw error
+        }
+    }
+
 }

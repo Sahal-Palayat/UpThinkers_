@@ -7,6 +7,10 @@ import { AuthContext } from './Context/AuthContext'
 import TutorRegister from './Assets/Tutor/TutorRegister/TutorRegister'
 import TutorLogin from './Assets/Tutor/TutorLogin/TutorLogin'
 import TutorHome from './Assets/Tutor/TutorHome/TutorHome'
+import AdminLogin from './Assets/Admin/AdminLogin/AdminLogin'
+import AdminHome from './Assets/Admin/AdminDashboard/AdminHome'
+import StudentsList from './Assets/Admin/ListStudents/StudentsList'
+import TutorsList from './Assets/Admin/ListTutor/TutorsList'
 
 
 function App() {
@@ -34,6 +38,13 @@ function App() {
       <Route path="/tutor" element={<TutorHome/>}/>
       <Route path="/tutor/login" element={token ?<TutorHome/> : <TutorLogin/>}/>
       <Route path="/tutor/home" element={token ?<TutorHome/>: <TutorLogin/>}/> 
+
+
+      <Route path="/admin/login" element={token ?<AdminHome/>: <AdminLogin/>}/> 
+      <Route path="/admin/home" element={token ?<AdminHome/>: <AdminLogin/>}/>
+      <Route path="/admin/studentslist" element={<StudentsList/>}/>
+      <Route path="/admin/tutorslist" element={<TutorsList/>}/>
+
 
 
     </Routes>

@@ -91,5 +91,15 @@ class UserController {
             }
         });
     }
+    getUsers(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const users = yield this.interactor.getUsers();
+                res.status(200).json({ users });
+            }
+            catch (error) {
+            }
+        });
+    }
 }
 exports.UserController = UserController;

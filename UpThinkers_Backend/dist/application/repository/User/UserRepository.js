@@ -97,5 +97,17 @@ class UserRepositoryImpl {
             }
         });
     }
+    getUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const users = yield user_1.default.find();
+                return users;
+            }
+            catch (error) {
+                console.error('Error fetching users:', error);
+                return [];
+            }
+        });
+    }
 }
 exports.UserRepositoryImpl = UserRepositoryImpl;

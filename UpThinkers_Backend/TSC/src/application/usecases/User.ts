@@ -63,22 +63,22 @@ export class UserInteractorImpl implements UserInteractor {
     }
 
 
-    async verifyOtp(otp: string): Promise<{ success: boolean,user?: User, token: string | null,refreshToken:string|null }> {
+    async verifyOtp(otp: string): Promise<{ success: boolean, user?: User, token: string | null, refreshToken: string | null }> {
         try {
             const isUser = await this.Repository.verifyotp(otp)
             if (isUser) {
-                const { user, token, refreshToken} = await this.Repository.save(isUser)
+                const { user, token, refreshToken } = await this.Repository.save(isUser)
                 if (user && token) {
-                    return { success: true, token,refreshToken,user};
+                    return { success: true, token, refreshToken, user };
 
                 }
 
             }
-            return { success: false, token: null,refreshToken: null }; 
+            return { success: false, token: null, refreshToken: null };
 
         } catch (error) {
             console.log(error);
-            return { success: false, token: null,refreshToken:null };
+            return { success: false, token: null, refreshToken: null };
 
         }
     }
@@ -107,7 +107,19 @@ export class UserInteractorImpl implements UserInteractor {
         }
     }
 
-
+    async getUsers(): Promise<User[] |[]> {
+        try {
+            const user = await this.Repository.getUsers()
+            if(user) {
+                return user
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            throw error
+        }
+    }
 
 
 

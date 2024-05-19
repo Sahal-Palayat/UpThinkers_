@@ -2,4 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const adminRouter = (0, express_1.Router)();
+const Admin_1 = require("../../application/usecases/Admin");
+const AdminRepository_1 = require("../../application/repository/Admin/AdminRepository");
+const AdminController_1 = require("../middlewares/AdminController");
+const repository = new AdminRepository_1.AdminRepositoryImpl();
+const interactor = new Admin_1.AdminInteractorImpl(repository);
+const controller = new AdminController_1.AdminController(interactor);
+adminRouter.post('/login', controller.login.bind(controller));
+adminRouter.get('/studentslist', controller.getUsers.bind(controller));
 exports.default = adminRouter;
