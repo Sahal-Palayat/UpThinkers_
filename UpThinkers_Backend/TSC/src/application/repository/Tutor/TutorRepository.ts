@@ -96,4 +96,15 @@ export class TutorRepositoryImpl implements TutorRepository {
   
   }
 
+
+  async getUsers(): Promise<Tutor[] | []> {
+    try {
+        const tutors: Tutor[] = await TutorModel.find();
+        return tutors
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        return [];
+    }
+}
+
 }

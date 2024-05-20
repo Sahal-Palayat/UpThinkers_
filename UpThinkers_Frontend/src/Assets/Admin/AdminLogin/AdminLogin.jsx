@@ -2,88 +2,108 @@ import React, { useContext, useEffect, useState } from 'react'
 import logo from '/logoo.png'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { toast,ToastContainer } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import { AuthContext } from '../../../Context/AuthContext'
-import { adminLoginFailure,adminLogin } from '../../../Store/adminAuthSlice'
+import { adminLoginFailure, adminLogin } from '../../../Store/adminAuthSlice'
 
 
 function AdminLogin() {
 
-    const [email,setEmail]= useState('')    
-    const [password,setPassword]= useState('')
-    const [emailError,setEmailError]= useState('')
-    const [passwordError,setPasswordError]= useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [emailError, setEmailError] = useState('')
+    const [passwordError, setPasswordError] = useState('')
 
 
-    const dispatch =useDispatch()
-    const navigate= useNavigate()
-    const error= useSelector((state)=>state.user.error)
-    const {token,setToken} = useContext(AuthContext)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const error = useSelector((state) => state.user.error)
+    const { token, setToken } = useContext(AuthContext)
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log('okkkk');
         dispatch(adminLoginFailure(null))
-    },[dispatch])
+    }, [dispatch])
 
-    const handleLogin= async (e)=>{
+    const handleLogin = async (e) => {
         e.preventDefault()
         const minPasswordLength = 8;
 
-    let hasError= false
+        let hasError = false
 
-    if (!email.trim()) {
-        setEmailError('Email is required');
-        hasError = true;
-    } else if (!/\b[A-Za-z0-9._%+-]+@gmail\.com\b/.test(email.trim())) {
-        setEmailError('Email must be in the format example@gmail.com');
-        hasError = true;
-    } else {
-        setEmailError('');
-    }
-
-    if (!password.trim()) {
-        setPasswordError('Password is required');
-        hasError = true;
-    } else if (password.length < 0) {
-        setPasswordError(`Password must be at least ${minPasswordLength} characters long`);
-        hasError = true;
-    } else {
-        setPasswordError('');
-    }
-
-    if(!hasError){
-        try {
-            await dispatch(adminLogin({email,password})).then(({payload})=>{
-        
-                const type = payload.user ? 'success' : 'error';
-                toast[type](payload.message,{
-                    autoClose:1500,
-                    onClose:()=>{
-                        if(payload.user){
-                            setToken(payload.refreshToken)
-                            navigate('/admin/home')
-                        }
-                    },
-                    pauseOnHover:false,
-                    draggable:false,
-                })
-            })
-        } catch (error) {
-            console.log('Failed to login');
-            toast.error('Invalid user')
-            setLoginError('Login failed ,please try again later')
-            dispatch(userLoginFailure('Login failed,try again'))
+        if (!email.trim()) {
+            setEmailError('Email is required');
+            hasError = true;
+        } else if (!/\b[A-Za-z0-9._%+-]+@gmail\.com\b/.test(email.trim())) {
+            setEmailError('Email must be in the format example@gmail.com');
+            hasError = true;
+        } else {
+            setEmailError('');
         }
+
+        if (!password.trim()) {
+            setPasswordError('Password is required');
+            hasError = true;
+        } else if (password.length < 0) {
+            setPasswordError(`Password must be at least ${minPasswordLength} characters long`);
+            hasError = true;
+        } else {
+            setPasswordError('');
+        }
+
+        if (!hasError) {
+            try {
+                await dispatch(adminLogin({ email, password })).then((response) => {
+                    if (response.payload) {
+                        toast.success(response?.payload?.message,{
+                                autoClose:1500,
+                                onClose:()=>{
+                                    if(response.payload.user){
+                                        setToken(response.payload.refreshToken)
+                                        navigate('/admin/home')
+                                    }
+                                },
+                                pauseOnHover:false,
+                                draggable:false,
+                            })
+                       
+                    } else {
+                        toast.error(response?.error?.message,{
+                            onClose:()=>{
+                                return navigate('/admin/login')
+                            }
+                        })
+                    }
+
+                    // const type = payload.user ? 'success' : 'error';
+                    // toast[type](payload.message,{
+                    //     autoClose:1500,
+                    //     onClose:()=>{
+                    //         if(payload.user){
+                    //             setToken(payload.refreshToken)
+                    //             navigate('/admin/home')
+                    //         }
+                    //     },
+                    //     pauseOnHover:false,
+                    //     draggable:false,
+                    // })
+                })
+            } catch (error) {
+                console.log(error.message);
+                // toast.error('Invalid user')
+                // setLoginError('Login failed ,please try again later')
+                // dispatch(adminLoginFailure('Login failed,try again'))
+            }
+        }
+
     }
 
-}
-
-  return (
-    <div className="h-screen  bg-gray-100 overflow-hidden text-gray-900 flex justify-center">
-             <ToastContainer autoClose={1500} onClose={() => navigate('/home')} />
+    return (
+        <div className="h-screen  bg-gray-100 overflow-hidden text-gray-900 flex justify-center">
+            <ToastContainer autoClose={1500} onClose={() => navigate('/home')} />
             <div className="w-full  bg-white shadow sm:rounded-lg flex h-full  justify-center flex-1">
                 <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
-              
+
                     <div>
                         <img src={logo} className="w-mx-auto" alt="Logo" style={{ width: '30%' }} />
                     </div>
@@ -121,63 +141,63 @@ function AdminLogin() {
                                     Or sign In with Cartesian E-mail
                                 </div>
                             </div>
-                        <form action='#' method='post'>
+                            <form action='#' method='post'>
 
-                       
-                            <div className="mx-auto max-w-xs">
-                                <input
-                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                                    type="email" 
-                                    placeholder="Email"
-                                    onChange={(e)=>{setEmail(e.target.value);setEmailError('')}}
+
+                                <div className="mx-auto max-w-xs">
+                                    <input
+                                        className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                                        type="email"
+                                        placeholder="Email"
+                                        onChange={(e) => { setEmail(e.target.value); setEmailError('') }}
                                     />
                                     {emailError && <p className="error text-red-600">{emailError}</p>}
-                                <input
-                                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    type="password"
-                                     placeholder="Password" 
-                                     onChange={(e)=>{setPassword(e.target.value);setPasswordError('')}}
-                                     />
+                                    <input
+                                        className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        type="password"
+                                        placeholder="Password"
+                                        onChange={(e) => { setPassword(e.target.value); setPasswordError('') }}
+                                    />
                                     {passwordError && <p className="error text-red-600">{passwordError}</p>}
 
-                                <button
-                                     onClick={handleLogin}
-                                     type='submit'
-                                    className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                                    
+                                    <button
+                                        onClick={handleLogin}
+                                        type='submit'
+                                        className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
 
-                                    <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                        <circle cx="8.5" cy="7" r="4" />
-                                        <path d="M20 8v6M23 11h-6" />
-                                    </svg>
-                                    <span className="ml-">
-                                        Sign In
-                                    </span>
-                                </button>
 
-                                <p className="mt-6 text-xs text-gray-600 text-center">
-                                    Dont have an Account clink_
-                                    <a href="" className="text-blue-500 text-sm font-semibold">
-                                        <button onClick={() => navigate('/register')}>SignUp</button>
-                                    </a>
+                                        <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                            <circle cx="8.5" cy="7" r="4" />
+                                            <path d="M20 8v6M23 11h-6" />
+                                        </svg>
+                                        <span className="ml-">
+                                            Sign In
+                                        </span>
+                                    </button>
 
-                                </p>
-                            </div>
+                                    <p className="mt-6 text-xs text-gray-600 text-center">
+                                        Dont have an Account clink_
+                                        <a href="" className="text-blue-500 text-sm font-semibold">
+                                            <button onClick={() => navigate('/register')}>SignUp</button>
+                                        </a>
+
+                                    </p>
+                                </div>
                             </form>
                         </div>
                     </div>
 
                 </div>
-                <div className="flex-1 text-center hidden lg:flex bg-no-repeat " style={{ backgroundImage: "url('https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg')",height: '100vh', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <div className="flex-1 text-center hidden lg:flex bg-no-repeat " style={{ backgroundImage: "url('https://images.pexels.com/photos/3183132/pexels-photo-3183132.jpeg')", height: '100vh', backgroundSize: 'cover', backgroundPosition: 'center' }}>
 
 
-        
+
                 </div>
             </div>
         </div>
-  )
+    )
 }
 
 export default AdminLogin

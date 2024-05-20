@@ -58,7 +58,13 @@ function Otp() {
           navigate('/home')
         }
       })
-    }
+    }else{
+      toast.error('Invalid otp',{
+          onClose:()=>{
+              return navigate('/login')
+          }
+      })
+  }
   }
 
   return (

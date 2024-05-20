@@ -54,40 +54,33 @@ function LoginPage() {
 
     if(!hasError){
         try {
-            await dispatch(userLogin({email,password})).then(({payload})=>{
-                // ({payload})=>{
-                //     if (payload.status) {
-                //         Cookies.set("token", payload.token, { expires: 7 });
-                //         Cookies.set("refreshToken", payload.refreshToken, { expires: 7 });
-                //       }
-                //       const key = payload.status ? "success" : "error";
-                //       toast[key](payload.message, {
-                //         autoClose: 1000,
-                //         onClose: () => {
-                //           if (payload.status) {
-                //             setToken(payload.token);
-                //             navigate("/");
-                //           }
-                //         },
-                //       });
-                // }
-                const type = payload.user ? 'success' : 'error';
-                toast[type](payload.message,{
-                    autoClose:1500,
-                    onClose:()=>{
-                        if(payload.user){
-                            setToken(payload.refreshToken)
-                            navigate('/home')
+            await dispatch(userLogin({ email, password })).then((response) => {
+                if (response.payload) {
+                  console.log(response.payload);
+                    toast.success(response?.payload?.message,{
+                            autoClose:1500,
+                            onClose:()=>{
+                                if(response.payload.user){
+                                    setToken(response.payload.refreshToken)
+                                    navigate('/home')
+                                }
+                            },
+                            pauseOnHover:false,
+                            draggable:false,
+                        })
+                   
+                } else {
+                    toast.error(response?.error?.message,{
+                        onClose:()=>{
+                            return navigate('/login')
                         }
-                    },
-                    pauseOnHover:false,
-                    draggable:false,
-                })
+                    })
+                }
             })
         } catch (error) {
             console.log('Failed to login');
             toast.error('Invalid user')
-            setLoginError('Login failed ,please try again later')
+            // setLoginError('Login failed ,please try again later')
             dispatch(userLoginFailure('Login failed,try again'))
         }
     }

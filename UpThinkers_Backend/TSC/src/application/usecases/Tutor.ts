@@ -104,5 +104,20 @@ export class TutorInteractorImpl implements TutorInteractor {
         }
     }
 
+    async getUsers(): Promise<Tutor[] |[]> {
+        try {
+            const tutor = await this.Repository.getUsers()
+            if(tutor) {
+                return tutor
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            throw error
+        }
+    }
+
+
 
 }

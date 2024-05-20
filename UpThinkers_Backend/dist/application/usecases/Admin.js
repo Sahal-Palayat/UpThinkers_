@@ -47,5 +47,22 @@ class AdminInteractorImpl {
             }
         });
     }
+    getTutors() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tutor = yield this.Repository.getTutors();
+                if (tutor) {
+                    return tutor;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
 }
 exports.AdminInteractorImpl = AdminInteractorImpl;

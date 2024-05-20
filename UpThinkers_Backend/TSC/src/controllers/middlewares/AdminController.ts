@@ -46,4 +46,15 @@ export class AdminController{
         }
     }
 
+    async getTutors(req: Request, res: Response,next: NextFunction){
+        try {
+            const tutors= await this.interactor.getTutors()
+            res.status(200).json({tutors})
+            
+        } catch (error) {
+            
+        }
+    }
+
+
 }

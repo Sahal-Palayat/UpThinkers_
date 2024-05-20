@@ -48,5 +48,15 @@ class AdminController {
             }
         });
     }
+    getTutors(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tutors = yield this.interactor.getTutors();
+                res.status(200).json({ tutors });
+            }
+            catch (error) {
+            }
+        });
+    }
 }
 exports.AdminController = AdminController;

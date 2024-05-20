@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import logo from '/logoo.png'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-
+import Cookies from 'js-cookie'
+import { AuthContext } from '../../Context/AuthContext'
+import { clearAdmin } from '../../Store/adminAuthSlice'
 function AdminSidebar() {
 
     const user = useSelector((state)=>state.admin.user)
     const navigate= useNavigate()
-    
+    const {setToken} = useContext(AuthContext)
+    const dispatch = useDispatch()
+
+    const logout = () => {
+        Cookies.remove('token')
+        setToken(null)
+        dispatch(clearAdmin())
+        navigate('/admin/login')
+    }
     console.log((user,'sidebarrrrrr'));
     return (
    <div>
@@ -49,7 +59,7 @@ function AdminSidebar() {
         <div className="flex flex-col w-full font-medium">
 
         
-        <div>
+        {/* <div>
             <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
             <a href="javascript:;" className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Sales</a>
             </span>
@@ -61,14 +71,14 @@ function AdminSidebar() {
             <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
             <a href="javascript:;" className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Profile</a>
             </span>
-        </div>
+        </div> */}
 
         
-        <div>
+        {/* <div>
             <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
             <a href="javascript:;" className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Settings</a>
             </span>
-        </div>
+        </div> */}
 
         
        
@@ -91,18 +101,18 @@ function AdminSidebar() {
             <a  onClick={() => navigate('/admin/home')} className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Orders</a>
             </span>
         </div>
-
+{/* 
         
         <div>
             <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
             <a  className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Track Order</a>
             </span>
-        </div>
+        </div> */}
 
         
         <div>
             <span className="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
-            <a href="javascript:;" className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Products</a>
+            <a   onClick={logout} className="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Logout</a>
             </span>
         </div>
 

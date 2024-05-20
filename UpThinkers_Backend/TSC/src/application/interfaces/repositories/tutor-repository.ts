@@ -8,6 +8,6 @@ export interface TutorRepository {
     saveToDB(signupData: SignupDataTutor, otp: string): Promise<boolean>;
     verifyotp(otp: string): Promise<Tutor | null>;
     findCredentials (email : string,password: string): Promise <{tutor:Tutor | null,message:string, token : string | null}> 
-
+    getUsers():Promise<Tutor[] | [] >;
 
 }

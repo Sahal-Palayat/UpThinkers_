@@ -96,5 +96,17 @@ class TutorRepositoryImpl {
             }
         });
     }
+    getUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tutors = yield tutor_1.default.find();
+                return tutors;
+            }
+            catch (error) {
+                console.error('Error fetching users:', error);
+                return [];
+            }
+        });
+    }
 }
 exports.TutorRepositoryImpl = TutorRepositoryImpl;

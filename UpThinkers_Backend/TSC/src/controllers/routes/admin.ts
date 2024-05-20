@@ -13,6 +13,8 @@ const controller = new AdminController(interactor)
 
 adminRouter.post('/login',controller.login.bind(controller))
 adminRouter.get('/studentslist',controller.getUsers.bind(controller))
+adminRouter.get('/Tutorslist',controller.getTutors.bind(controller))
+
 
 
 

@@ -2,7 +2,7 @@ import { AdminRepository } from "../interfaces/repositories/admin-repository";
 import { genRefreshToken } from "../functions/CommonFunctions";
 import { User } from "../entities/user";
 import { AdminInteractor } from "../interfaces/usecases/AdminInteractor";
-
+import { Tutor } from "../entities/tutor";
 
 
 
@@ -50,5 +50,21 @@ export class AdminInteractorImpl implements AdminInteractor {
             throw error
         }
     }
+
+    
+    async getTutors(): Promise<Tutor[] |[]> {
+        try {
+            const tutor = await this.Repository.getTutors()
+            if(tutor) {
+                return tutor
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            throw error
+        }
+    }
+
 
 }

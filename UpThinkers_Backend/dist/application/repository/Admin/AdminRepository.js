@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminRepositoryImpl = void 0;
 const user_1 = __importDefault(require("../../../frameworks/database/models/user"));
 const CommonFunctions_1 = require("../../functions/CommonFunctions");
+const tutor_1 = __importDefault(require("../../../frameworks/database/models/tutor"));
 class AdminRepositoryImpl {
     findCredentials(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -51,6 +52,18 @@ class AdminRepositoryImpl {
             try {
                 const users = yield user_1.default.find();
                 return users;
+            }
+            catch (error) {
+                console.error('Error fetching users:', error);
+                return [];
+            }
+        });
+    }
+    getTutors() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tutors = yield tutor_1.default.find();
+                return tutors;
             }
             catch (error) {
                 console.error('Error fetching users:', error);

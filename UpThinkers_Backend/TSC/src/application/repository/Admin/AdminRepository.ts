@@ -2,6 +2,8 @@ import { User } from "../../entities/user";
 import UserModel from "../../../frameworks/database/models/user";
 import { AdminRepository } from "../../interfaces/repositories/admin-repository";
 import { genAccessToken } from "../../functions/CommonFunctions";
+import { Tutor } from "../../entities/tutor";
+import TutorModel from "../../../frameworks/database/models/tutor";
 
 export class AdminRepositoryImpl implements AdminRepository {
 
@@ -46,6 +48,16 @@ export class AdminRepositoryImpl implements AdminRepository {
         try {
             const users: User[] = await UserModel.find();
             return users
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            return [];
+        }
+    }
+
+    async getTutors(): Promise<Tutor[] | []> {
+        try {
+            const tutors: Tutor[] = await TutorModel.find();
+            return tutors
         } catch (error) {
             console.error('Error fetching users:', error);
             return [];

@@ -60,21 +60,29 @@ function TutorLogin() {
 
     if(!hasError){
         try {
-            await dispatch(tutorLogin({email,password})).then(({payload})=>{
-              
-                const type = payload.tutor ? 'success' : 'error';
-                toast[type](payload.message,{
-                    autoClose:1500,
-                    onClose:()=>{
-                        if(payload.tutor){
-                            setToken(payload.refreshToken)
-                            navigate('/tutor/home')
-                        }
-                    },
-                    pauseOnHover:false,
-                    draggable:false,
+            await dispatch(tutorLogin({ email, password })).then((response) => {
+                    if (response.payload) {
+                      console.log(response.payload);
+                        toast.success(response?.payload?.message,{
+                                autoClose:1500,
+                                onClose:()=>{
+                                    if(response.payload.tutor){
+                                        setToken(response.payload.refreshToken)
+                                        navigate('/tutor/home')
+                                    }
+                                },
+                                pauseOnHover:false,
+                                draggable:false,
+                            })
+                       
+                    } else {
+                        toast.error(response?.error?.message,{
+                            onClose:()=>{
+                                return navigate('/tutor/login')
+                            }
+                        })
+                    }
                 })
-            })
         } catch (error) {
             console.log('Failed to login');
             toast.error('Invalid tutor')

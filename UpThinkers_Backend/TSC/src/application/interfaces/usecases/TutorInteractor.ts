@@ -6,5 +6,5 @@ export interface TutorInteractor {
     sendMail(signupData: SignupDataTutor): Promise<{ tutorExists: boolean, isMailSent: boolean }>
     verifyOtp(otp: string): Promise<{ success: boolean, token: string | null,tutor?: Tutor, refreshToken:string |null}>;
     login(credentials : {email: string, password:string}):Promise <{tutor:Tutor | null,token :string |null,message: string, refreshToken:string | null}>
-
+    getUsers(): Promise<Tutor[] | []>;
 }

@@ -91,4 +91,15 @@ export class TutorController {
             
         }
     }
+    async getUsers(req: Request, res: Response,next: NextFunction){
+        try {
+            const tutors= await this.interactor.getUsers()
+            res.status(200).json({tutors})
+            
+        } catch (error) {
+            
+        }
+    }
+
+
 }

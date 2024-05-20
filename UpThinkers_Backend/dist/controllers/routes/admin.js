@@ -10,4 +10,5 @@ const interactor = new Admin_1.AdminInteractorImpl(repository);
 const controller = new AdminController_1.AdminController(interactor);
 adminRouter.post('/login', controller.login.bind(controller));
 adminRouter.get('/studentslist', controller.getUsers.bind(controller));
+adminRouter.get('/Tutorslist', controller.getTutors.bind(controller));
 exports.default = adminRouter;

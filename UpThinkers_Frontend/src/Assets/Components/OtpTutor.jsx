@@ -64,6 +64,12 @@ function OtpTutor() {
                     navigate('/tutor/home')
                 }
             })
+        }else{
+            toast.error('Invalid otp',{
+                onClose:()=>{
+                    return navigate('/tutor/login')
+                }
+            })
         }
     }
 
