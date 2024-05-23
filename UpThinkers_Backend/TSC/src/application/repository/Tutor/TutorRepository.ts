@@ -26,7 +26,7 @@ export class TutorRepositoryImpl implements TutorRepository {
     }
 
     async tutorExists(email: string): Promise<boolean> {
-        const tutorExists = await TutorModel.findOne({ email: email });
+        const tutorExists = await TutorModel.findOne({ Email: email });
         return !!tutorExists; 
     }
 
@@ -106,5 +106,19 @@ export class TutorRepositoryImpl implements TutorRepository {
         return [];
     }
 }
+
+async updateOTP(emailId: string, newOtp: string): Promise<boolean> {
+    try {
+        const isUpdateOTP = await otpModel.findOneAndUpdate(
+            { Email: emailId },
+            { $set: { otp: newOtp } }
+        );
+        return isUpdateOTP != null;
+    } catch (error) {
+        console.log(error);
+        throw new Error();
+    }
+}
+
 
 }

@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserController = void 0;
-class UserController {
+exports.TutorController = void 0;
+class TutorController {
     constructor(interactor) {
         this.interactor = interactor;
     }
@@ -19,9 +19,9 @@ class UserController {
             try {
                 const { name, email, mobile, password } = req.body;
                 console.log('bodyyy', req.body);
-                const { user, token } = yield this.interactor.register({ Name: name, Password: password, Email: email, Mobile: mobile });
-                console.log(user, token, 'returningggggg');
-                res.status(200).json({ message: 'Signup successful', user, token });
+                const { tutor, token } = yield this.interactor.register({ Name: name, Password: password, Email: email, Mobile: mobile });
+                console.log(tutor, token, 'returningggggg');
+                res.status(200).json({ message: 'Signup successful', tutor, token });
             }
             catch (error) {
                 console.error('Error during signup:', error);
@@ -34,8 +34,8 @@ class UserController {
             try {
                 const signupData = req.body;
                 console.log(req.body, 'firsttttttttttttttt');
-                const { userExists, isMailSent } = yield this.interactor.sendMail(signupData);
-                if (userExists) {
+                const { tutorExists, isMailSent } = yield this.interactor.sendMail(signupData);
+                if (tutorExists) {
                     res.status(400).json({ success: false, message: 'User already exists' });
                 }
                 else if (isMailSent) {
@@ -55,9 +55,9 @@ class UserController {
             try {
                 console.log('0000000');
                 const { otp } = req.body;
-                const { user, success, token, refreshToken } = yield this.interactor.verifyOtp(otp);
+                const { tutor, success, token, refreshToken } = yield this.interactor.verifyOtp(otp);
                 if (success) {
-                    res.status(200).json({ success: true, message: 'otp verification success', token, refreshToken, user });
+                    res.status(200).json({ success: true, message: 'otp verification success', token, refreshToken, tutor });
                 }
                 else {
                     res.status(400).json({ success: false, message: 'otp verification failed' });
@@ -75,11 +75,11 @@ class UserController {
                 console.log('entered login controller', req.body);
                 const { email, password } = req.body;
                 console.log(email, password);
-                const { user, message, token, refreshToken } = yield this.interactor.login({ email: email, password: password });
-                if (user) {
+                const { tutor, message, token, refreshToken } = yield this.interactor.login({ email: email, password: password });
+                if (tutor) {
                     console.log('user und');
-                    console.log('cntrllr user', user, token, refreshToken);
-                    res.status(200).json({ message: 'Login Succefull', user, token: token, refreshToken });
+                    console.log('cntrllr user', tutor, token, refreshToken);
+                    res.status(200).json({ message: 'Login Succefull', tutor, token: token, refreshToken });
                 }
                 else {
                     res.status(302).json({ message: message });
@@ -94,8 +94,8 @@ class UserController {
     getUsers(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const users = yield this.interactor.getUsers();
-                res.status(200).json({ users });
+                const tutors = yield this.interactor.getUsers();
+                res.status(200).json({ tutors });
             }
             catch (error) {
             }
@@ -104,7 +104,9 @@ class UserController {
     resendMail(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
                 const emailId = req.params.emailId;
+                console.log(emailId, 'jjjjjjjjjjjjjjjjjjj');
                 const success = yield this.interactor.resendMail(emailId);
                 if (success) {
                     console.log('Sheriyayii');
@@ -121,4 +123,4 @@ class UserController {
         });
     }
 }
-exports.UserController = UserController;
+exports.TutorController = TutorController;

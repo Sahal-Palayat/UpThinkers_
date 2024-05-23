@@ -104,7 +104,9 @@ class UserController {
     resendMail(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
                 const emailId = req.params.emailId;
+                console.log(emailId, 'jjjjjjjjjjjjjjjjjjj');
                 const success = yield this.interactor.resendMail(emailId);
                 if (success) {
                     console.log('Sheriyayii');

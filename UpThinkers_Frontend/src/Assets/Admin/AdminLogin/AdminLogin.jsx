@@ -59,6 +59,7 @@ function AdminLogin() {
                                 autoClose:1500,
                                 onClose:()=>{
                                     if(response.payload.user){
+                                        
                                         setToken(response.payload.refreshToken)
                                         navigate('/admin/home')
                                     }

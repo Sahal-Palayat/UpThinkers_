@@ -19,10 +19,10 @@ class AdminInteractorImpl {
     login(credentials) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { user, message, token } = yield this.Repository.findCredentials(credentials.email, credentials.password);
-                console.log(user, token, message, 'loggggg');
-                const refreshToken = user ? yield (0, CommonFunctions_1.genRefreshToken)(user) : '';
-                return { user, message, token, refreshToken };
+                const { user, message, adminToken } = yield this.Repository.findCredentials(credentials.email, credentials.password);
+                console.log(user, adminToken, message, 'loggggg');
+                const refreshToken = user ? yield (0, CommonFunctions_1.genRefreshToken)(user, 'admin') : '';
+                return { user, message, adminToken, refreshToken };
             }
             catch (error) {
                 console.log(error);
@@ -57,6 +57,30 @@ class AdminInteractorImpl {
                 else {
                     return [];
                 }
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    blockUser(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.Repository.blockUser(userId);
+                return user;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    blockTutor(tutorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tutor = yield this.Repository.blockTutor(tutorId);
+                return tutor;
             }
             catch (error) {
                 console.log(error);

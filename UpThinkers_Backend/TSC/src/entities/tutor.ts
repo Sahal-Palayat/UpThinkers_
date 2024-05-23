@@ -10,5 +10,7 @@ export default interface TutorDocument extends   Document {
    Image:string;
    UpdatedAt:Date;
    wishlist:ObjectId;
+   isBlocked:boolean;
+   Courses:ObjectId;
    
 }

@@ -4,10 +4,11 @@ import { AdminRepository } from "../../interfaces/repositories/admin-repository"
 import { genAccessToken } from "../../functions/CommonFunctions";
 import { Tutor } from "../../entities/tutor";
 import TutorModel from "../../../frameworks/database/models/tutor";
+import { isObjectIdOrHexString } from "mongoose";
 
 export class AdminRepositoryImpl implements AdminRepository {
 
-    async findCredentials(email: string, password: string): Promise<{ user: User | null, token: string | null, message: string }> {
+    async findCredentials(email: string, password: string): Promise<{ user: User | null, adminToken: string | null, message: string }> {
 
         console.log('user repositoryyyy');
         console.log(email, password);
@@ -17,7 +18,7 @@ export class AdminRepositoryImpl implements AdminRepository {
         console.log(user)
 
         let message = ''
-        let token = null
+        let adminToken = null
 
 
         if (!user) {
@@ -27,17 +28,17 @@ export class AdminRepositoryImpl implements AdminRepository {
                 console.log('invalid password');
                 message = 'Invalid Password'
             } else {
-                token = await genAccessToken(user)
-                console.log('token', token);
+                adminToken = await genAccessToken(user,'admin')
+                console.log('token', adminToken);
             }
         }
 
         if (user && !message) {
-            return { user: user.toObject() as User, message, token }
+            return { user: user.toObject() as User, message, adminToken }
         } else {
             console.log('message222', message);
 
-            return { user: null, message, token };
+            return { user: null, message, adminToken };
         }
 
 
@@ -63,5 +64,52 @@ export class AdminRepositoryImpl implements AdminRepository {
             return [];
         }
     }
+
+    async blockUser(id: string): Promise<User | null> {
+
+        try {
+            const result = isObjectIdOrHexString(id)
+            if (!result) {
+
+            }
+            const user = await UserModel.findById(id)
+            if (!user) {
+
+            }
+            if (user) {
+                user.isBlocked = !user.isBlocked
+                await user.save()
+            }
+            return user ? user.toObject() as User : null
+        } catch (error) {
+            console.log(error);
+            throw error
+
+        }
+    }
+
+    async blockTutor(id: string): Promise<Tutor | null> {
+
+        try {
+            const result = isObjectIdOrHexString(id)
+            if (!result) {
+
+            }
+            const tutor = await TutorModel.findById(id)
+            if (!tutor) {
+
+            }
+            if (tutor) {
+                tutor.isBlocked = !tutor.isBlocked
+                await tutor.save()
+            }
+            return tutor ? tutor.toObject() as Tutor : null
+        } catch (error) {
+            console.log(error);
+            throw error
+
+        }
+    }
+
 
 }

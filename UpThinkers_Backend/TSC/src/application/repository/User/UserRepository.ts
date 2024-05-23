@@ -22,8 +22,8 @@ export class UserRepositoryImpl implements UserRepository {
 
         await newUser.save()
 
-        let token = await genAccessToken(user)
-        let refreshToken = await genRefreshToken(user)
+        let token = await genAccessToken(user,'user')
+        let refreshToken = await genRefreshToken(user,'user')
         console.log('tokennn', token);
         return { user: newUser ? newUser.toObject() as User : null, token, refreshToken }
 
@@ -31,7 +31,7 @@ export class UserRepositoryImpl implements UserRepository {
 
 
     async userExists(email: string): Promise<boolean> {
-        const userExists = await UserModel.findOne({ email: email });
+        const userExists = await UserModel.findOne({ Email: email });
         return !!userExists;
     }
 
@@ -70,7 +70,7 @@ export class UserRepositoryImpl implements UserRepository {
         console.log('user repositoryyyy');
         console.log(email, password);
 
-        const user = await UserModel.findOne({ Email: email })
+        const user = await UserModel.findOne({ Email: email})
 
         console.log(user)
 
@@ -80,17 +80,20 @@ export class UserRepositoryImpl implements UserRepository {
 
         if (!user) {
             message = ' invalid user'
-        } else {
+        } else if (user.isBlocked===true) {
+            message='user blocked'
+        }else{
             if (password !== user.Password) {
                 console.log('invalid password');
                 message = 'Invalid Password'
             } else {
-                token = await genAccessToken(user)
+                token = await genAccessToken(user,'user')
                 console.log('token', token);
             }
+
         }
 
-        if (user && !message) {
+        if (user?.isBlocked===false && !message) {
             return { user: user.toObject() as User, message, token }
         } else {
             console.log('message222', message);
@@ -111,6 +114,22 @@ export class UserRepositoryImpl implements UserRepository {
             return [];
         }
     }
+
+
+    async updateOTP(emailId: string, newOtp: string): Promise<boolean> {
+        try {
+            const isUpdateOTP = await otpModel.findOneAndUpdate(
+                { Email: emailId },
+                { $set: { otp: newOtp } }
+            );
+            return isUpdateOTP != null;
+        } catch (error) {
+            console.log(error);
+            throw new Error();
+        }
+    }
+
+
 
 }
 

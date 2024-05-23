@@ -33,7 +33,7 @@ class TutorRepositoryImpl {
     }
     tutorExists(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const tutorExists = yield tutor_1.default.findOne({ email: email });
+            const tutorExists = yield tutor_1.default.findOne({ Email: email });
             return !!tutorExists;
         });
     }
@@ -105,6 +105,18 @@ class TutorRepositoryImpl {
             catch (error) {
                 console.error('Error fetching users:', error);
                 return [];
+            }
+        });
+    }
+    updateOTP(emailId, newOtp) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const isUpdateOTP = yield otp_1.default.findOneAndUpdate({ Email: emailId }, { $set: { otp: newOtp } });
+                return isUpdateOTP != null;
+            }
+            catch (error) {
+                console.log(error);
+                throw new Error();
             }
         });
     }

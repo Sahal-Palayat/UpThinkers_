@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useRef, useState,useEffect } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie'
@@ -6,15 +6,34 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AuthContext } from '../../Context/AuthContext';
 import { setTutor } from '../../Store/tutorAuthSlice';
+import axios from 'axios'
+import { config } from '../../config';
 
 
 
 
-function OtpTutor() {
+function OtpTutor({ signupData }) {
 
     const [otpValues, setOtpValues] = useState(['', '', '', ''])
     const { setToken } = useContext(AuthContext)
+    const [timer, setTimer] = useState(30);
+    const [isDisabled, setIsDisabled] = useState(false);
     const inputs = useRef([])
+
+
+    useEffect(() => {
+        if (timer > 0) {
+            const intervalId = setInterval(() => {
+                setTimer(prevTimer => prevTimer - 1);
+            }, 1000);
+
+            return () => clearInterval(intervalId);
+        } else {
+            setIsDisabled(true);
+        }
+    }, [timer]);
+
+
 
     const navigate = useNavigate()
 
@@ -41,7 +60,7 @@ function OtpTutor() {
     const handleOtpSubmit = async () => {
         const otp = otpValues.join('')
         console.log(otp);
-       
+
         const response = await fetch('http://localhost:3030/tutor/verifyOtp', {
             method: 'POST',
             headers: {
@@ -64,14 +83,40 @@ function OtpTutor() {
                     navigate('/tutor/home')
                 }
             })
-        }else{
-            toast.error('Invalid otp',{
-                onClose:()=>{
+        } else {
+            toast.error('Invalid otp', {
+                onClose: () => {
                     return navigate('/tutor/login')
                 }
             })
         }
     }
+
+
+
+    const handleResendOtp = async () => {
+
+        const response = await axios.post(`${config.TUTOR_BASE_URL}/resendMail/${signupData.email}`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+
+                emailId: signupData.email
+            })
+        });
+
+        console.log(response);
+
+        if (response.status === 200) {
+            setTimer(30);
+            setIsDisabled(false);
+            toast.success(response.success);
+        } else if (response.error) {
+            toast.error(response.error);
+        }
+
+    };
 
 
     return (
@@ -110,10 +155,16 @@ function OtpTutor() {
                             </button>
 
                             <div className="flex items-center justify-center text-sm font-medium space-x-1 text-gray-500">
-                                <p>Didn't receive code?</p>{' '}
-                                <a className="flex items-center text-blue-600" href="#" target="_blank" rel="noopener noreferrer">
-                                    Resend
-                                </a>
+                                {/* <p>Didn't receive code?</p>{' '} */}
+                                {/* <button >Submit OTP</button> */}
+                                <p>Time remaining: {timer} seconds</p>
+                                <button
+                                    className={`${isDisabled ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'} font-bold py-1 px-2 rounded text-xs mt-2`}
+                                    onClick={handleResendOtp}
+                                    disabled={!isDisabled}
+                                >
+                                    Resend OTP
+                                </button>
                             </div>
                         </div>
                     </div>

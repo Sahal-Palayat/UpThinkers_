@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const tutorRouter = (0, express_1.Router)();
-const TutorController_1 = require("../middlewares/TutorController");
+const TutorController_1 = require("../controller/TutorController");
 const mailer_1 = require("../../application/external-lib/mailer");
 const Tutor_1 = require("../../application/usecases/Tutor");
 const TutorRepository_1 = require("../../application/repository/Tutor/TutorRepository");
@@ -13,5 +13,6 @@ const controller = new TutorController_1.TutorController(interactor);
 tutorRouter.post('/register', controller.register.bind(controller));
 tutorRouter.post('/sendMail', controller.sendMail.bind(controller));
 tutorRouter.post('/verifyOtp', controller.verifyOtp.bind(controller));
+tutorRouter.post('/resendMail/:emailId', controller.resendMail.bind(controller));
 tutorRouter.post('/login', controller.login.bind(controller));
 exports.default = tutorRouter;

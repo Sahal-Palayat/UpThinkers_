@@ -14,22 +14,22 @@ export class AdminInteractorImpl implements AdminInteractor {
 
 
     
-    async login(credentials: { email: string, password: string }): Promise<{ user: User | null, message: string, token: string | null, refreshToken: string | null }> {
+    async login(credentials: { email: string, password: string }): Promise<{ user: User | null, message: string, adminToken: string | null, refreshToken: string | null }> {
         try {
 
 
 
-            const { user, message, token }: {
+            const { user, message, adminToken }: {
                 user: User | null,
                 message: string,
-                token: string | null
+                adminToken: string | null
             } = await this.Repository.findCredentials(credentials.email, credentials.password)
-            console.log(user, token, message, 'loggggg');
+            console.log(user, adminToken, message, 'loggggg');
 
 
-            const refreshToken = user ? await genRefreshToken(user) : ''
+            const refreshToken = user ? await genRefreshToken(user,'admin') : ''
 
-            return { user, message, token, refreshToken }
+            return { user, message, adminToken, refreshToken }
 
         } catch (error) {
             console.log(error);
@@ -66,5 +66,28 @@ export class AdminInteractorImpl implements AdminInteractor {
         }
     }
 
+    async blockUser(userId: string):Promise <User|null> {
+        try {
+            const user = await this.Repository.blockUser(userId)
+           return user
+        } catch (error) {
+            console.log(error);
+            throw error
+            
+        }
 
+    }
+
+
+    async blockTutor(tutorId: string):Promise <Tutor|null> {
+        try {
+            const tutor = await this.Repository.blockTutor(tutorId)
+           return tutor
+        } catch (error) {
+            console.log(error);
+            throw error
+            
+        }
+
+    }
 }

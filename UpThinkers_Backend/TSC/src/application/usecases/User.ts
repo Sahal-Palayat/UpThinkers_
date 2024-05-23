@@ -97,7 +97,7 @@ export class UserInteractorImpl implements UserInteractor {
             console.log(user, token, message, 'loggggg');
 
 
-            const refreshToken = user ? await genRefreshToken(user) : ''
+            const refreshToken = user ? await genRefreshToken(user,'user') : ''
 
             return { user, message, token, refreshToken }
 
@@ -119,6 +119,23 @@ export class UserInteractorImpl implements UserInteractor {
             console.log(error);
             throw error
         }
+    }
+    async resendMail(emailId: string): Promise<boolean> {
+        try {
+            const { otp, success } = await this.mailer.sendMail(emailId);
+            console.log(otp);
+            
+            if (success) {
+                const updateOTP = await this.Repository.updateOTP(emailId,otp);
+                return updateOTP;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            throw new Error;
+        }
+
     }
 
 

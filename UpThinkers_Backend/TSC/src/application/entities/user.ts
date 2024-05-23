@@ -9,4 +9,5 @@ export interface User {
     gender?: string;
     Image?: string;
     CreatedAt?:Date;
+    isBlocked?: boolean;
 }

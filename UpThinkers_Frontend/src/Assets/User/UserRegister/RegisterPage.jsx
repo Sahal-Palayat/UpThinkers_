@@ -147,7 +147,9 @@ const RegisterPage = () => {
                     setShowOTP(true)
                     
                 } else if (response.status === 400) {
+                    
                     console.log('user already exist');
+                    toast.error('User already exist')
                 } else if (response.status === 500) {
                     console.log('failed to send otp');
                 } else {
@@ -168,7 +170,7 @@ const RegisterPage = () => {
             <>
 
                 <ToastContainer position="top-center" autoClose={1500} />
-                <Otp />
+                <Otp signupData={signupData} />
 
             </>
         )
@@ -177,6 +179,7 @@ const RegisterPage = () => {
 
     return (
         <div className="h-screen bg-gray-100 text-gray-900 flex justify-center">
+            <ToastContainer position="top-center" autoClose={1500} />
             <div className="w-full bg-white shadow sm:rounded-lg flex h-screen justify-center flex-1">
 
                 <div className="flex-1 text-center hidden lg:flex bg-contain  bg-center bg-no-repeat " style={{ backgroundImage: "url('https://st.depositphotos.com/1015530/4696/i/450/depositphotos_46963461-stock-photo-little-boy-is-reading-a.jpg')" }}>
@@ -298,6 +301,7 @@ const RegisterPage = () => {
                 </div>
 
             </div>
+        
         </div>
     )
 }

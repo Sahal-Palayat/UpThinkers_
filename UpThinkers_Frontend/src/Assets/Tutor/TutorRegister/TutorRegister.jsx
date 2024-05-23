@@ -131,7 +131,7 @@ function TutorRegister() {
                     console.log('email sent sucsess');
                     toast.success('Email sent sucsess')
                     setShowOTP(true)
-                    
+
                 } else if (response.status === 400) {
                     console.log('user already exist');
                 } else if (response.status === 500) {
@@ -153,7 +153,7 @@ function TutorRegister() {
             <>
 
                 <ToastContainer position="top-center" autoClose={1500} />
-                <OtpTutor />
+                <OtpTutor signupData={signupData} />
 
             </>
         )
@@ -164,6 +164,8 @@ function TutorRegister() {
 
     return (
         <div className="h-screen bg-gray-100 text-gray-900 flex justify-center">
+            <ToastContainer position="top-center" autoClose={1500} />
+
             <div className="w-full bg-white shadow sm:rounded-lg flex h-screen justify-center flex-1">
                 <div className="flex-1 text-center hidden lg:flex" style={{ backgroundImage: "url('https://www.corporatevision-news.com/wp-content/uploads/2020/07/online-learning-1.jpg')", height: '100vh', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 </div>
@@ -204,69 +206,69 @@ function TutorRegister() {
                             <div className="max-w-xs w-full   p-2 ml-20">
                                 <form onSubmit={handleSubmit}>
 
-                                <input
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="name"
-                                    name="name"
-                                    placeholder="Full Name"
-                                    type="text"
-                                value={name}
-                                onChange={handleInputChange}
-                                />
-                                {nameError && <p className="text-xs text-red-500">{nameError}</p>}
-                                <input
-                                    autoFocus
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="email"
-                                    name="email"
-                                    placeholder="Email"
-                                    type="text"
-                                value={email}
-                                onChange={handleInputChange}
-                                />
-                                {emailError && <p className="text-xs text-red-500">{emailError}</p>}
-                                <input
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="mobile"
-                                    name="mobile"
-                                    placeholder="Mobile"
-                                    type="text"
-                                value={mobile}
-                                onChange={handleInputChange}
-                                />
-                                {mobileError && <p className="text-xs text-red-500">{mobileError}</p>}
-                                <input
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Password"
-                                    type="password"
-                                value={password}
-                                onChange={handleInputChange}
-                                />
-                                {passwordError && <p className="text-xs text-red-500">{passwordError}</p>}
-                                <input
-                                    className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    placeholder="Confirm Password"
-                                    type="password"
-                                value={confirmPassword}
-                                onChange={handleInputChange}
-                                />
-                                {confirmPasswordError && <p className="text-xs text-red-500">{confirmPasswordError}</p>}
-                                <button
-                                    type='submit' className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-2 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                                    <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                                        <circle cx="8.5" cy="7" r="4" />
-                                        <path d="M20 8v6M23 11h-6" />
-                                    </svg>
-                                    <span className="ml-">
-                                        Sign In
-                                    </span>
-                                </button>
+                                    <input
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="name"
+                                        name="name"
+                                        placeholder="Full Name"
+                                        type="text"
+                                        value={name}
+                                        onChange={handleInputChange}
+                                    />
+                                    {nameError && <p className="text-xs text-red-500">{nameError}</p>}
+                                    <input
+                                        autoFocus
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        type="text"
+                                        value={email}
+                                        onChange={handleInputChange}
+                                    />
+                                    {emailError && <p className="text-xs text-red-500">{emailError}</p>}
+                                    <input
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="mobile"
+                                        name="mobile"
+                                        placeholder="Mobile"
+                                        type="text"
+                                        value={mobile}
+                                        onChange={handleInputChange}
+                                    />
+                                    {mobileError && <p className="text-xs text-red-500">{mobileError}</p>}
+                                    <input
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Password"
+                                        type="password"
+                                        value={password}
+                                        onChange={handleInputChange}
+                                    />
+                                    {passwordError && <p className="text-xs text-red-500">{passwordError}</p>}
+                                    <input
+                                        className="w-full px-8 py-2 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        placeholder="Confirm Password"
+                                        type="password"
+                                        value={confirmPassword}
+                                        onChange={handleInputChange}
+                                    />
+                                    {confirmPasswordError && <p className="text-xs text-red-500">{confirmPasswordError}</p>}
+                                    <button
+                                        type='submit' className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-2 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                                        <svg className="w-6 h-6 -ml-2" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                                            <circle cx="8.5" cy="7" r="4" />
+                                            <path d="M20 8v6M23 11h-6" />
+                                        </svg>
+                                        <span className="ml-">
+                                            Sign In
+                                        </span>
+                                    </button>
                                 </form>
                                 <p className="mt-6 text-xs text-gray-600 text-center">
                                     You have a Account click here--

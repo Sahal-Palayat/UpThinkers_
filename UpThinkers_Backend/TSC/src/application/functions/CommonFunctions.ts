@@ -2,6 +2,8 @@ import {hash ,compare } from 'bcrypt'
 import { User } from '../entities/user'
 import { Tutor } from '../entities/tutor'
 const jwt = require('jsonwebtoken')
+import {config} from 'dotenv'
+config()
 // export function genRandomString(length :number):string {
 //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 //     let result = ''
@@ -32,16 +34,18 @@ export const CalculateTime: Function = async (Password: string ,Hashed:string )=
 }
 
 
-export function genAccessToken(user:any):string {
-    return jwt.sign({ userId: user._id }, 'athee....', { expiresIn: '1d' });
+export function genAccessToken(user:any,role:string):string {
+   const secret = process.env.JWT_SECRET || ' ';
+    return jwt.sign({ id: user._id, role:role }, secret, { expiresIn: '1d' });
 }
 export function genAccessTokenTutor(tutor:any):string {
-    return jwt.sign({ tutorId: tutor._id }, 'athee....', { expiresIn: '1d' });
+    return jwt.sign({ id: tutor._id }, 'athee....', { expiresIn: '1d' });
 }
 
 
-export function genRefreshToken(user:User): string {
-    return jwt.sign({ userId: user.Email }, 'athee...', { expiresIn: '7d' });
+export function genRefreshToken(user:User,role:any): string {
+    const secret = process.env.JWT_SECRET || ' ';
+    return jwt.sign({ id: user.Email,role:role }, secret, { expiresIn: '7d' });
 }
 
 export function genRefreshTokenTutor(tutor:Tutor): string {

@@ -1,6 +1,6 @@
 import {Router} from 'express'
 const tutorRouter:Router = Router()
-import { TutorController } from '../middlewares/TutorController';
+import { TutorController } from '../controller/TutorController';
 import { MailerImp } from '../../application/external-lib/mailer';
 import { TutorInteractorImpl } from '../../application/usecases/Tutor';
 import { TutorRepositoryImpl } from '../../application/repository/Tutor/TutorRepository';
@@ -15,6 +15,8 @@ const controller= new TutorController(interactor)
 tutorRouter.post('/register',controller.register.bind(controller))
 tutorRouter.post('/sendMail',controller.sendMail.bind(controller))
 tutorRouter.post('/verifyOtp',controller.verifyOtp.bind(controller))
+tutorRouter.post('/resendMail/:emailId', controller.resendMail.bind(controller));
+
 
 tutorRouter.post('/login',controller.login.bind(controller))  
 

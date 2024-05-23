@@ -4,7 +4,6 @@ import UserDocument from "../../../entities/user";
 
 const userSchema= new Schema<UserDocument>({
     Name:String,
-    
     Email:String,
     Mobile:Number,
     Password:String,
@@ -16,7 +15,11 @@ const userSchema= new Schema<UserDocument>({
         type:Boolean,
         default:false,
     },
-    wishlist:[]
+    wishlist:[],
+    isBlocked:{
+        type:Boolean,
+        default:false,
+    }
 })
 
 

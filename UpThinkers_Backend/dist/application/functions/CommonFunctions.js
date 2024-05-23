@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.genRandomOtp = exports.genRefreshTokenTutor = exports.genRefreshToken = exports.genAccessTokenTutor = exports.genAccessToken = exports.CalculateTime = exports.HashPassword = void 0;
 const bcrypt_1 = require("bcrypt");
 const jwt = require('jsonwebtoken');
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.config)();
 // export function genRandomString(length :number):string {
 //     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 //     let result = ''
@@ -37,16 +39,18 @@ const CalculateTime = (Password, Hashed) => __awaiter(void 0, void 0, void 0, fu
     return yield (0, bcrypt_1.compare)(Password, Hashed);
 });
 exports.CalculateTime = CalculateTime;
-function genAccessToken(user) {
-    return jwt.sign({ userId: user._id }, 'athee....', { expiresIn: '1d' });
+function genAccessToken(user, role) {
+    const secret = process.env.JWT_SECRET || ' ';
+    return jwt.sign({ id: user._id, role: role }, secret, { expiresIn: '1d' });
 }
 exports.genAccessToken = genAccessToken;
 function genAccessTokenTutor(tutor) {
-    return jwt.sign({ tutorId: tutor._id }, 'athee....', { expiresIn: '1d' });
+    return jwt.sign({ id: tutor._id }, 'athee....', { expiresIn: '1d' });
 }
 exports.genAccessTokenTutor = genAccessTokenTutor;
-function genRefreshToken(user) {
-    return jwt.sign({ userId: user.Email }, 'athee...', { expiresIn: '7d' });
+function genRefreshToken(user, role) {
+    const secret = process.env.JWT_SECRET || ' ';
+    return jwt.sign({ id: user.Email, role: role }, secret, { expiresIn: '7d' });
 }
 exports.genRefreshToken = genRefreshToken;
 function genRefreshTokenTutor(tutor) {

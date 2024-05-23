@@ -111,5 +111,24 @@ class TutorInteractorImpl {
             }
         });
     }
+    resendMail(emailId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { otp, success } = yield this.mailer.sendMail(emailId);
+                console.log(otp);
+                if (success) {
+                    const updateOTP = yield this.Repository.updateOTP(emailId, otp);
+                    return updateOTP;
+                }
+                else {
+                    return false;
+                }
+            }
+            catch (error) {
+                console.error('Error sending email:', error);
+                throw new Error;
+            }
+        });
+    }
 }
 exports.TutorInteractorImpl = TutorInteractorImpl;

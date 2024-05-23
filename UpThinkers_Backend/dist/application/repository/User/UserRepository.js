@@ -26,15 +26,15 @@ class UserRepositoryImpl {
             const newUser = new user_1.default({ Name, Email, Mobile, Password });
             console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
             yield newUser.save();
-            let token = yield (0, CommonFunctions_1.genAccessToken)(user);
-            let refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user);
+            let token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
+            let refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user, 'user');
             console.log('tokennn', token);
             return { user: newUser ? newUser.toObject() : null, token, refreshToken };
         });
     }
     userExists(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const userExists = yield user_1.default.findOne({ email: email });
+            const userExists = yield user_1.default.findOne({ Email: email });
             return !!userExists;
         });
     }
@@ -78,17 +78,20 @@ class UserRepositoryImpl {
             if (!user) {
                 message = ' invalid user';
             }
+            else if (user.isBlocked === true) {
+                message = 'user blocked';
+            }
             else {
                 if (password !== user.Password) {
                     console.log('invalid password');
                     message = 'Invalid Password';
                 }
                 else {
-                    token = yield (0, CommonFunctions_1.genAccessToken)(user);
+                    token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
                     console.log('token', token);
                 }
             }
-            if (user && !message) {
+            if ((user === null || user === void 0 ? void 0 : user.isBlocked) === false && !message) {
                 return { user: user.toObject(), message, token };
             }
             else {
@@ -106,6 +109,18 @@ class UserRepositoryImpl {
             catch (error) {
                 console.error('Error fetching users:', error);
                 return [];
+            }
+        });
+    }
+    updateOTP(emailId, newOtp) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const isUpdateOTP = yield otp_1.default.findOneAndUpdate({ Email: emailId }, { $set: { otp: newOtp } });
+                return isUpdateOTP != null;
+            }
+            catch (error) {
+                console.log(error);
+                throw new Error();
             }
         });
     }

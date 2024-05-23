@@ -20,11 +20,11 @@ class AdminController {
                 console.log('entered login controller', req.body);
                 const { email, password } = req.body;
                 console.log(email, password);
-                const { user, message, token, refreshToken } = yield this.interactor.login({ email: email, password: password });
+                const { user, message, adminToken, refreshToken } = yield this.interactor.login({ email: email, password: password });
                 if (user) {
                     console.log('user und');
-                    console.log('cntrllr user', user, token, refreshToken);
-                    res.status(200).json({ message: 'Login Succefull', user, token: token, refreshToken });
+                    console.log('cntrllr user', user, adminToken, refreshToken);
+                    res.status(200).json({ message: 'Login Succefull', user, adminToken: adminToken, refreshToken });
                 }
                 else {
                     res.status(302).json({ message: message });
@@ -40,6 +40,7 @@ class AdminController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const users = yield this.interactor.getUsers();
+                console.log(users, '_+_+_+_+_+_+_+_+_+_+_+');
                 res.status(200).json({ users });
             }
             catch (error) {
@@ -75,6 +76,7 @@ class AdminController {
     blockTutor(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log('keriiiiiiiiiii');
                 const tutorId = req.params.id;
                 console.log(tutorId);
                 const blockedTutor = yield this.interactor.blockTutor(tutorId);
@@ -83,6 +85,17 @@ class AdminController {
             catch (error) {
                 console.log(error);
                 res.status(500).send('Internal server error');
+            }
+        });
+    }
+    addCategory(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // const {name,}= req.body
+                // console.log(category);
+                // const {}= await this.interactor.addCategory()
+            }
+            catch (err) {
             }
         });
     }

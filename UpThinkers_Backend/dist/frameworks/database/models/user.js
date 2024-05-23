@@ -14,7 +14,11 @@ const userSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
-    wishlist: []
+    wishlist: [],
+    isBlocked: {
+        type: Boolean,
+        default: false,
+    }
 });
 const UserModel = (0, mongoose_1.model)('users', userSchema);
 exports.default = UserModel;

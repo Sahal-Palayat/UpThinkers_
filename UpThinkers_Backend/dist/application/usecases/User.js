@@ -86,7 +86,7 @@ class UserInteractorImpl {
             try {
                 const { user, message, token } = yield this.Repository.findCredentials(credentials.email, credentials.password);
                 console.log(user, token, message, 'loggggg');
-                const refreshToken = user ? yield (0, CommonFunctions_1.genRefreshToken)(user) : '';
+                const refreshToken = user ? yield (0, CommonFunctions_1.genRefreshToken)(user, 'user') : '';
                 return { user, message, token, refreshToken };
             }
             catch (error) {
@@ -109,6 +109,25 @@ class UserInteractorImpl {
             catch (error) {
                 console.log(error);
                 throw error;
+            }
+        });
+    }
+    resendMail(emailId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { otp, success } = yield this.mailer.sendMail(emailId);
+                console.log(otp);
+                if (success) {
+                    const updateOTP = yield this.Repository.updateOTP(emailId, otp);
+                    return updateOTP;
+                }
+                else {
+                    return false;
+                }
+            }
+            catch (error) {
+                console.error('Error sending email:', error);
+                throw new Error;
             }
         });
     }

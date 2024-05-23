@@ -16,6 +16,7 @@ exports.AdminRepositoryImpl = void 0;
 const user_1 = __importDefault(require("../../../frameworks/database/models/user"));
 const CommonFunctions_1 = require("../../functions/CommonFunctions");
 const tutor_1 = __importDefault(require("../../../frameworks/database/models/tutor"));
+const mongoose_1 = require("mongoose");
 class AdminRepositoryImpl {
     findCredentials(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -24,7 +25,7 @@ class AdminRepositoryImpl {
             const user = yield user_1.default.findOne({ Email: email, isAdmin: true });
             console.log(user);
             let message = '';
-            let token = null;
+            let adminToken = null;
             if (!user) {
                 message = ' invalid user';
             }
@@ -34,16 +35,16 @@ class AdminRepositoryImpl {
                     message = 'Invalid Password';
                 }
                 else {
-                    token = yield (0, CommonFunctions_1.genAccessToken)(user);
-                    console.log('token', token);
+                    adminToken = yield (0, CommonFunctions_1.genAccessToken)(user, 'admin');
+                    console.log('token', adminToken);
                 }
             }
             if (user && !message) {
-                return { user: user.toObject(), message, token };
+                return { user: user.toObject(), message, adminToken };
             }
             else {
                 console.log('message222', message);
-                return { user: null, message, token };
+                return { user: null, message, adminToken };
             }
         });
     }
@@ -68,6 +69,48 @@ class AdminRepositoryImpl {
             catch (error) {
                 console.error('Error fetching users:', error);
                 return [];
+            }
+        });
+    }
+    blockUser(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = (0, mongoose_1.isObjectIdOrHexString)(id);
+                if (!result) {
+                }
+                const user = yield user_1.default.findById(id);
+                if (!user) {
+                }
+                if (user) {
+                    user.isBlocked = !user.isBlocked;
+                    yield user.save();
+                }
+                return user ? user.toObject() : null;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    blockTutor(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = (0, mongoose_1.isObjectIdOrHexString)(id);
+                if (!result) {
+                }
+                const tutor = yield tutor_1.default.findById(id);
+                if (!tutor) {
+                }
+                if (tutor) {
+                    tutor.isBlocked = !tutor.isBlocked;
+                    yield tutor.save();
+                }
+                return tutor ? tutor.toObject() : null;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
             }
         });
     }

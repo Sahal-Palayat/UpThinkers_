@@ -119,5 +119,25 @@ export class TutorInteractorImpl implements TutorInteractor {
     }
 
 
+    async resendMail(emailId: string): Promise<boolean> {
+        try {
+            const { otp, success } = await this.mailer.sendMail(emailId);
+            console.log(otp);
+            
+            if (success) {
+                const updateOTP = await this.Repository.updateOTP(emailId,otp);
+                return updateOTP;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            throw new Error;
+        }
+
+    }
+
+
+
 
 }

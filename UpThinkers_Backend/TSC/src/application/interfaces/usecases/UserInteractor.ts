@@ -8,4 +8,5 @@ export interface UserInteractor {
     verifyOtp(otp: string): Promise<{ success: boolean, token: string | null, user?: User, refreshToken: string | null }>;
     login(credentials: { email: string, password: string }): Promise<{ user: User | null, token: string | null, message: string, refreshToken: string | null }>
     getUsers(): Promise<User[] | []>;
+    resendMail(email: string):  Promise<boolean>;
 } 

@@ -14,5 +14,6 @@ export default interface UserDocument extends   Document {
    Image:string;
    UpdatedAt:Date;
    wishlist:ObjectId;
+   isBlocked:boolean;
    
 }
