@@ -9,7 +9,7 @@ import { adminAuth } from '../middlewares/authmiddleware';
 
 const repository = new AdminRepositoryImpl()
 const interactor= new AdminInteractorImpl(repository)
-const controller = new AdminController(interactor)
+const controller = new AdminController(interactor) 
 
 
 adminRouter.post('/login',controller.login.bind(controller))
@@ -19,8 +19,11 @@ adminRouter.patch('/studentslist/blockUser/:id',controller.blockUser.bind(contro
 adminRouter.patch('/tutorslist/blockTutor/:id',controller.blockTutor.bind(controller))
 
 
-// adminRouter.post( '/addcategory',adminAuth,controller.addCategory.bind(controller))
+adminRouter.post( '/addcategory',adminAuth,controller.addCategory.bind(controller))
+adminRouter.get('/categorylist',adminAuth,controller.getCategory.bind(controller))
 
+adminRouter.put('/editcategory/:id', adminAuth,controller.editCategory.bind(controller));
 
+// middle req.header decode id db blocked true ? 209 : response.status 209 cookie remove else "" return response.
 
 export default adminRouter;

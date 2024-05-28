@@ -5,41 +5,51 @@ import { genAccessToken } from "../../functions/CommonFunctions";
 import { Tutor } from "../../entities/tutor";
 import TutorModel from "../../../frameworks/database/models/tutor";
 import { isObjectIdOrHexString } from "mongoose";
+import { Category } from "../../entities/category";
+import CategoryModel from "../../../frameworks/database/models/category";
 
 export class AdminRepositoryImpl implements AdminRepository {
 
     async findCredentials(email: string, password: string): Promise<{ user: User | null, adminToken: string | null, message: string }> {
-
-        console.log('user repositoryyyy');
-        console.log(email, password);
-
-        const user = await UserModel.findOne({ Email: email, isAdmin: true })
-
-        console.log(user)
-
-        let message = ''
-        let adminToken = null
-
-
-        if (!user) {
-            message = ' invalid user'
-        } else {
-            if (password !== user.Password) {
-                console.log('invalid password');
-                message = 'Invalid Password'
+      
+        try {
+            console.log('user repositoryyyy');
+            console.log(email, password);
+    
+            const user = await UserModel.findOne({ Email: email, isAdmin: true })
+    
+            console.log(user)
+    
+            let message = ''
+            let adminToken = null
+    
+    
+            if (!user) {
+                message = ' invalid user'
             } else {
-                adminToken = await genAccessToken(user,'admin')
-                console.log('token', adminToken);
+                if (password !== user.Password) {
+                    console.log('invalid password');
+                    message = 'Invalid Password'
+                } else {
+                    adminToken = await genAccessToken(user, 'admin')
+                    console.log('token', adminToken);
+                }
             }
+    
+            if (user && !message) {
+                return { user: user.toObject() as User, message, adminToken }
+            } else {
+                console.log('message222', message);
+    
+                return { user: null, message, adminToken };
+            }
+            
+        } catch (error) {
+            console.log(error);
+            throw error
+            
         }
-
-        if (user && !message) {
-            return { user: user.toObject() as User, message, adminToken }
-        } else {
-            console.log('message222', message);
-
-            return { user: null, message, adminToken };
-        }
+       
 
 
     }
@@ -110,6 +120,51 @@ export class AdminRepositoryImpl implements AdminRepository {
 
         }
     }
+    async addCategory(category: Category): Promise<{ category: Category | null; }> {
+        try {
 
+            const { Name, Description } = category
+            const newCategory = new CategoryModel({ Name, Description })
+
+            await newCategory.save()
+            return { category: newCategory.toObject() as Category }
+        } catch (error) {
+            console.log(error);
+            throw error
+        }
+    }
+
+
+    async getCategory(): Promise<Category[] | []> {
+        try {
+
+
+            const category: Category[] = await CategoryModel.find();
+            return category
+
+        } catch (error) {
+            console.log(error);
+            throw error
+
+        }
+    }
+
+
+    async editCategory(id: string, category: Category): Promise<Category | null> {
+        try {
+            const { Name, Description } = category;
+            const updateCategory = await CategoryModel.findByIdAndUpdate(id, { Name, Description }, { new: true });
+            return updateCategory;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+
+    async categoryExists(Name: string): Promise<Category[]|null> {
+        return await CategoryModel.find()
+    }
+    
 
 }

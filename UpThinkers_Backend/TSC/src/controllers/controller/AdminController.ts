@@ -94,16 +94,57 @@ export class AdminController{
 
     async addCategory(req:Request,res:Response,next:NextFunction){
         try{
-            // const {name,}= req.body
-            // console.log(category);
-            // const {}= await this.interactor.addCategory()
+            const {name,description}= req.body
+            console.log(name,description,'ssssss');
+            const {categoryExists,category} = await this.interactor.addCategory({ Name:name,Description: description }); 
             
+            if(categoryExists){
+                res.status(208).json({success: false, message: 'User already exists'})
+            }else{
+                res.status(200).json(category);
 
-        }catch(err){
+            }
+        }catch(error){
+            res.status(500).json({ error: error });
 
         }
     }
 
 
+    async getCategory(req:Request,res:Response,next:NextFunction){
+        try {
+
+            console.log('keriii');
+            
+            const category = await this.interactor.getCategory();
+            res.status(200).json(category);
+
+            
+        } catch (error) {
+            res.status(500).json({ error: error });
+            console.log(error);
+        }
+    }
+
+
+
+    async editCategory(req:Request,res:Response,next:NextFunction){
+        try {
+
+            const {id}= req.params
+            const {Name,Description}= req.body
+
+            console.log(id,Name,Description);
+            
+
+            const updateCategory= await this.interactor.editCategory(id,{Name :Name,Description:Description});
+            res.status(200).json(updateCategory);
+        } catch (error) {
+            res.status(500).json(error)
+            throw error
+        }
+    }
+
+    
 
 }

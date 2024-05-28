@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import Otp from '../../Components/Otp';
+import { config } from '../../../config';
 
 
 
@@ -133,7 +134,7 @@ const RegisterPage = () => {
         if (!hasError) {
             try {
                 console.log('vannnnn', signupData);
-                const response = await fetch('http://localhost:3030/user/sendMail', {
+                const response = await fetch(`${config.USER_BASE_URL}/sendMail`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -147,7 +148,6 @@ const RegisterPage = () => {
                     setShowOTP(true)
                     
                 } else if (response.status === 400) {
-                    
                     console.log('user already exist');
                     toast.error('User already exist')
                 } else if (response.status === 500) {
@@ -156,13 +156,10 @@ const RegisterPage = () => {
                     console.log('Unhandled status code:', response.status);
                 }
 
-
             } catch (error) {
                 console.log(error);
             }
         }
-
-
     }
 
     if (showOTP) {

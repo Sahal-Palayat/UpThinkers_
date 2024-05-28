@@ -59,7 +59,7 @@ function AdminLogin() {
                                 autoClose:1500,
                                 onClose:()=>{
                                     if(response.payload.user){
-                                        
+
                                         setToken(response.payload.refreshToken)
                                         navigate('/admin/home')
                                     }
@@ -76,24 +76,10 @@ function AdminLogin() {
                         })
                     }
 
-                    // const type = payload.user ? 'success' : 'error';
-                    // toast[type](payload.message,{
-                    //     autoClose:1500,
-                    //     onClose:()=>{
-                    //         if(payload.user){
-                    //             setToken(payload.refreshToken)
-                    //             navigate('/admin/home')
-                    //         }
-                    //     },
-                    //     pauseOnHover:false,
-                    //     draggable:false,
-                    // })
                 })
             } catch (error) {
                 console.log(error.message);
-                // toast.error('Invalid user')
-                // setLoginError('Login failed ,please try again later')
-                // dispatch(adminLoginFailure('Login failed,try again'))
+
             }
         }
 

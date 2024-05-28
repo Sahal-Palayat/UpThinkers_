@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import OtpTutor from '../../Components/OtpTutor';
+import { config } from '../../../config';
 
 
 function TutorRegister() {
@@ -119,7 +120,7 @@ function TutorRegister() {
         if (!hasError) {
             try {
                 console.log('vannnnn', signupData);
-                const response = await fetch('http://localhost:3030/tutor/sendMail', {
+                const response = await fetch(`${config.TUTOR_BASE_URL}/sendMail`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

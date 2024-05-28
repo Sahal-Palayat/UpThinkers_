@@ -45,6 +45,24 @@ function OtpTutor({ signupData }) {
     }
 
 
+    
+
+    const handleKeyDown = (e, index) => {
+        if (e.key === 'Backspace') {
+          const newOtpValues = [...otpValues];
+          if (otpValues[index] !== '') {
+            newOtpValues[index] = '';
+            setOtpValues(newOtpValues);
+          } else if (index > 0) {
+            newOtpValues[index - 1] = '';
+            setOtpValues(newOtpValues);
+            inputs.current[index - 1].focus();
+          }
+        }
+      };
+      
+
+
     const handleChange = (e, index) => {
         const { value } = e.target
         if (value && value.length === 1) {
@@ -61,7 +79,7 @@ function OtpTutor({ signupData }) {
         const otp = otpValues.join('')
         console.log(otp);
 
-        const response = await fetch('http://localhost:3030/tutor/verifyOtp', {
+        const response = await fetch(`${config.TUTOR_BASE_URL}/verifyOtp`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -84,11 +102,7 @@ function OtpTutor({ signupData }) {
                 }
             })
         } else {
-            toast.error('Invalid otp', {
-                onClose: () => {
-                    return navigate('/tutor/login')
-                }
-            })
+            toast.error('invalid Otp')
         }
     }
 
@@ -141,6 +155,8 @@ function OtpTutor({ signupData }) {
                                         id=""
                                         value={value}
                                         onChange={e => handleChange(e, index)}
+                                        onKeyDown={e=> handleKeyDown(e,index)}
+
                                     />
                                 </div>
                             ))}

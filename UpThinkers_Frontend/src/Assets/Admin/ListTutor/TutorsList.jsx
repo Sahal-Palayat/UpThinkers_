@@ -3,8 +3,8 @@ import AdminSidebar from '../../Components/AdminSidebar'
 import axios from 'axios'
 import { AuthContext } from '../../../Context/AuthContext';
 import { blockTutor } from '../Functions/Block';
-import { config } from '../../../config';
-import Cookies from 'js-cookie'
+import AdminNavbar from '../../Components/AdminNavbar';
+import { adminApi, axiosApiAdmin } from '../../../Services/axios';
 
 function TutorsList() {
 
@@ -12,36 +12,35 @@ function TutorsList() {
     const {token} = useContext(AuthContext)
     const [users, setUsers] = useState([])
     const {adminToken}= useContext(AuthContext)
+
+
     
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState (6);
 
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = tutors.slice(indexOfFirstItem, indexOfLastItem);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(tutors.length / itemsPerPage); i++) {
+        pageNumbers.push(i);
+    }
     useEffect(() => {
-        axios.get(`${config.ADMIN_BASE_URL}/tutorslist`).then(({ data }) => setTutors(data.tutors))
-
+        adminApi().then(({ data }) => setTutors(data.tutors))
         const fetchUsers = async () => {
-            Cookies.get('adminToken')
-            Cookies.get('refreshToken')
             try {
-                const response = await axios.get(`${config.ADMIN_BASE_URL}/tutorslist`, {
-                    headers: {
-                        Authorization: `Bearer ${adminToken}`, // Add your auth token
-                        
-                    },
-                   
-                })
-                console.log(response.data);
-                setTutors(response.data.tutors);
-
+               axiosApiAdmin.get('/tutorslist').then(({ data }) =>setTutors(data.tutors))
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
         }
         fetchUsers();
-
     }, []);
+
     
-    console.log(tutors,'wwwwwwwwwwww');
-
-
     const Block = (tutorId) => {
         blockTutor(tutorId,token).then(() => {
             setUsers((prev) => {
@@ -53,11 +52,13 @@ function TutorsList() {
     }
 
     return (
-        <div className="flex h-screen">
+        <div >
 
             <AdminSidebar />
+            <AdminNavbar/>
+            <div style={{ marginLeft: '21%', width: '100%' }} className="mt-4 max-w-full bg-white-200" >
+            <h1 class="p-8 text-customBlue text-3xl font-bold">Tutors List...</h1>
 
-            <div style={{ marginLeft: '18%', width: '100%' }} className="mt-10 max-w-full bg-white-200" >
                 <table style={{ width: '100%' }} className=" divide-y divide-gray-200 w-[500px] ml-auto">
                     <thead className="bg-gray-50">
                         <tr>
@@ -82,7 +83,7 @@ function TutorsList() {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {tutors.map((tutor) => (
+                        {currentItems.map((tutor) => (
 
 
 
@@ -125,6 +126,15 @@ function TutorsList() {
                         ))}
                     </tbody>
                 </table>
+                <div>
+        
+        {pageNumbers.map((number) => (
+        <button key={number} onClick={() => paginate(number)} className="rounded-md bg-customBlue text-white m-2 px-3 py-1 hover:bg-green-600">
+          {number}
+         </button>
+         ))}
+
+       </div>
             </div>
         </div>
     )

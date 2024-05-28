@@ -1,6 +1,7 @@
 import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { config } from "../config";
 
 
 
@@ -11,7 +12,7 @@ export const adminLogin = createAsyncThunk('admin/login',async (loginData,thunkA
         console.log('yessss');
         console.log(loginData);
 
-        const response = await fetch('http://localhost:3030/admin/login',{
+        const response = await fetch(`${config.ADMIN_BASE_URL}/login`,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',

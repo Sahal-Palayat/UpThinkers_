@@ -1,21 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const tutorSchema = new mongoose_1.Schema({
+const categorySchema = new mongoose_1.Schema({
     Name: String,
-    Email: String,
-    Mobile: Number,
-    Password: String,
-    Status: Boolean,
-    CreatedAt: Date,
-    Image: String,
-    UpdatedAt: Date,
-    wishlist: [],
-    isBlocked: {
+    Status: {
         type: Boolean,
-        default: false,
+        default: true
     },
-    Courses: []
+    Description: String,
 });
-const TutorModel = (0, mongoose_1.model)('tutors', tutorSchema);
-exports.default = TutorModel;
+const CategoryModel = (0, mongoose_1.model)('category', categorySchema);
+exports.default = CategoryModel;

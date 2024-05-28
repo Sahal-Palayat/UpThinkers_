@@ -8,7 +8,7 @@ import { setUser } from '../../Store/userAuthSlice';
 import { useDispatch } from 'react-redux';
 import { config } from '../../config';
 import axios from 'axios'
-import { apiRequest } from '../../Services/axios';
+// import { apiRequest } from '../../Services/axios';
 // import { useToast } from "@chakra-ui/react";
 // import { axiosApiGateWay } from '../../Services/axios';
 
@@ -74,8 +74,8 @@ function Otp({ signupData }) {
   const dispatch = useDispatch()
   const handleOtpSubmit = async () => {
     const otp = otpValues.join('')
-    alert('OtpSubmit')
-    const response = await fetch('http://localhost:3030/user/verifyOtp', {
+    
+    const response = await fetch(`${config.USER_BASE_URL}/verifyOtp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -104,7 +104,6 @@ function Otp({ signupData }) {
 
 
   const handleResendOtp = async () => {
-
     const response = await axios.post(`${config.USER_BASE_URL}/resendMail/${signupData.email}`, {
       headers: {
         'Content-Type': 'application/json'

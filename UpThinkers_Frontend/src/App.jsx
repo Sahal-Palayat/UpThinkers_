@@ -11,6 +11,9 @@ import AdminLogin from './Assets/Admin/AdminLogin/AdminLogin'
 import AdminHome from './Assets/Admin/AdminDashboard/AdminHome'
 import StudentsList from './Assets/Admin/ListStudents/StudentsList'
 import TutorsList from './Assets/Admin/ListTutor/TutorsList'
+import AddCategory from './Assets/Admin/Category/AddCategory'
+import CategoryList from './Assets/Admin/Category/CategoryList'
+import AdminNavbar from './Assets/Components/AdminNavbar'
 
 
 function App() {
@@ -45,6 +48,9 @@ function App() {
       <Route path="/admin/home" element={token ?<AdminHome/>: <Navigate to='/admin/login' />}/>
       <Route path="/admin/studentslist" element={<StudentsList/>}/>
       <Route path="/admin/tutorslist" element={<TutorsList/>}/>
+      <Route path="/admin/addcategory" element={<AddCategory/>}/>
+      <Route path="/admin/categorylist" element={<CategoryList/>}/>
+      <Route path="/admin/navbar" element={<AdminNavbar/>}/>
 
 
 

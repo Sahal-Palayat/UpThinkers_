@@ -14,5 +14,8 @@ adminRouter.get('/studentslist', authmiddleware_1.adminAuth, controller.getUsers
 adminRouter.get('/Tutorslist', authmiddleware_1.adminAuth, controller.getTutors.bind(controller));
 adminRouter.patch('/studentslist/blockUser/:id', controller.blockUser.bind(controller));
 adminRouter.patch('/tutorslist/blockTutor/:id', controller.blockTutor.bind(controller));
-// adminRouter.post( '/addcategory',adminAuth,controller.addCategory.bind(controller))
+adminRouter.post('/addcategory', authmiddleware_1.adminAuth, controller.addCategory.bind(controller));
+adminRouter.get('/categorylist', authmiddleware_1.adminAuth, controller.getCategory.bind(controller));
+adminRouter.put('/editcategory/:id', authmiddleware_1.adminAuth, controller.editCategory.bind(controller));
+// middle req.header decode id db blocked true ? 209 : response.status 209 cookie remove else "" return response.
 exports.default = adminRouter;

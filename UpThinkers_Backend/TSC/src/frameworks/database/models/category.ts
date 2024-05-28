@@ -1,25 +1,19 @@
 import { Schema,model } from "mongoose";
 import { ObjectId } from "mongoose";
-import TutorDocument from "../../../entities/tutor";
+import CategoryDocument from "../../../entities/category";
 
-const tutorSchema= new Schema<TutorDocument>({
+const categorySchema= new Schema<CategoryDocument>({
     Name:String,
-    
-    Email:String,
-    Mobile:Number,
-    Password:String,
-    Status:Boolean,
-    CreatedAt:Date,
-    Image:String,
-    UpdatedAt:Date,
-    wishlist:[],
-    isBlocked:{
+    Status:{
         type:Boolean,
-        default:false,
+        default:true
     },
-    Courses:[]
+    Description:String,
+
+    
+   
 })
 
 
-const TutorModel = model <TutorDocument>('tutors',tutorSchema);
-export default TutorModel;
+const CategoryModel = model <CategoryDocument>('category',categorySchema);
+export default CategoryModel;

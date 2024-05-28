@@ -3,30 +3,38 @@ import AdminSidebar from '../../Components/AdminSidebar'
 import axios from 'axios'
 import { AuthContext } from '../../../Context/AuthContext';
 import { block } from '../Functions/Block';
-import Cookies from 'js-cookie'
-import { config } from '../../../config';
+import AdminNavbar from '../../Components/AdminNavbar';
+import { adminApi, axiosApiAdmin } from '../../../Services/axios';
 
 function StudentsList() {
     const [students, setStudents] = useState([]);
     const [users, setUsers] = useState([])
     const { token } = useContext(AuthContext)
-    const {adminToken}= useContext(AuthContext)
+    const { adminToken } = useContext(AuthContext)
+
+
+
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(6);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = students.slice(indexOfFirstItem, indexOfLastItem);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(students.length / itemsPerPage); i++) {
+        pageNumbers.push(i);
+    }
 
 
     useEffect(() => {
-        axios.get(`${config.ADMIN_BASE_URL}/studentslist`).then(({ data }) => setStudents(data.users))
+        adminApi().then(({ data }) => setStudents(data.users))
         const fetchUsers = async () => {
-            Cookies.get('adminToken')
-            Cookies.get('refreshToken')
             try {
-                const response = await axios.get(`${config.ADMIN_BASE_URL}/studentslist`, {
-                    headers: {
-                        Authorization: `Bearer ${adminToken}`,
-                    },
-                })
-                console.log(response.data,'????????????');
-                setStudents(response.data.users);
-
+                axiosApiAdmin.get('/studentslist').then(({ data }) => setStudents(data.users))
             } catch (error) {
                 console.error('Error fetching users:', error);
             }
@@ -35,10 +43,10 @@ function StudentsList() {
     }, []);
 
 
-    const Block = (userId) => {
+    const blockUser = (userId) => {
         block(userId, token).then(() => {
             setUsers((prev) => {
-                prev.map((user) => {  
+                prev.map((user) => {
                     user._id === id ? { ...user, isBlocked: true } : user
                 })
             })
@@ -46,17 +54,19 @@ function StudentsList() {
     }
 
 
-console.log(students,'checcccckkkkkkkkkkkk');
+    console.log(students, 'checcccckkkkkkkkkkkk');
 
 
 
     return (
-        <div className="flex h-screen">
+        <div>
 
             <AdminSidebar />
+            <AdminNavbar />
+            <div style={{ paddingTop: '1%', paddingLeft: '21%', width: '100%' }} className="h-full w-full ">
+                <h1 class="p-8 text-customBlue text-3xl font-bold">Students List...</h1>
 
-            <div style={{ marginLeft: '18%', width: '100%' }} className="mt-10 max-w-full bg-white-200" >
-                <table style={{ width: '100%' }} className=" divide-y divide-gray-200 w-[500px] ml-auto">
+                <table style={{ width: '100%' }} className="  divide-gray-200 ">
                     <thead className="bg-gray-50">
                         <tr>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -74,13 +84,13 @@ console.log(students,'checcccckkkkkkkkkkkk');
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Email
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
-                            </th>
+                            </th> */}
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {students.map(student => (
+                        {currentItems.map(student => (
 
 
 
@@ -105,10 +115,15 @@ console.log(students,'checcccckkkkkkkkkkkk');
                                     <div className="text-sm text-gray-900"> {student.Mobile}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                    <a href=""> <span onClick={() => Block(student._id)} className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${student.isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                                        }`}>
-                                        {student.isBlocked ? 'Blocked' : 'Active'}
-                                    </span></a>
+                                    <a href="">
+                                        <span
+                                            onClick={!student.isAdmin ? () => blockUser(student._id) : null}
+                                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${student.isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                                                }`}
+                                        >
+                                            {student.isAdmin ? 'Active' : (student.isBlocked ? 'Blocked' : 'Active')}
+                                        </span>
+                                    </a>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {student.isAdmin ? 'Admin' : 'User'}
@@ -116,16 +131,25 @@ console.log(students,'checcccckkkkkkkkkkkk');
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {student.Email}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap  text-sm font-medium">
+                                {/* <td className="px-6 py-4 whitespace-nowrap  text-sm font-medium">
                                     <a href="#" className="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    {/* <a href="#" className="ml-2 text-red-600 hover:text-red-900">Delete</a> */}
-                                </td>
+                                    <a href="#" className="ml-2 text-red-600 hover:text-red-900">Delete</a>
+                                </td> */}
 
                             </tr>
 
                         ))}
                     </tbody>
                 </table>
+                <div>
+
+                    {pageNumbers.map((number) => (
+                        <button key={number} onClick={() => paginate(number)} className="rounded-md bg-customBlue text-white m-2 px-3 py-1 hover:bg-green-600">
+                            {number}
+                        </button>
+                    ))}
+
+                </div>
             </div>
         </div>
     )

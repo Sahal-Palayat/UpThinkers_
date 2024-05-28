@@ -59,32 +59,45 @@ config()
         }
 
         const token = authHeader.split(' ')[1];
+
+        console.log(token,'tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
+
         if (!token) {
             return res.status(401).json({ error: 'No token found' });
         }
 
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET as Secret);
-        if (decoded.role === 'user') {
-            const user = await UserModel.findOne({ _id : decoded._id });    
-            if (!user) {
-                return res.status(401).json({ error: 'User not found' });
-            }
-            if (user.isBlocked) {
-                return res.status(401).json({ error: 'Account is blocked' });
+
+
+        let decoded:any = null
+        const secret =  process.env.JWT_SECRET || ''
+        jwt.verify(token,secret,(err,data:any)=>{
+            if (err) {
+                if (err.name === 'JsonWebTokenError') {
+                    console.log(err);
+                    
+                    return res.status(401).json({ error: 'Invalid token' });
+                } else if (err.name === 'TokenExpiredError') {
+                    console.log(err);
+                    
+                    return res.status(402).json({ error: 'Token expired' });
+                } else {
+                    console.log(err);
+                    return res.status(403).json({ error: 'Token verification failed' });
+                }
             }
 
-            // const courseId = req.query.courseId;
-            // const course = await getSingleCoursess(courseId);
-            // if (!course) {
-            //     return res.status(404).json({ error: 'Course not found' });
-            // }
-            // if (!course.students.includes(decoded._id)) {
-            //     return res.status(403).json({ error: 'Unauthorized: Student not enrolled in the course' });
-            // }
-            // next()
-        } else {
-            return res.status(401).json({ error: 'Unauthorized' });
-        }
+            if (data && data?.role === 'user') {
+                console.log(data)
+                data
+                next()
+            } else {
+                return res.status(401).json({ error: 'Unauthorized' })
+                
+            } 
+
+        })
+
+      
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -98,15 +111,16 @@ config()
   
   export const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
    
-    try {
+    try {  
         const authHeader = req.headers.authorization
-        console.log(authHeader);
+        console.log(authHeader,'tokenano');
         if (!authHeader || !authHeader.startsWith('Bearer')) {
             return res.status(401).json({ error: 'No token found' });
         }
         const adminToken = authHeader.split(' ')[1]
 
         console.log(adminToken,'tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
+
         if (!adminToken) {
             return res.status(401).json({ error: 'No token found' });
         }
@@ -130,6 +144,7 @@ config()
 
             if (data && data?.role === 'admin') {
                 console.log(data)
+                data
                 next()
             } else {
                 return res.status(401).json({ error: 'Unauthorized' });

@@ -6,7 +6,12 @@ export default {
     
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors:{
+        customBlue:'#2F6177',
+        customGreen:'#7BD654'
+      },
+    },
   },
   plugins: [],
 }

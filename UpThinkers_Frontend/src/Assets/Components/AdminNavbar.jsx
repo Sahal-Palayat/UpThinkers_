@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
 import logo from '/logoo.png'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie';
 import { clearUser } from '../../Store/userAuthSlice';
 import { AuthContext } from '../../Context/AuthContext';
+import { Link } from 'react-scroll'
 
 
 function AdminNavbar() {
@@ -15,7 +16,7 @@ function AdminNavbar() {
     const user = useSelector((state) => state.admin.user)
     console.log(user, 'navbarrrrr');
 
-    const logout = () => {
+    const logout = () => { 
         Cookies.remove('token')
         setToken(null)
         dispatch(clearAdmin())
@@ -23,8 +24,9 @@ function AdminNavbar() {
     }
 
     return (
-        <div class="bg-gray-100 font-sans w-full min-h-screen m-0">
-            <div class="bg-white shadow">
+        <div class="bg-gray-100 font-sans w-full m-0">
+            <div class="bg-customBlue h-16  ">
+            
                 <div class="container mx-auto px-4">
                     <div class="flex items-center justify-between py-4">
                         <div>
@@ -33,10 +35,10 @@ function AdminNavbar() {
                         </div>
 
                         <div class="hidden sm:flex sm:items-center">
-                            <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mr-4">Products</a>
+                            {/* <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mr-4">Products</a>
                             <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mr-4">Marketplace</a>
                             <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mr-4">Partners</a>
-                            <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600">Pricing</a>
+                            <a href="#" class="text-gray-800 flex items-end text-sm font-semibold hover:text-purple-600">Pricing</a> */}
                         </div>
 
                         <div class="hidden sm:flex sm:items-center">
@@ -47,7 +49,7 @@ function AdminNavbar() {
                                 </>
                             ) : (
                                 <center>
-                                    <button onClick={logout} className={`text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 `}>Logout</button>
+                                    <button onClick={logout} className={ `  text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-7 pb-1 pt-1 `}>Logout</button>
 
                                 </center>
 
@@ -62,25 +64,39 @@ function AdminNavbar() {
                         </div>
                     </div>
 
-                    <div class="block sm:hidden bg-white border-t-2 py-2">
-                        <div class="flex flex-col">
-                            <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mb-1">Products</a>
-                            <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mb-1">Marketplace</a>
-                            <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mb-1">Partners</a>
-                            <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mb-1">Pricing</a>
-                            <div class="flex justify-between items-center border-t-2 pt-2">
-                                <a href="#" class="text-gray-800 text-sm font-semibold hover:text-purple-600 mr-4">Sign in</a>
-                                <a href="#" class="text-gray-800 text-sm font-semibold border px-4 py-1 rounded-lg hover:text-purple-600 hover:border-purple-600">Sign up</a>
-                            </div>
-                        </div>
-                    </div>
+                  
                 </div>
 
             </div>
-            <div>
-                <h1>home page  Adminn</h1>
-            </div>
+            
         </div>
+
+        // <div >
+        //     <div   className='h-10vh flex justify-between z-50 text-white lg:py-5 px-20 py-4 '>
+        //         <div className='flex items-center flex-1'>
+        //             <span className='text-3xl font-bold'>Logo</span>
+        //         </div>
+        //         <div className='lg:flex md:flex lg: flex-1 items-center justify-end font-normal hidden'>
+        //             <div className='flex-10'>
+        //                 <ul className='flex gap-8 mr-16 text-[18px]'>
+        //                     <Link to='Home'>
+        //                         <li>Home</li>
+        //                     </Link>
+        //                     <Link>
+        //                         <li>About</li>
+        //                     </Link>
+        //                     <Link>
+        //                         <li>Projects</li>
+        //                     </Link>
+        //                     <Link>
+        //                         <li>Contact</li>
+        //                     </Link>
+        //                 </ul>
+        //             </div>
+        //         </div>
+        //     </div>
+
+        // </div>
     )
 }
 

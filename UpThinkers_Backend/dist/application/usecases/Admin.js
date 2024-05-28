@@ -88,5 +88,69 @@ class AdminInteractorImpl {
             }
         });
     }
+    addCategory(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newCategory = {
+                    Name: data.Name,
+                    Description: data.Description
+                };
+                const cate = { categoryExists: false, category: null };
+                const categoryExists = yield this.Repository.categoryExists(newCategory.Name);
+                if (categoryExists) {
+                    categoryExists.forEach((item) => {
+                        var _a;
+                        if (item && ((_a = item === null || item === void 0 ? void 0 : item.Name) === null || _a === void 0 ? void 0 : _a.toLowerCase()) === data.Name.toLowerCase()) {
+                            cate.categoryExists = true;
+                            cate.category = item;
+                        }
+                    });
+                }
+                if (cate.categoryExists) {
+                    return cate;
+                }
+                else {
+                    const { category } = yield this.Repository.addCategory(newCategory);
+                    return { categoryExists: false, category };
+                }
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    getCategory() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const category = yield this.Repository.getCategory();
+                if (category) {
+                    return category;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    editCategory(id, datas) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const category = yield this.Repository.editCategory(id, {
+                    Name: datas.Name,
+                    Description: datas.Description,
+                });
+                return category;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
 }
 exports.AdminInteractorImpl = AdminInteractorImpl;
