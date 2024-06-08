@@ -59,7 +59,7 @@ export const tutorLogin = createAsyncThunk('tutor/login',async (loginData,thunkA
 
         const data = await response.json()
 
-        Cookies.set('token',data.token,{expires:7})
+        Cookies.set('tutorToken',data.tutorToken,{expires:7})
         Cookies.set('refreshToken',data.refreshToken,{expires:7})
         console.log(data.token);
 

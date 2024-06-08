@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
-import Otp from '../../Components/Otp';
+import Otp from '../../Components/UserComponents/Otp';
 import { config } from '../../../config';
 
 

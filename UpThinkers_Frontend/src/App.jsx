@@ -13,7 +13,10 @@ import StudentsList from './Assets/Admin/ListStudents/StudentsList'
 import TutorsList from './Assets/Admin/ListTutor/TutorsList'
 import AddCategory from './Assets/Admin/Category/AddCategory'
 import CategoryList from './Assets/Admin/Category/CategoryList'
-import AdminNavbar from './Assets/Components/AdminNavbar'
+import AdminNavbar from './Assets/Components/AdminComponents/AdminNavbar'
+import AddCourse from './Assets/Tutor/Courses/AddCourse'
+import CourseList from './Assets/Tutor/Courses/CourseList'
+import EditCourse from './Assets/Tutor/Courses/EditCourse'
 
 
 function App() {
@@ -43,6 +46,10 @@ function App() {
       <Route path="/tutor/login" element={token ? <Navigate to='/tutor/home'/>  : <TutorLogin/>}/>
       <Route path="/tutor/home" element={token ?<TutorHome/>: <Navigate to='/tutor/login'/>}/> 
 
+      <Route path="/tutor/courselist" element={<CourseList/>}/>
+      <Route path="/tutor/addcourse" element={<AddCourse/>}/>
+      <Route path="/tutor/editcourse" element={<EditCourse/>}/>
+
 
       <Route path="/admin/login" element={token ?<Navigate to='/admin/home'/>: <AdminLogin/>}/> 
       <Route path="/admin/home" element={token ?<AdminHome/>: <Navigate to='/admin/login' />}/>
@@ -51,6 +58,9 @@ function App() {
       <Route path="/admin/addcategory" element={<AddCategory/>}/>
       <Route path="/admin/categorylist" element={<CategoryList/>}/>
       <Route path="/admin/navbar" element={<AdminNavbar/>}/>
+
+
+
 
 
 

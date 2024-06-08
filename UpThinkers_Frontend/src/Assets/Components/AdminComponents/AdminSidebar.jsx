@@ -3,18 +3,18 @@ import logo from '/logoo.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
-import { AuthContext } from '../../Context/AuthContext'
-import { clearAdmin } from '../../Store/adminAuthSlice'
+import { AuthContext } from '../../../Context/AuthContext'
+import { clearAdmin } from '../../../Store/adminAuthSlice'
 function AdminSidebar() {
 
     const user = useSelector((state) => state.admin.user)
     const navigate = useNavigate()
-    const { setToken } = useContext(AuthContext)
+    const { setAdminToken } = useContext(AuthContext)
     const dispatch = useDispatch()
  
     const logout = () => {
-        Cookies.remove('token')
-        setToken(null)
+        Cookies.remove('adminToken')
+        setAdminToken(null)
         dispatch(clearAdmin())
         navigate('/admin/login')
     }

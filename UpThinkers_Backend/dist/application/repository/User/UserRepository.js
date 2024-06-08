@@ -20,16 +20,22 @@ const jwt = require('jsonwebtoken');
 class UserRepositoryImpl {
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('repositoryy');
-            const { Name, Email, Mobile, Password } = user;
-            console.log(user, 'lasttt');
-            const newUser = new user_1.default({ Name, Email, Mobile, Password });
-            console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
-            yield newUser.save();
-            let token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
-            let refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user, 'user');
-            console.log('tokennn', token);
-            return { user: newUser ? newUser.toObject() : null, token, refreshToken };
+            try {
+                console.log('repositoryy');
+                const { Name, Email, Mobile, Password } = user;
+                console.log(user, 'lasttt');
+                const newUser = new user_1.default({ Name, Email, Mobile, Password });
+                console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
+                yield newUser.save();
+                let token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
+                let refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user, 'user');
+                console.log('tokennn', token);
+                return { user: newUser ? newUser.toObject() : null, token, refreshToken };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
         });
     }
     userExists(email) {
@@ -69,34 +75,40 @@ class UserRepositoryImpl {
     }
     findCredentials(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('user repositoryyyy');
-            console.log(email, password);
-            const user = yield user_1.default.findOne({ Email: email });
-            console.log(user);
-            let message = '';
-            let token = null;
-            if (!user) {
-                message = ' invalid user';
-            }
-            else if (user.isBlocked === true) {
-                message = 'user blocked';
-            }
-            else {
-                if (password !== user.Password) {
-                    console.log('invalid password');
-                    message = 'Invalid Password';
+            try {
+                console.log('user repositoryyyy');
+                console.log(email, password);
+                const user = yield user_1.default.findOne({ Email: email });
+                console.log(user);
+                let message = '';
+                let token = null;
+                if (!user) {
+                    message = ' invalid user';
+                }
+                else if (user.isBlocked === true) {
+                    message = 'user blocked';
                 }
                 else {
-                    token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
-                    console.log('token', token);
+                    if (password !== user.Password) {
+                        console.log('invalid password');
+                        message = 'Invalid Password';
+                    }
+                    else {
+                        token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
+                        console.log('token', token);
+                    }
+                }
+                if ((user === null || user === void 0 ? void 0 : user.isBlocked) === false && !message) {
+                    return { user: user.toObject(), message, token };
+                }
+                else {
+                    console.log('message222', message);
+                    return { user: null, message, token };
                 }
             }
-            if ((user === null || user === void 0 ? void 0 : user.isBlocked) === false && !message) {
-                return { user: user.toObject(), message, token };
-            }
-            else {
-                console.log('message222', message);
-                return { user: null, message, token };
+            catch (error) {
+                console.log(error);
+                throw error;
             }
         });
     }

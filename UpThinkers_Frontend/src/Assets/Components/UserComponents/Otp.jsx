@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
 import Cookies from 'js-cookie'
-import { AuthContext } from '../../Context/AuthContext';
-import { setUser } from '../../Store/userAuthSlice';
+import { AuthContext } from '../../../Context/AuthContext';
+import { setUser } from '../../../Store/userAuthSlice';
 import { useDispatch } from 'react-redux';
-import { config } from '../../config';
+import { config } from '../../../config';
 import axios from 'axios'
 // import { apiRequest } from '../../Services/axios';
 // import { useToast } from "@chakra-ui/react";

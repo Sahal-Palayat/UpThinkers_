@@ -3,8 +3,8 @@ import logo from '/logoo.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie';
-import { clearTutor } from '../../Store/tutorAuthSlice';
-import { AuthContext } from '../../Context/AuthContext';
+import { clearTutor } from '../../../Store/tutorAuthSlice';
+import { AuthContext } from '../../../Context/AuthContext';
 
 function TutorNavbar() {
 

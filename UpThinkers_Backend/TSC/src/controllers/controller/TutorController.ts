@@ -14,11 +14,11 @@ export class TutorController {
             const { name, email, mobile, password } = req.body
             console.log('bodyyy', req.body);
 
-            const { tutor, token } = await this.interactor.register({ Name:name, Password:password,Email: email,Mobile: mobile  })
-            console.log(tutor, token, 'returningggggg');
+            const { tutor, tutorToken } = await this.interactor.register({ Name: name, Password: password, Email: email, Mobile: mobile })
+            console.log(tutor, tutorToken, 'returningggggg');
 
-            res.status(200).json({ message: 'Signup successful', tutor, token })
-        } catch (error) { 
+            res.status(200).json({ message: 'Signup successful', tutor, tutorToken })
+        } catch (error) {
             console.error('Error during signup:', error);
             res.status(500).send('Internal server error');
         }
@@ -26,19 +26,19 @@ export class TutorController {
 
     async sendMail(req: Request, res: Response, next: NextFunction) {
         try {
-          
-            
-            const signupData= req.body
-            console.log(req.body,'firsttttttttttttttt');
-            
+
+
+            const signupData = req.body
+            console.log(req.body, 'firsttttttttttttttt');
+
             const { tutorExists, isMailSent } = await this.interactor.sendMail(signupData)
 
-            if(tutorExists){
-                res.status(400).json({success:false, message: 'User already exists' })
-            }else if(isMailSent){
-                res.status(200).json({success:true,message:'Email sent successfully'})
-            }else{
-                res.status(500).json({success:false,message :'Failed to send email'})
+            if (tutorExists) {
+                res.status(400).json({ success: false, message: 'User already exists' })
+            } else if (isMailSent) {
+                res.status(200).json({ success: true, message: 'Email sent successfully' })
+            } else {
+                res.status(500).json({ success: false, message: 'Failed to send email' })
             }
 
         } catch (error) {
@@ -47,16 +47,16 @@ export class TutorController {
     }
 
 
-    
+
     async verifyOtp(req: Request, res: Response) {
         try {
             console.log('0000000')
-            const {otp }=req.body
-            const {tutor,success,token,refreshToken}=await this.interactor.verifyOtp(otp)
-            if(success){
-                res.status(200).json({success:true,message:'otp verification success',token,refreshToken,tutor})
-            }else{
-                res.status(400).json({success:false,message:'otp verification failed'})
+            const { otp } = req.body
+            const { tutor, success, tutorToken, refreshToken } = await this.interactor.verifyOtp(otp)
+            if (success) {
+                res.status(200).json({ success: true, message: 'otp verification success', tutorToken, refreshToken, tutor })
+            } else {
+                res.status(400).json({ success: false, message: 'otp verification failed' })
             }
 
         } catch (error) {
@@ -65,38 +65,40 @@ export class TutorController {
         }
     }
 
-    async login(req: Request, res: Response,next: NextFunction){
+    async login(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log('entered login controller',req.body);
+            console.log('entered login controller', req.body);
 
-            const {email,password}=req.body;
-            console.log(email,password);
+            const { email, password } = req.body;
+            console.log(email, password);
 
 
-            const {tutor,message,token,refreshToken}= await this.interactor.login({email:email,password:password})
-            
-            if(tutor){
+            const { tutor, message, tutorToken, refreshToken } = await this.interactor.login({ email: email, password: password })
+
+            if (tutor) {
                 console.log('user und');
-                console.log('cntrllr user',tutor,token,refreshToken);
-                res.status(200).json({message:'Login Succefull',tutor,token:token,refreshToken})
-                
-            }else{
+                console.log('cntrllr user', tutor, tutorToken, refreshToken);
+                res.status(200).json({ message: 'Login Succefull', tutor, tutorToken: tutorToken, refreshToken })
+
+            } else {
                 res.status(302).json({ message: message });
             }
 
-            
+
         } catch (error) {
             console.log(error);
             res.status(500).send('Internal server error');
-            
+
         }
     }
-    async getUsers(req: Request, res: Response,next: NextFunction){
+    async getUsers(req: Request, res: Response, next: NextFunction) {
         try {
-            const tutors= await this.interactor.getUsers()
-            res.status(200).json({tutors})
-            
+            const tutors = await this.interactor.getUsers()
+            res.status(200).json({ tutors })
+
         } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
             
         }
     }
@@ -105,17 +107,17 @@ export class TutorController {
         try {
 
             console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-            
-            const emailId= req.params.emailId
-            console.log(emailId,'jjjjjjjjjjjjjjjjjjj');
-            
-            const success= await this.interactor.resendMail(emailId)
-            if(success){
-                   
-                console.log('Sheriyayii'); 
-                    
+
+            const emailId = req.params.emailId
+            console.log(emailId, 'jjjjjjjjjjjjjjjjjjj');
+
+            const success = await this.interactor.resendMail(emailId)
+            if (success) {
+
+                console.log('Sheriyayii');
+
                 res.status(200).json({ success: true, message: 'Email sent successfully.' });
-            }else{
+            } else {
                 res.status(302).json({ success: false, message: 'Failed to send email.' });
 
             }
@@ -124,9 +126,26 @@ export class TutorController {
         } catch (error) {
             console.error('Error sending email:', error);
             res.status(500).json({ success: false, message: 'Internal server error.' });
-            
+
         }
     }
+
+
+    async getCategory(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            console.log('keriii');
+
+            const category = await this.interactor.getCategory();
+            res.status(200).json(category);
+
+
+        } catch (error) {
+            res.status(500).json({ error: error });
+            console.log(error);
+        }
+    }
+
 
 
 }

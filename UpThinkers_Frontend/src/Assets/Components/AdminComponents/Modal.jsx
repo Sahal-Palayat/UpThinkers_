@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa';
 import axios from 'axios'
-import { config } from '../../config';
+import { config } from '../../../config';
 import Cookies from 'js-cookie'
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';

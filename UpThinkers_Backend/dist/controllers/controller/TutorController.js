@@ -19,9 +19,9 @@ class TutorController {
             try {
                 const { name, email, mobile, password } = req.body;
                 console.log('bodyyy', req.body);
-                const { tutor, token } = yield this.interactor.register({ Name: name, Password: password, Email: email, Mobile: mobile });
-                console.log(tutor, token, 'returningggggg');
-                res.status(200).json({ message: 'Signup successful', tutor, token });
+                const { tutor, tutorToken } = yield this.interactor.register({ Name: name, Password: password, Email: email, Mobile: mobile });
+                console.log(tutor, tutorToken, 'returningggggg');
+                res.status(200).json({ message: 'Signup successful', tutor, tutorToken });
             }
             catch (error) {
                 console.error('Error during signup:', error);
@@ -55,9 +55,9 @@ class TutorController {
             try {
                 console.log('0000000');
                 const { otp } = req.body;
-                const { tutor, success, token, refreshToken } = yield this.interactor.verifyOtp(otp);
+                const { tutor, success, tutorToken, refreshToken } = yield this.interactor.verifyOtp(otp);
                 if (success) {
-                    res.status(200).json({ success: true, message: 'otp verification success', token, refreshToken, tutor });
+                    res.status(200).json({ success: true, message: 'otp verification success', tutorToken, refreshToken, tutor });
                 }
                 else {
                     res.status(400).json({ success: false, message: 'otp verification failed' });
@@ -75,11 +75,11 @@ class TutorController {
                 console.log('entered login controller', req.body);
                 const { email, password } = req.body;
                 console.log(email, password);
-                const { tutor, message, token, refreshToken } = yield this.interactor.login({ email: email, password: password });
+                const { tutor, message, tutorToken, refreshToken } = yield this.interactor.login({ email: email, password: password });
                 if (tutor) {
                     console.log('user und');
-                    console.log('cntrllr user', tutor, token, refreshToken);
-                    res.status(200).json({ message: 'Login Succefull', tutor, token: token, refreshToken });
+                    console.log('cntrllr user', tutor, tutorToken, refreshToken);
+                    res.status(200).json({ message: 'Login Succefull', tutor, tutorToken: tutorToken, refreshToken });
                 }
                 else {
                     res.status(302).json({ message: message });
@@ -98,6 +98,8 @@ class TutorController {
                 res.status(200).json({ tutors });
             }
             catch (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
             }
         });
     }
@@ -119,6 +121,19 @@ class TutorController {
             catch (error) {
                 console.error('Error sending email:', error);
                 res.status(500).json({ success: false, message: 'Internal server error.' });
+            }
+        });
+    }
+    getCategory(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log('keriii');
+                const category = yield this.interactor.getCategory();
+                res.status(200).json(category);
+            }
+            catch (error) {
+                res.status(500).json({ error: error });
+                console.log(error);
             }
         });
     }

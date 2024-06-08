@@ -27,8 +27,8 @@ class TutorInteractorImpl {
                     CreatedAt: new Date()
                 };
                 console.log(newUser);
-                const { tutor, token } = yield this.Repository.save(newUser);
-                return { tutor, token };
+                const { tutor, tutorToken } = yield this.Repository.save(newUser);
+                return { tutor, tutorToken };
             }
             catch (error) {
                 console.error('Error during signup:', error);
@@ -67,26 +67,26 @@ class TutorInteractorImpl {
             try {
                 const isUser = yield this.Repository.verifyotp(otp);
                 if (isUser) {
-                    const { tutor, token, refreshToken } = yield this.Repository.save(isUser);
-                    if (tutor && token) {
-                        return { success: true, token, refreshToken, tutor };
+                    const { tutor, tutorToken, refreshToken } = yield this.Repository.save(isUser);
+                    if (tutor && tutorToken) {
+                        return { success: true, tutorToken, refreshToken, tutor };
                     }
                 }
-                return { success: false, token: null, refreshToken: null };
+                return { success: false, tutorToken: null, refreshToken: null };
             }
             catch (error) {
                 console.log(error);
-                return { success: false, token: null, refreshToken: null };
+                return { success: false, tutorToken: null, refreshToken: null };
             }
         });
     }
     login(credentials) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { tutor, message, token } = yield this.Repository.findCredentials(credentials.email, credentials.password);
-                console.log(tutor, token, message, 'loggggg');
-                const refreshToken = tutor ? yield (0, CommonFunctions_1.genRefreshTokenTutor)(tutor) : '';
-                return { tutor, message, token, refreshToken };
+                const { tutor, message, tutorToken } = yield this.Repository.findCredentials(credentials.email, credentials.password);
+                console.log(tutor, tutorToken, message, 'loggggg');
+                const refreshToken = tutor ? yield (0, CommonFunctions_1.genRefreshToken)(tutor, 'tutor') : '';
+                return { tutor, message, tutorToken, refreshToken };
             }
             catch (error) {
                 console.log(error);
@@ -127,6 +127,111 @@ class TutorInteractorImpl {
             catch (error) {
                 console.error('Error sending email:', error);
                 throw new Error;
+            }
+        });
+    }
+    getCategory() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const category = yield this.Repository.getCategory();
+                if (category) {
+                    return category;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    addCourse(courseData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newCourse = {
+                    Name: courseData.Name,
+                    Status: true,
+                    Description: courseData.Description,
+                    Image: courseData.Image,
+                    Price: courseData.Price,
+                    OfferPrice: courseData.Price,
+                    Duration: courseData.Duration,
+                    Category: courseData.Category,
+                    lessons: courseData.lessons,
+                    Tutor: courseData.Tutor,
+                    CreatedAt: courseData.CreatedAt,
+                    UpdatedAt: courseData.UpdatedAt
+                };
+                const { course } = yield this.Repository.addCourse(newCourse);
+                console.log(newCourse);
+                return { course };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    getCourse() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const course = yield this.Repository.getCourse();
+                if (course) {
+                    return course;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    editCourse(id, courseData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newCourse = {
+                    Name: courseData.Name,
+                    Status: courseData.Status,
+                    Description: courseData.Description,
+                    Image: courseData.Image,
+                    Price: courseData.Price,
+                    OfferPrice: courseData.Price,
+                    Duration: courseData.Duration,
+                    Category: courseData.Category,
+                    lessons: courseData.lessons,
+                    Tutor: courseData.Tutor,
+                    CreatedAt: courseData.CreatedAt,
+                    UpdatedAt: courseData.UpdatedAt
+                };
+                const { course } = yield this.Repository.editCourse(id, newCourse);
+                console.log(newCourse);
+                return { course };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    deleteCourse(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const course = yield this.Repository.deleteCourse(id);
+                if (course) {
+                    return course;
+                }
+                else {
+                    return null;
+                }
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
             }
         });
     }

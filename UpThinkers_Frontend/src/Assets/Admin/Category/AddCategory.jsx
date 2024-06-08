@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import AdminSidebar from '../../Components/AdminSidebar'
+import AdminSidebar from '../../Components/AdminComponents/AdminSidebar'
 import { config } from '../../../config'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import {toast,ToastContainer } from 'react-toastify'
-import AdminNavbar from '../../Components/AdminNavbar'
+import AdminNavbar from '../../Components/AdminComponents/AdminNavbar'
+import { useNavigate } from 'react-router-dom'
 
 function AddCategory() {
     const [name, setName] = useState('');
@@ -14,6 +15,7 @@ function AddCategory() {
     const [descriptionError, setDescriptionError] = useState('');
 
     const categoryData = { name, description }
+    const navigate=useNavigate()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -68,6 +70,9 @@ function AddCategory() {
                 if (response.status === 200) {
                     console.log('category addes');
                     toast.success('Category added')
+                    setTimeout(()=>{
+                        navigate('/admin/categorylist');
+                    },2000)
 
 
                 } else if (response.status === 208) {

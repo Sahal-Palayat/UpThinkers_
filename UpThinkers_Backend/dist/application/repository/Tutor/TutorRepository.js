@@ -16,19 +16,27 @@ exports.TutorRepositoryImpl = void 0;
 const tutor_1 = __importDefault(require("../../../frameworks/database/models/tutor"));
 const CommonFunctions_1 = require("../../functions/CommonFunctions");
 const otp_1 = __importDefault(require("../../../frameworks/database/models/otp"));
+const course_1 = __importDefault(require("../../../frameworks/database/models/course"));
+const category_1 = __importDefault(require("../../../frameworks/database/models/category"));
 class TutorRepositoryImpl {
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('repositoryy');
-            const { Name, Email, Mobile, Password } = user;
-            console.log(user, 'lasttt');
-            const newTutor = new tutor_1.default({ Name, Email, Mobile, Password });
-            console.log(newTutor, 'new userrrrrrrrrrrrrrrrrr');
-            yield newTutor.save();
-            let token = yield (0, CommonFunctions_1.genAccessTokenTutor)(user);
-            let refreshToken = yield (0, CommonFunctions_1.genRefreshTokenTutor)(user);
-            console.log('tokennn', token);
-            return { tutor: newTutor ? newTutor.toObject() : null, token, refreshToken };
+            try {
+                console.log('repositoryy');
+                const { Name, Email, Mobile, Password } = user;
+                console.log(user, 'lasttt');
+                const newTutor = new tutor_1.default({ Name, Email, Mobile, Password });
+                console.log(newTutor, 'new userrrrrrrrrrrrrrrrrr');
+                yield newTutor.save();
+                let tutorToken = yield (0, CommonFunctions_1.genAccessToken)(user, 'tutor');
+                let refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user, 'tutor');
+                console.log('tokennn', tutorToken);
+                return { tutor: newTutor ? newTutor.toObject() : null, tutorToken, refreshToken };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
         });
     }
     tutorExists(email) {
@@ -68,31 +76,37 @@ class TutorRepositoryImpl {
     }
     findCredentials(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('user repositoryyyy');
-            console.log(email, password);
-            const tutor = yield tutor_1.default.findOne({ Email: email });
-            console.log(tutor);
-            let message = '';
-            let token = null;
-            if (!tutor) {
-                message = ' invalid user';
-            }
-            else {
-                if (password !== tutor.Password) {
-                    console.log('invalid password');
-                    message = 'Invalid Password';
+            try {
+                console.log('user repositoryyyy');
+                console.log(email, password);
+                const tutor = yield tutor_1.default.findOne({ Email: email });
+                console.log(tutor);
+                let message = '';
+                let tutorToken = null;
+                if (!tutor) {
+                    message = ' invalid user';
                 }
                 else {
-                    token = yield (0, CommonFunctions_1.genAccessTokenTutor)(tutor);
-                    console.log('token', token);
+                    if (password !== tutor.Password) {
+                        console.log('invalid password');
+                        message = 'Invalid Password';
+                    }
+                    else {
+                        tutorToken = yield (0, CommonFunctions_1.genAccessToken)(tutor, 'tutor');
+                        console.log('token', tutorToken);
+                    }
+                }
+                if (tutor && !message) {
+                    return { tutor: tutor.toObject(), message, tutorToken };
+                }
+                else {
+                    console.log('message222', message);
+                    return { tutor: null, message, tutorToken };
                 }
             }
-            if (tutor && !message) {
-                return { tutor: tutor.toObject(), message, token };
-            }
-            else {
-                console.log('message222', message);
-                return { tutor: null, message, token };
+            catch (error) {
+                console.log(error);
+                throw error;
             }
         });
     }
@@ -117,6 +131,67 @@ class TutorRepositoryImpl {
             catch (error) {
                 console.log(error);
                 throw new Error();
+            }
+        });
+    }
+    addCourse(course) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newCourse = new course_1.default(course);
+                yield newCourse.save();
+                return { course: newCourse };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    getCategory() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const category = yield category_1.default.find();
+                return category;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    getCourse() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const courses = yield course_1.default.find();
+                return courses;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    editCourse(id, course) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const updatedCourse = yield course_1.default.findOneAndUpdate({ _id: id }, { $set: course }, { new: true });
+                return { course: updatedCourse };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    deleteCourse(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const deletedCourse = yield course_1.default.findOneAndDelete({ _id: id });
+                return deletedCourse;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
             }
         });
     }

@@ -1,6 +1,6 @@
 import React from 'react'
-import AdminNavbar from '../../Components/AdminNavbar'
-import AdminSidebar from '../../Components/AdminSidebar'
+import AdminNavbar from '../../Components/AdminComponents/AdminNavbar'
+import AdminSidebar from '../../Components/AdminComponents/AdminSidebar'
 
 function AdminHome() {
   return (

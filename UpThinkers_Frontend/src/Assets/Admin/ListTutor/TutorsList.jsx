@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import AdminSidebar from '../../Components/AdminSidebar'
+import AdminSidebar from '../../Components/AdminComponents/AdminSidebar'
 import axios from 'axios'
 import { AuthContext } from '../../../Context/AuthContext';
 import { blockTutor } from '../Functions/Block';
-import AdminNavbar from '../../Components/AdminNavbar';
-import { adminApi, axiosApiAdmin } from '../../../Services/axios';
+import AdminNavbar from '../../Components/AdminComponents/AdminNavbar';
+import {  axiosApiAdmin } from '../../../Services/axios';
 
 function TutorsList() {
 
@@ -12,16 +12,22 @@ function TutorsList() {
     const {token} = useContext(AuthContext)
     const [users, setUsers] = useState([])
     const {adminToken}= useContext(AuthContext)
+    const [currentItems, setCurrentItems] = useState([])
+
 
 
     
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState (6);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = tutors.slice(indexOfFirstItem, indexOfLastItem);
+ 
 
+    useEffect(() => {
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+        setCurrentItems(tutors.slice(indexOfFirstItem, indexOfLastItem))
+    }, [tutors])
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const pageNumbers = [];
@@ -29,7 +35,7 @@ function TutorsList() {
         pageNumbers.push(i);
     }
     useEffect(() => {
-        adminApi().then(({ data }) => setTutors(data.tutors))
+        axiosApiAdmin().then(({ data }) => setTutors(data.tutors))
         const fetchUsers = async () => {
             try {
                axiosApiAdmin.get('/tutorslist').then(({ data }) =>setTutors(data.tutors))
@@ -83,7 +89,7 @@ function TutorsList() {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {currentItems.map((tutor) => (
+                        {currentItems.map((tutor,index) => (
 
 
 
@@ -106,10 +112,32 @@ function TutorsList() {
                                     <div className="text-sm text-gray-900"> {tutor.Mobile}</div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                <a href=""> <span onClick={()=>Block(tutor._id)} className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${tutor.isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
-                                        }`}>
-                                    {tutor.isBlocked ? 'Blocked' : 'Active'}
-                                    </span></a> 
+                                <p> <span
+                                onClick={(event) => {
+                                    if (tutor) {
+                                        setCurrentItems((prevItems) => {
+                                            return prevItems.map((item, idx) => {
+                                                if (idx === index) {
+                                                    return { ...item, isBlocked: !item.isBlocked };
+                                                }
+                                                return item;
+                                            });
+                                        });
+                                        blockUser(tutor._id).then(() => {
+                                                const newStd = [...new Set([...tutor,...currentItems])]
+                                                setStudents(newStd)
+                                        }).catch((error) => {
+                                            console.error('Error blocking/unblocking user:', error);
+                                        });
+                                    }
+                                }}
+
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${tutor.isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}
+                            >
+                                { tutor.isBlocked ? 'Blocked' : 'Active'}
+                                    </span>
+                                    
+                                    </p> 
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                    Tutor

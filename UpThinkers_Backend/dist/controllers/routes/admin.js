@@ -17,5 +17,4 @@ adminRouter.patch('/tutorslist/blockTutor/:id', controller.blockTutor.bind(contr
 adminRouter.post('/addcategory', authmiddleware_1.adminAuth, controller.addCategory.bind(controller));
 adminRouter.get('/categorylist', authmiddleware_1.adminAuth, controller.getCategory.bind(controller));
 adminRouter.put('/editcategory/:id', authmiddleware_1.adminAuth, controller.editCategory.bind(controller));
-// middle req.header decode id db blocked true ? 209 : response.status 209 cookie remove else "" return response.
 exports.default = adminRouter;

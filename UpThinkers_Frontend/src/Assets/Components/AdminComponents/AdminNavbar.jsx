@@ -3,8 +3,8 @@ import logo from '/logoo.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie';
-import { clearUser } from '../../Store/userAuthSlice';
-import { AuthContext } from '../../Context/AuthContext';
+import { clearUser } from '../../../Store/userAuthSlice';
+import { AuthContext } from '../../../Context/AuthContext';
 import { Link } from 'react-scroll'
 
 

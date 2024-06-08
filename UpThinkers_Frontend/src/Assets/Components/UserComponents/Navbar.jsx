@@ -3,8 +3,8 @@ import logo from '/logoo.png'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie';
-import { clearUser } from '../../Store/userAuthSlice';
-import { AuthContext } from '../../Context/AuthContext';
+import {clearUser } from '../../../Store/userAuthSlice';
+import { AuthContext } from '../../../Context/AuthContext';
 import { Nav, NavLink, Bars, NavMenu} from './NavbarElements';
 import Head from './Head';
 
@@ -49,7 +49,7 @@ function Navbar() {
               <NavLink to='/admission'>Admission</NavLink>
               <NavLink to='/media'>Media</NavLink>
               <NavLink to='/about'>About</NavLink>
-            z  <NavLink to='/contact'>Contact</NavLink>
+              <NavLink to='/contact'>Contact</NavLink>
               <div className='start'>
                 <NavLink to='/login'>
                   <div onClick={logout}>Logout</div>

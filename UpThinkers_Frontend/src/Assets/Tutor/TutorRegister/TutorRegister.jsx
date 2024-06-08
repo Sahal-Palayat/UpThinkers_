@@ -3,7 +3,7 @@ import logo from '/logoo.png'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
-import OtpTutor from '../../Components/OtpTutor';
+import OtpTutor from '../../Components/TutorComponents/OtpTutor';
 import { config } from '../../../config';
 
 

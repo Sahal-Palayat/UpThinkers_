@@ -11,4 +11,5 @@ export interface AdminInteractor {
     addCategory(datas:{Name: string, Description: string}):Promise <{categoryExists: boolean,category : Category | null}>
     getCategory():Promise<Category[] |[]>;
     editCategory(id:string,datas:{Name: string, Description: string}):Promise < Category | null>
+    
 } 

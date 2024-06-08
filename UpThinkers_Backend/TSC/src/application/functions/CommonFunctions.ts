@@ -38,9 +38,12 @@ export function genAccessToken(user:any,role:string):string {
    const secret = process.env.JWT_SECRET || ' ';
     return jwt.sign({ id: user._id, role:role }, secret, { expiresIn: '1d' });
 }
-export function genAccessTokenTutor(tutor:any):string {
-    return jwt.sign({ id: tutor._id }, 'athee....', { expiresIn: '1d' });
-}
+
+// export function genAccessTokenTutor(user:any,role:string):string {
+//     const secret = process.env.JWT_SECRET || ' ';
+//      return jwt.sign({ id: user._id, role:role }, secret, { expiresIn: '1d' });
+//  }
+
 
 
 export function genRefreshToken(user:User,role:any): string {
@@ -48,9 +51,6 @@ export function genRefreshToken(user:User,role:any): string {
     return jwt.sign({ id: user.Email,role:role }, secret, { expiresIn: '7d' });
 }
 
-export function genRefreshTokenTutor(tutor:Tutor): string {
-    return jwt.sign({ tutorId: tutor.Email }, 'athee...', { expiresIn: '7d' });
-}
 
 export const genRandomOtp:Function= ()=>{
     const otp=Math.floor(1000 + Math.random()*9000);

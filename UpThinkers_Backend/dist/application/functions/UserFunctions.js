@@ -2,7 +2,7 @@
 // import { UploadApiResponse } from 'cloudinary';
 // import cloudinaryV2 from '../../config/cloudinary';
 // import fs from 'fs'
-// import UnverifiedUsers from '../../entities/UnverifiedUsers';
+// // import UnverifiedUsers from '../../entities/UnverifiedUsers';
 // import UserDocument from '../../entities/user';
 // export const UploadFile:Function = async (file : Express.Multer.File)=>{
 //     try {
@@ -29,25 +29,25 @@
 //       return 'Internal Server Error'
 //     }
 //   };
-// export const VerifyUser: Function = async (user: UnverifiedUsers | UserDocument) => {
-//     try {
-//         if (!user) return { message: "No User Found", status: false };
-//         if (user.Terminated) return { message: "Account Terminated", status: false };
-//         if (user.Suspended) {
-//             const currentDate = new Date()
-//             if (user.SuspendedTill && user.SuspendedTill > currentDate) {
-//                 return { message: "Account Suspended", status: false };
-//             } else {
-//                 user.Suspended = false;
-//                 user.SuspendedTill = undefined;
-//                 await user.save();
-//             }
-//         }
-//         return { message: "User Verified", status: true };
-//     } catch (e) {
-//         return {
-//             message: 'Internal Server Error',
-//             status: false,
-//         }
-//     }
-// }
+// // export const VerifyUser: Function = async (user: UnverifiedUsers | UserDocument) => {
+// //     try {
+// //         if (!user) return { message: "No User Found", status: false };
+// //         if (user.Terminated) return { message: "Account Terminated", status: false };
+// //         if (user.Suspended) {
+// //             const currentDate = new Date()
+// //             if (user.SuspendedTill && user.SuspendedTill > currentDate) {
+// //                 return { message: "Account Suspended", status: false };
+// //             } else {
+// //                 user.Suspended = false;
+// //                 user.SuspendedTill = undefined;
+// //                 await user.save();
+// //             }
+// //         }
+// //         return { message: "User Verified", status: true };
+// //     } catch (e) {
+// //         return {
+// //             message: 'Internal Server Error',
+// //             status: false,
+// //         }
+// //     }
+// // }

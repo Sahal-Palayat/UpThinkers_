@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Typography } from "@material-tailwind/react";
-import AdminSidebar from '../../Components/AdminSidebar';
+import AdminSidebar from '../../Components/AdminComponents/AdminSidebar';
 import axios from 'axios'
 import { config } from '../../../config';
 import Cookies from 'js-cookie'
-import AdminNavbar from '../../Components/AdminNavbar';
-import Modal from '../../Components/Modal';
-import { adminApi, axiosApiAdmin } from '../../../Services/axios';
+import AdminNavbar from '../../Components/AdminComponents/AdminNavbar';
+import Modal from '../../Components/AdminComponents/Modal';
+import {  axiosApiAdmin } from '../../../Services/axios';
 
 
 function CategoryList() {
@@ -19,7 +19,7 @@ function CategoryList() {
     };
 
     useEffect(() => {
-        adminApi().then(({ data }) => setCategory(data))
+        axiosApiAdmin().then(({ data }) => setCategory(data))
         const fetchUsers = async () => {
             const token = Cookies.get('adminToken')
             try {
@@ -30,6 +30,8 @@ function CategoryList() {
         }
         fetchUsers();
     }, [])
+
+    
 
 
 

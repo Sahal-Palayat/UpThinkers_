@@ -1,15 +1,16 @@
-import { genRefreshTokenTutor } from "../functions/CommonFunctions";
 import { SignupDataTutor } from "../entities/signUpDataTutor";
 import { Tutor } from "../entities/tutor";
 import { IMailer } from "../interfaces/external-lib/IMailer";
 import { TutorRepository } from "../interfaces/repositories/tutor-repository";
 import { TutorInteractor } from "../interfaces/usecases/TutorInteractor";
-
+import { Course } from "../entities/course";
+import { Category } from "../entities/category";
+import { genRefreshToken } from "../functions/CommonFunctions";
 
 export class TutorInteractorImpl implements TutorInteractor {
     constructor(private readonly Repository: TutorRepository, private readonly mailer: IMailer){ }
 
-    async register(tutorData: { Name: string, Email: string, Mobile: number, Password: string }): Promise<{ tutor: Tutor | null, token: string | null }> {
+    async register(tutorData: { Name: string, Email: string, Mobile: number, Password: string }): Promise<{ tutor: Tutor | null, tutorToken: string | null }> {
 
         try {
             const newUser = {
@@ -21,9 +22,9 @@ export class TutorInteractorImpl implements TutorInteractor {
             }
             console.log(newUser);
 
-            const { tutor, token } = await this.Repository.save(newUser)
+            const { tutor, tutorToken } = await this.Repository.save(newUser)
 
-            return { tutor, token }
+            return { tutor, tutorToken }
         } catch (error) {
             console.error('Error during signup:', error);
             throw error;
@@ -60,43 +61,43 @@ export class TutorInteractorImpl implements TutorInteractor {
         }
     }
 
-    async verifyOtp(otp: string): Promise<{ success: boolean,tutor?: Tutor, token: string | null,refreshToken:string|null }> {
+    async verifyOtp(otp: string): Promise<{ success: boolean,tutor?: Tutor, tutorToken: string | null,refreshToken:string|null }> {
         try {
             const isUser = await this.Repository.verifyotp(otp)
             if (isUser) {
-                const { tutor, token, refreshToken} = await this.Repository.save(isUser)
-                if (tutor && token) {
-                    return { success: true, token,refreshToken,tutor};
+                const { tutor, tutorToken, refreshToken} = await this.Repository.save(isUser)
+                if (tutor && tutorToken) {
+                    return { success: true, tutorToken,refreshToken,tutor};
 
                 }
 
             }
-            return { success: false, token: null,refreshToken: null }; 
+            return { success: false, tutorToken: null,refreshToken: null }; 
 
         } catch (error) {
             console.log(error);
-            return { success: false, token: null,refreshToken:null };
+            return { success: false, tutorToken: null,refreshToken:null };
 
         }
     }
 
     
-    async login(credentials: { email: string, password: string }): Promise<{ tutor: Tutor | null, message: string, token: string | null, refreshToken: string | null }> {
+    async login(credentials: { email: string, password: string }): Promise<{ tutor: Tutor | null, message: string, tutorToken: string | null, refreshToken: string | null }> {
         try {
 
 
 
-            const { tutor, message, token }: {
+            const { tutor, message, tutorToken }: {
                  tutor: Tutor | null,
                 message: string,
-                token: string | null
+                tutorToken: string | null
             } = await this.Repository.findCredentials(credentials.email, credentials.password)
-            console.log(tutor, token, message, 'loggggg');
+            console.log(tutor, tutorToken, message, 'loggggg');
 
 
-            const refreshToken = tutor ? await genRefreshTokenTutor(tutor) : ''
+            const refreshToken = tutor ? await genRefreshToken(tutor,'tutor') : ''
 
-            return { tutor, message, token, refreshToken }
+            return { tutor, message, tutorToken, refreshToken }
 
         } catch (error) {
             console.log(error);
@@ -137,7 +138,105 @@ export class TutorInteractorImpl implements TutorInteractor {
 
     }
 
+    async getCategory(): Promise<Category[] | []> {
+        try {
+            const category = await this.Repository.getCategory()
+            if (category) {
+                return category
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            throw error
+
+        }
+    }
+    
+    async addCourse(courseData: { Name: string; Status: boolean; Description: string; Image: string; Price: number; OfferPrice: number; Duration: string; Category: string; lessons: []; Tutor: string; CreatedAt: Date; UpdatedAt: Date; }): Promise<{ course: Course | null; }> {
+        try {
+            const newCourse = {
+                Name: courseData.Name,
+                Status: true,
+                Description: courseData.Description,
+                Image: courseData.Image,
+                Price: courseData.Price,
+                OfferPrice: courseData.Price,
+                Duration: courseData.Duration,
+                Category: courseData.Category,
+                lessons: courseData.lessons,
+                Tutor: courseData.Tutor,
+                CreatedAt: courseData.CreatedAt,
+                UpdatedAt: courseData.UpdatedAt
+            }
+
+                const { course } = await this.Repository.addCourse(newCourse)
+                console.log(newCourse);
+                return {course}
+            
+        } catch (error) {
+            console.log(error);
+            throw error;
+            
+        }
+    }
+
+    async getCourse(): Promise<Course[]|[]>{
+        try {
+            const course = await this.Repository.getCourse()
+            if (course) {
+                return course
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            throw error
+    }
+
+   }
 
 
+   async editCourse(id: string, courseData: { Name: string; Status: boolean; Description: string; Image: string; Price: number; OfferPrice: number; Duration: string; Category: string; lessons: []; Tutor: string; CreatedAt: Date; UpdatedAt: Date; }): Promise<{ course: Course | null; }> {
+       try {
+         const newCourse = {
+             Name: courseData.Name,
+             Status: courseData.Status,
+             Description: courseData.Description,
+             Image: courseData.Image,
+             Price: courseData.Price,
+             OfferPrice: courseData.Price,
+             Duration: courseData.Duration,
+             Category: courseData.Category,
+             lessons: courseData.lessons,
+             Tutor: courseData.Tutor,
+             CreatedAt: courseData.CreatedAt,
+             UpdatedAt: courseData.UpdatedAt
+         }
+            const { course } = await this.Repository.editCourse(id,newCourse)
+            console.log(newCourse);
+            return {course}
+       } catch (error) {
+            console.log(error);
+            throw error
+        
+       }
+   }
+
+   async deleteCourse(id: string):Promise< Course | null>{
+        try {
+            const course = await this.Repository.deleteCourse(id)
+            if (course) {
+                return course
+            } else {
+                return null
+            }
+            
+        } catch (error) {
+            console.log(error);
+            throw error;
+            
+        }
+   }
 
 }

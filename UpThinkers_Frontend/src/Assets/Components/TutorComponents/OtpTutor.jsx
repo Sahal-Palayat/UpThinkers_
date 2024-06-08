@@ -4,10 +4,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AuthContext } from '../../Context/AuthContext';
-import { setTutor } from '../../Store/tutorAuthSlice';
+import { AuthContext } from '../../../Context/AuthContext';
+import { setTutor } from '../../../Store/tutorAuthSlice';
 import axios from 'axios'
-import { config } from '../../config';
+import { config } from '../../../config';
 
 
 
@@ -91,7 +91,7 @@ function OtpTutor({ signupData }) {
 
         if (response.ok) {
             const data = await response.json()
-            Cookies.set('token', data.token)
+            Cookies.set('tutorToken', data.tutorToken)
             Cookies.set('refreshToken', data.refreshToken)
             toast.success('Signup successful', {
                 autoClose: true,

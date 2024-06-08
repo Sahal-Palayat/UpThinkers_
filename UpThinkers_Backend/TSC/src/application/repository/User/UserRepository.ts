@@ -11,6 +11,11 @@ const jwt = require('jsonwebtoken')
 export class UserRepositoryImpl implements UserRepository {
 
     async save(user: User): Promise<{ user: User | null, token: string | null, refreshToken: string | null }> {
+      
+      try {
+        
+      
+      
         console.log('repositoryy');
 
         const { Name, Email, Mobile, Password } = user
@@ -26,7 +31,11 @@ export class UserRepositoryImpl implements UserRepository {
         let refreshToken = await genRefreshToken(user,'user')
         console.log('tokennn', token);
         return { user: newUser ? newUser.toObject() as User : null, token, refreshToken }
-
+        } catch (error) {
+            console.log(error);
+            throw error
+            
+        }
     }
 
 
@@ -67,6 +76,9 @@ export class UserRepositoryImpl implements UserRepository {
 
     async findCredentials(email: string, password: string): Promise<{ user: User | null, token: string | null, message: string }> {
 
+        try {
+            
+        
         console.log('user repositoryyyy');
         console.log(email, password);
 
@@ -100,7 +112,11 @@ export class UserRepositoryImpl implements UserRepository {
 
             return { user: null, message, token };
         }
-
+        } catch (error) {
+                console.log(error);
+                throw error
+                
+        }
 
     }
 
