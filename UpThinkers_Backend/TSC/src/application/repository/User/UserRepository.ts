@@ -4,6 +4,10 @@ import { UserRepository } from '../../interfaces/repositories/user-repository';
 import { SignupData } from '../../entities/signupData';
 import { genAccessToken, genRefreshToken } from '../../functions/CommonFunctions';
 import otpModel from '../../../frameworks/database/models/otp';
+import { Category } from '../../entities/category';
+import CategoryModel from '../../../frameworks/database/models/category';
+import { Course } from '../../entities/course';
+import CourseModel from '../../../frameworks/database/models/course';
 const jwt = require('jsonwebtoken')
 
 
@@ -145,6 +149,32 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
+
+    async getCategory(): Promise<Category[] | []> {
+        try {
+
+            const category: Category[] = await CategoryModel.find();
+            return category
+
+        } catch (error) {
+            console.log(error);
+            throw error
+
+        }
+    }
+
+
+    async getCourse():Promise <Course[] | []> {
+        try {
+            const course: Course[] = await CourseModel.find();
+            return course
+            
+        } catch (error) {
+            console.log(error);
+            return []
+            
+        }
+    }
 
 
 }

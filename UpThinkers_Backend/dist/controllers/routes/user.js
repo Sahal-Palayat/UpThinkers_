@@ -15,6 +15,8 @@ userRouter.post('/register', controller.register.bind(controller));
 userRouter.post('/sendMail', controller.sendMail.bind(controller));
 userRouter.post('/verifyOtp', controller.verifyOtp.bind(controller));
 userRouter.post('/resendMail/:emailId', controller.resendMail.bind(controller));
-userRouter.get('/home', authmiddleware_1.userAuth);
 userRouter.post('/login', controller.login.bind(controller));
+// userRouter.get('/home',userAuth,controller.getHome.bind(controller))
+userRouter.get('/categorylist', authmiddleware_1.userAuth, controller.getCategory.bind(controller));
+userRouter.get('/courselist', authmiddleware_1.userAuth, controller.getCourse.bind(controller));
 exports.default = userRouter;

@@ -1,5 +1,7 @@
 import { User } from "../../entities/user";
 import { SignupData } from "../../entities/signupData";
+import { Category } from "../../entities/category";
+import { Course } from "../../entities/course";
 
 export interface UserRepository{
     save(user: User): Promise<{ user: User | null, token: string | null,refreshToken:string|null }>;
@@ -9,5 +11,7 @@ export interface UserRepository{
     findCredentials (email : string,password: string): Promise <{user:User | null,message:string, token : string | null}> 
     getUsers():Promise<User[] | [] >;
     updateOTP(emailId: string,newOtp:string) : Promise<boolean>;
+    getCategory():Promise<Category[] | []>
+    getCourse():Promise<Course[] | []>
 
 }

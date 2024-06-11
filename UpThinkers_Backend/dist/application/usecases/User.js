@@ -131,5 +131,39 @@ class UserInteractorImpl {
             }
         });
     }
+    getCategory() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const category = yield this.Repository.getCategory();
+                if (category) {
+                    return category;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    getCourse() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const course = yield this.Repository.getCourse();
+                if (course) {
+                    return course;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return [];
+            }
+        });
+    }
 }
 exports.UserInteractorImpl = UserInteractorImpl;

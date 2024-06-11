@@ -30,21 +30,34 @@ export const axiosApiUser = axios.create({
     }
 })
 
-axiosApiUser.interceptors.response.use((response) => {
-    if(token){
-        response.headers.Authorization=token
-      }
-    if (response.status === 208) {
-        Cookies.remove('token')
-        window.location.href = '/login'
+axiosApiUser.interceptors.request.use((config) => {
+    const token = Cookies.get('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        console.error('Token is not available');
     }
-    return response
-}, (err) => {
-    console.log(err, "this is the error");
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
 
-    const { response } = err;
+
+// axiosApiUser.interceptors.response.use((response) => {
+//     if(token){
+//         response.headers.Authorization=token
+//       }
+//     if (response.status === 208) {
+//         Cookies.remove('token')
+//         window.location.href = '/login'
+//     }
+//     return response
+// }, (err) => {
+//     console.log(err, "this is the error");
+
+//     const { response } = err;
     
-})
+// })
 
 
 
@@ -76,6 +89,17 @@ axiosApiAdmin.interceptors.request.use(response=>{
 
 
 
+  axiosApiTutor.interceptors.request.use((config) => {
+    const token = Cookies.get('tutorToken');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        console.error('Token is not available');
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
 
 
 

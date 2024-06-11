@@ -1,198 +1,87 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { axiosApiUser } from '../../../Services/axios';
 
 
-
-
-
-
-
-
-
-export const coursesCard = [
-    {
-      id: 1,
-      cover: "./images/courses/1.png",
-      coursesName: "Standard 1",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    },
-    {
-      id: 2,
-      cover: "./images/courses/2.png",
-      coursesName: "Standard 2",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    },
-    {
-      id: 3,
-      cover: "./images/courses/3.png",
-      coursesName: "Standard 3",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    },
-    {
-      id: 4,
-      cover: "./images/courses/4.png",
-      coursesName: "Standard 4",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    },
-    {
-      id: 5,
-      cover: "./images/courses/5.png",
-      coursesName: "Standard 5",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    },
-    {
-      id: 6,
-      cover: "./images/courses/6.png",
-      coursesName: "Standard 6",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    },
-    {
-      id: 7,
-      cover: "./images/courses/7.png",
-      coursesName: "Standard 7",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    },
-    {
-      id: 8,
-      cover: "./images/courses/8.png",
-      coursesName: "Standard 8",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    },
-    {
-      id: 9,
-      cover: "./images/courses/9.png",
-      coursesName: "Standard 9",
-      courTeacher: [
-        {
-          dcover: "./images/Avatar.png",
-          name: "by Ram Gurung",
-          totalTime: "50 lectures (100 hrs)",
-        },
-      ],
-      priceAll: "\u20B90",
-      pricePer: "Free",
-    }
-   
-  ]
 function CourseCard() {
+    const [course,setCourse]= useState([])
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const { data } = await axiosApiUser.get('/courselist');
+                setCourse(data.course);
+                console.log(data);
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+            }
+        }
+        fetchCourses();
+    }, []);
+    console.log(course,'courseeeeeee');
   return (
     <>
     <section className="homeAbout">
         
-      <div className="container mx-auto">
-        {/* <Heading subtitle="our courses" title="explore our popular online courses" /> */}
-    
-        <div className="coursesCard py-12">
-        <h1 className="text-4xl font-bold text-customBlue pb-8">Best Courses...</h1>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {coursesCard.slice(0, 3).map((val) => (
-              <div className="items bg-white p-8 text-center shadow-md" key={val.id}>
-                <div className="content flex flex-col md:flex-row">
-                  <div className="left flex justify-center md:justify-start mb-4 md:mb-0">
-                    <div className="img w-20 h-20 rounded-full bg-customGreen p-4">
-                      <img src={val.cover} alt={val.coursesName} className="w-full h-full object-cover" />
+    <div className="relative pt-2 lg:pt-2 min-h-screen">
+    <h1 className="text-4xl font-bold text-customBlue pb-8 ml-20 mt-10">Best Popular Courses</h1>
+                    <div className="bg-cover w-full flex flex-wrap">
+                        {course.length > 0 && course.map((courses) => (
+                            <div key={courses._id} className="w-full md:w-3/12 lg:w-3/12 xl:w-3/12 p-2">
+                                <div className="w-full bg-white p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg rounded-2xl">
+                                    <article  className="bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl border">
+                                        <div   onClick={() => navigate(`/user/coursedetails`, { state: { course: courses } })}
+
+                                        className=" cursor-pointer relative mb-4 rounded-2xl">
+                                            <img className="h-80 rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
+                                                src={courses.Image} alt="" />
+                                            <div className="absolute bottom-3 left-3 inline-flex items-center rounded-lg bg-white p-2 shadow-md">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 text-red-700">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                                                </svg>
+                                                <span className="ml-1 text-sm text-slate-400">2</span>
+                                            </div>
+                                            <div className="flex justify-center items-center bg-customGreen bg-opacity-80 z-10 absolute top-0 left-0 w-full h-full text-white rounded-2xl opacity-0 transition-all duration-300 transform group-hover:scale-105 text-xl group-hover:opacity-100">
+                                                View More...
+                                                <svg className="ml-2 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-between items-center w-full pb-4 mb-auto">
+                                            <div className="flex items-center">
+                                                <div className="pr-3">
+                                                    <img className="h-12 w-12 rounded-full object-cover" src="https://images.pexels.com/photos/163097/twitter-social-media-communication-internet-network-163097.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
+                                                </div>
+                                                <div className="flex flex-1">
+                                                    <div>
+                                                        <p className="text-sm font-semibold">Morris Muthigani</p>
+                                                        <p className="text-sm text-gray-500">Published on 19/03/2024</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-end">
+                                                <div className="text-sm flex items-center text-gray-500">
+                                                    2 Days ago
+                                                    <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h3 className="font-medium text-xl leading-8">
+                                            <p className="block relative group-hover:text-red-700 transition-colors duration-200">
+                                                {courses.Name}
+                                            </p>
+                                            
+
+                                            <p>{courses.Description}</p>
+                                        </h3>
+                                    </article>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                  </div>
-                  <div className="text text-left md:ml-4">
-                    <h1 className="text-2xl font-medium leading-tight">{val.coursesName}</h1>
-                    <div className="rate my-4 text-customGreen">
-                      <i className="fa fa-star"></i>
-                      <i className="fa fa-star"></i>
-                      <i className="fa fa-star"></i>
-                      <i className="fa fa-star"></i>
-                      <i className="fa fa-star"></i>
-                      <label htmlFor="">(5.0)</label>
-                    </div>
-                    <div className="details flex items-center space-x-4 text-gray-500">
-                      {val.courTeacher.map((details) => (
-                        <div className="box flex items-center" key={details.name}>
-                          <div className="dimg w-12 h-12 rounded-full mr-4">
-                            <img src={details.dcover} alt={details.name} className="w-full h-full object-cover" />
-                          </div>
-                          <div className="para">
-                            <h4>{details.name}</h4>
-                          </div>
-                        </div>
-                      ))}
-                      <span className="text-teal-500 font-medium text-sm">{val.courTeacher[0].totalTime}</span>
-                    </div>
-                  </div>
                 </div>
-                <div className="price my-8 bg-gray-100 py-2">
-                  <h3 className="text-customGreen font-medium">
-                    {val.priceAll} / {val.pricePer}
-                  </h3>
-                </div>
-                <button className="outline-btn border-2 border-cutomGreen text-customGreen py-2 px-4 rounded hover:bg-customGreen hover:text-white transition">ENROLL NOW !</button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      {/* <OnlineCourses /> */}
     </section>
   </>
   )

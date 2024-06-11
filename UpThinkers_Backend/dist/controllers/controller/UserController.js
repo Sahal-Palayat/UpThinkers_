@@ -122,5 +122,29 @@ class UserController {
             }
         });
     }
+    getCategory(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const category = yield this.interactor.getCategory();
+                res.status(200).json({ category });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
+            }
+        });
+    }
+    getCourse(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const course = yield this.interactor.getCourse();
+                res.status(200).json({ course });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
+            }
+        });
+    }
 }
 exports.UserController = UserController;

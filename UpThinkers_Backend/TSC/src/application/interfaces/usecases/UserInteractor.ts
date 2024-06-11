@@ -1,5 +1,7 @@
 import { User } from "../../entities/user";
 import { SignupData } from "../../entities/signupData";
+import { Category } from "../../entities/category";
+import { Course } from "../../entities/course";
 
 
 export interface UserInteractor {
@@ -9,4 +11,7 @@ export interface UserInteractor {
     login(credentials: { email: string, password: string }): Promise<{ user: User | null, token: string | null, message: string, refreshToken: string | null }>
     getUsers(): Promise<User[] | []>;
     resendMail(email: string):  Promise<boolean>;
+    getCategory():Promise<Category[] | []>
+    getCourse():Promise<Course[] | []>
+
 } 

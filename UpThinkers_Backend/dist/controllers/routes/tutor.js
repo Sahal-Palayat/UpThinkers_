@@ -23,4 +23,6 @@ tutorRouter.post('/addcourse', courseController.addCourse.bind(courseController)
 tutorRouter.get('/courselist', courseController.getCourse.bind(courseController));
 tutorRouter.delete('/deletecourse/:id', courseController.deleteCourse.bind(courseController));
 tutorRouter.put('/editcourse/:id', courseController.editCourse.bind((courseController)));
+tutorRouter.post('/addlesson/:id', authmiddleware_1.tutorAuth, courseController.addLesson.bind(courseController));
+tutorRouter.get('/getlessons/:id', authmiddleware_1.tutorAuth, courseController.getLessons.bind(courseController));
 exports.default = tutorRouter;

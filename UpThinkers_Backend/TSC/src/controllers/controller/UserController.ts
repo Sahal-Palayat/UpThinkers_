@@ -104,17 +104,17 @@ export class UserController {
         try {
 
             console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-            
-            const emailId= req.params.emailId
-            console.log(emailId,'jjjjjjjjjjjjjjjjjjj');
-            
-            const success= await this.interactor.resendMail(emailId)
-            if(success){
-                   
-                console.log('Sheriyayii'); 
-                    
+
+            const emailId = req.params.emailId
+            console.log(emailId, 'jjjjjjjjjjjjjjjjjjj');
+
+            const success = await this.interactor.resendMail(emailId)
+            if (success) {
+
+                console.log('Sheriyayii');
+
                 res.status(200).json({ success: true, message: 'Email sent successfully.' });
-            }else{
+            } else {
                 res.status(302).json({ success: false, message: 'Failed to send email.' });
 
             }
@@ -123,6 +123,32 @@ export class UserController {
         } catch (error) {
             console.error('Error sending email:', error);
             res.status(500).json({ success: false, message: 'Internal server error.' });
+
+        }
+    }
+
+
+    async getCategory(req: Request, res: Response, next: NextFunction) {
+        try {
+            const category = await this.interactor.getCategory()
+            res.status(200).json({ category })
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
+
+        }
+    }
+
+
+    async getCourse(req:Request, res: Response, next: NextFunction) {
+        try {
+            const course = await this.interactor.getCourse()
+            res.status(200).json({ course })
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
             
         }
     }

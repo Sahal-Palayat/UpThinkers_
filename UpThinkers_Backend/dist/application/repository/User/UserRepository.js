@@ -16,6 +16,8 @@ exports.UserRepositoryImpl = void 0;
 const user_1 = __importDefault(require("../../../frameworks/database/models/user"));
 const CommonFunctions_1 = require("../../functions/CommonFunctions");
 const otp_1 = __importDefault(require("../../../frameworks/database/models/otp"));
+const category_1 = __importDefault(require("../../../frameworks/database/models/category"));
+const course_1 = __importDefault(require("../../../frameworks/database/models/course"));
 const jwt = require('jsonwebtoken');
 class UserRepositoryImpl {
     save(user) {
@@ -133,6 +135,30 @@ class UserRepositoryImpl {
             catch (error) {
                 console.log(error);
                 throw new Error();
+            }
+        });
+    }
+    getCategory() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const category = yield category_1.default.find();
+                return category;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    getCourse() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const course = yield course_1.default.find();
+                return course;
+            }
+            catch (error) {
+                console.log(error);
+                return [];
             }
         });
     }

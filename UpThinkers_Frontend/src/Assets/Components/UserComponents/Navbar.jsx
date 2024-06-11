@@ -31,6 +31,7 @@ function Navbar() {
         <>
         {/* <Head /> */}
         
+           
             
             
           <Nav className='' >
@@ -44,7 +45,7 @@ function Navbar() {
                 
               <NavLink to='/'>Home</NavLink>
               <NavLink to='/view'>Docs</NavLink>
-              <NavLink to='/courses'>Courses</NavLink>
+              <NavLink to='/courselist'>Courses</NavLink>
               <NavLink to='/onlineExam'>OnlineExam</NavLink>
               <NavLink to='/admission'>Admission</NavLink>
               <NavLink to='/media'>Media</NavLink>
@@ -52,7 +53,7 @@ function Navbar() {
               <NavLink to='/contact'>Contact</NavLink>
               <div className='start'>
                 <NavLink to='/login'>
-                  <div onClick={logout}>Logout</div>
+                  <div className='text-black' onClick={logout}>Logout</div>
                 </NavLink>
               </div>
             </NavMenu>

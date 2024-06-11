@@ -17,11 +17,16 @@ import AdminNavbar from './Assets/Components/AdminComponents/AdminNavbar'
 import AddCourse from './Assets/Tutor/Courses/AddCourse'
 import CourseList from './Assets/Tutor/Courses/CourseList'
 import EditCourse from './Assets/Tutor/Courses/EditCourse'
+import CourseDetails from './Assets/Tutor/Courses/CourseDetails'
+import AddLessons from './Assets/Tutor/Courses/AddLessons'
+import CoursePage from './Assets/User/Courses/CoursePage'
+import SingleCourse from './Assets/User/Courses/SingleCourse'
 
 
 function App() {
 
   const {token,loading}= useContext(AuthContext)
+  const {tutorToken}= useContext(AuthContext)
   const {adminToken}= useContext(AuthContext)
 
   if(loading){
@@ -39,16 +44,20 @@ function App() {
       <Route path="/" element={<UserHome/>} />
       <Route path="/register" element={token ? <UserHome/>   :<RegisterPage/>} />
       <Route path="/home" element={token ? <UserHome/> :<Navigate to='/login'/>} />
+      <Route path="/courselist" element={token ? <CoursePage/> : <Navigate to='/login'/>} />
+      <Route path="/coursedetails" element={token ? <SingleCourse/> : <Navigate to='/login'/>} />
 
 
-      <Route path="/tutor/register" element={token ? <TutorHome/> :<TutorRegister/>}/>
+      <Route path="/tutor/register" element={tutorToken ? <TutorHome/> :<TutorRegister/>}/>
       <Route path="/tutor" element={<TutorHome/>}/>
-      <Route path="/tutor/login" element={token ? <Navigate to='/tutor/home'/>  : <TutorLogin/>}/>
-      <Route path="/tutor/home" element={token ?<TutorHome/>: <Navigate to='/tutor/login'/>}/> 
+      <Route path="/tutor/login" element={tutorToken ? <Navigate to='/tutor/home'/>  : <TutorLogin/>}/>
+      <Route path="/tutor/home" element={tutorToken ?<TutorHome/>: <Navigate to='/tutor/login'/>}/> 
 
-      <Route path="/tutor/courselist" element={<CourseList/>}/>
-      <Route path="/tutor/addcourse" element={<AddCourse/>}/>
-      <Route path="/tutor/editcourse" element={<EditCourse/>}/>
+      <Route path="/tutor/courselist" element={tutorToken ? <CourseList/> : <Navigate to='/tutor/login'/> }/>
+      <Route path="/tutor/addcourse" element={tutorToken  ? <AddCourse/>  : <Navigate to='/tutor/login'/>   }/>
+      <Route path="/tutor/editcourse" element={tutorToken  ? <EditCourse/> : <Navigate to='/tutor/login'/>    }/>
+      <Route path="/tutor/coursedetails" element={<CourseDetails/>}/>
+      <Route path="/tutor/coursedetails/addlessons" element={<AddLessons/>}/>
 
 
       <Route path="/admin/login" element={token ?<Navigate to='/admin/home'/>: <AdminLogin/>}/> 

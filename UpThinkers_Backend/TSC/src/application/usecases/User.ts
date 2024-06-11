@@ -5,6 +5,8 @@ import { IMailer } from '../interfaces/external-lib/IMailer'
 import { UserRepository } from '../interfaces/repositories/user-repository'
 import { UserInteractor } from '../interfaces/usecases/UserInteractor'
 import UserModel from '../../frameworks/database/models/user'
+import { Category } from '../entities/category'
+import { Course } from '../entities/course'
 
 export class UserInteractorImpl implements UserInteractor {
     constructor(private readonly Repository: UserRepository, private readonly mailer: IMailer) {
@@ -138,7 +140,36 @@ export class UserInteractorImpl implements UserInteractor {
 
     }
 
+    async getCategory(): Promise<Category[] | []> {
+        try {
+            const category = await this.Repository.getCategory()
+            if (category) {
+                return category
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            throw error
 
+        }
+    }
+
+
+     async getCourse():Promise<Course[] | []>{
+        try {
+            const course = await this.Repository.getCourse()
+            if (course) {
+                return course
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            return []
+       }
+
+    }
 
 }
 

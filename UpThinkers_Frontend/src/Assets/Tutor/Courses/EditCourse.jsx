@@ -23,9 +23,7 @@ function EditCourse() {
     });
 
     useEffect(() => {
-        if (course) {
-
-        }
+        
         const fetchCategory = async () => {
             try {
                 console.log('Fetching categories...');
@@ -197,6 +195,9 @@ function EditCourse() {
                                              <img src={formState.image} alt="" />
                                         </div>
                                         <br /><br />
+                                        {/* <div>
+                                            <h1>Add Lessons</h1>
+                                        </div> */}
                                         <div className="mb-6 text-center">
                                             <button
                                                 className="w-full px-4 py-2 font-bold text-white bg-customGreen rounded-full hover:bg-customGreen dark:bg-customGreen dark:text-white dark:hover:bg-customGreen focus:outline-none focus:shadow-outline"
@@ -206,6 +207,8 @@ function EditCourse() {
                                             </button>
                                         </div>
                                         <hr className="mb-6 border-t" />
+
+
                                     </form>
                                 </div>
                                 <div

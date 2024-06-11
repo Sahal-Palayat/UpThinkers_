@@ -91,5 +91,40 @@ class CourseController {
             }
         });
     }
+    addLesson(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log('lesonnnnnnnn');
+                const { id } = req.params;
+                const { title, content, img, vdo, pdf } = req.body;
+                console.log(id, title, content, img, vdo, pdf);
+                const success = yield this.interactor.addLesson({ Title: title, Content: content, Image: img, Video: vdo, Documents: pdf, Course: id });
+                if (success) {
+                    res.status(200).json({ success: true, message: 'Lesson added successfully.' });
+                }
+                else {
+                    res.status(302).json({ success: false, message: 'Failed to add lesson.' });
+                }
+            }
+            catch (error) {
+                console.log();
+                res.status(500).json({ success: false, message: 'Internal server error.' });
+            }
+        });
+    }
+    getLessons(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                console.log(id);
+                const lessons = yield this.interactor.getLessons(id);
+                res.status(200).json(lessons);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ success: false, message: 'internal server error' });
+            }
+        });
+    }
 }
 exports.CourseController = CourseController;

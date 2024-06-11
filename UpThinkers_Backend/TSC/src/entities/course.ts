@@ -11,7 +11,7 @@ export default interface CourseDocument extends   Document {
     Duration:string,
     Category:string,
     Students:string[],
-    lessons:[],
+    Lessons:[],
     Rating : number,
     TutorId:ObjectId,
     isApproved : boolean;

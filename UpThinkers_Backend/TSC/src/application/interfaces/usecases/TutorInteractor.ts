@@ -2,6 +2,7 @@ import { Tutor } from "../../entities/tutor";
 import { SignupDataTutor } from "../../entities/signUpDataTutor";
 import { Course } from "../../entities/course";
 import { Category } from "../../entities/category";
+import { Lesson } from "../../entities/lesson";
 
 export interface TutorInteractor {
     register(tutorData: { Name: string, Password: string, Email: string, Mobile: number }): Promise<{ tutor: Tutor | null, tutorToken: string | null }>
@@ -15,4 +16,6 @@ export interface TutorInteractor {
     getCourse():Promise<Course[] |[]>;
     editCourse(id:string,courseData:{Name:string,Status:boolean,Description:string,Image:string,Price:number,OfferPrice:number, Duration:string,Category:string,lessons:[],Tutor:string,CreatedAt:Date,UpdatedAt:Date,}): Promise <{course:Course |null}>
     deleteCourse(id:string): Promise<Course|null>;
+    addLesson(lessonData:{Title:string,Content:string,Image:string,Video:string,Documents:[],Course:string}):Promise<{lesson:Lesson|null}>
+    getLessons(id:string):Promise<Course |null>
 }

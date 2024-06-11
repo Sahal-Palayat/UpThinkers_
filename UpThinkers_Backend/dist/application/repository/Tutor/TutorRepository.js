@@ -18,6 +18,8 @@ const CommonFunctions_1 = require("../../functions/CommonFunctions");
 const otp_1 = __importDefault(require("../../../frameworks/database/models/otp"));
 const course_1 = __importDefault(require("../../../frameworks/database/models/course"));
 const category_1 = __importDefault(require("../../../frameworks/database/models/category"));
+const lesson_1 = __importDefault(require("../../../frameworks/database/models/lesson"));
+const mongoose_1 = __importDefault(require("mongoose"));
 class TutorRepositoryImpl {
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -192,6 +194,59 @@ class TutorRepositoryImpl {
             catch (error) {
                 console.log(error);
                 throw error;
+            }
+        });
+    }
+    addLesson(lesson) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newLesson = new lesson_1.default(lesson);
+                yield newLesson.save();
+                return { lesson: newLesson };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    getLessons(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // const lessons: Lesson[] = await LessonModel.aggregate([
+                //     {
+                //         $lookup: {
+                //             from: 'courses', 
+                //             localField: 'Course', 
+                //             foreignField: '_id', 
+                //             as: 'courseDetails'
+                //         }
+                //     },
+                //     {
+                //         $match: {
+                //             'courseDetails._id': new mongoose.Types.ObjectId(id) 
+                //         }
+                //     },
+                //     {
+                //         $unwind: '$courseDetails' 
+                //     }
+                // ]);
+                // return lessons
+                const [data] = yield course_1.default.aggregate([{
+                        $match: { _id: new mongoose_1.default.Types.ObjectId(id) },
+                    },
+                    { $lookup: {
+                            from: "lessons",
+                            localField: "_id",
+                            foreignField: "Course",
+                            as: "lessons"
+                        } }
+                ]);
+                return data;
+            }
+            catch (error) {
+                console.log(error);
+                return null;
             }
         });
     }

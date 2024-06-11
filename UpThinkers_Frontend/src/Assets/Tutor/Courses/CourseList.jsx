@@ -12,7 +12,6 @@ const CourseList = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const token = Cookies.get('tutorToken');
                 const { data } = await axiosApiTutor.get('/courselist');
                 setCourse(data);
             } catch (error) {
@@ -49,8 +48,10 @@ const CourseList = () => {
                         {course.length > 0 && course.map((courses) => (
                             <div key={courses._id} className="w-full md:w-3/12 lg:w-6/12 xl:w-6/12 p-2">
                                 <div className="w-full bg-white p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg rounded-2xl">
-                                    <article className="bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl border">
-                                        <div className="relative mb-4 rounded-2xl">
+                                    <article  className="bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl border">
+                                        <div   onClick={() => navigate(`/tutor/coursedetails`, { state: { course: courses } })}
+
+                                        className=" cursor-pointer relative mb-4 rounded-2xl">
                                             <img className="h-80 rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
                                                 src={courses.Image} alt="" />
                                             <div className="absolute bottom-3 left-3 inline-flex items-center rounded-lg bg-white p-2 shadow-md">
@@ -59,7 +60,7 @@ const CourseList = () => {
                                                 </svg>
                                                 <span className="ml-1 text-sm text-slate-400">2</span>
                                             </div>
-                                            <div className="flex justify-center items-center bg-red-700 bg-opacity-80 z-10 absolute top-0 left-0 w-full h-full text-white rounded-2xl opacity-0 transition-all duration-300 transform group-hover:scale-105 text-xl group-hover:opacity-100">
+                                            <div className="flex justify-center items-center bg-customGreen bg-opacity-80 z-10 absolute top-0 left-0 w-full h-full text-white rounded-2xl opacity-0 transition-all duration-300 transform group-hover:scale-105 text-xl group-hover:opacity-100">
                                                 View More...
                                                 <svg className="ml-2 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>

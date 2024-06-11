@@ -235,5 +235,42 @@ class TutorInteractorImpl {
             }
         });
     }
+    addLesson(lessonData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newLesson = { Title: lessonData.Title,
+                    Content: lessonData.Content,
+                    Image: lessonData.Image,
+                    Video: lessonData.Video,
+                    Documents: lessonData.Documents,
+                    Course: lessonData.Course
+                };
+                const { lesson } = yield this.Repository.addLesson(newLesson);
+                console.log(newLesson);
+                return { lesson };
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    getLessons(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const lesson = yield this.Repository.getLessons(id);
+                if (lesson) {
+                    return lesson;
+                }
+                else {
+                    return null;
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return null;
+            }
+        });
+    }
 }
 exports.TutorInteractorImpl = TutorInteractorImpl;
