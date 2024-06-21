@@ -12,6 +12,10 @@ const userSchema= new Schema<UserDocument>({
     CreatedAt:Date,
     Image:String,
     UpdatedAt:Date,
+    isGoogle: {
+        type: Boolean,
+        default: false
+    },
     isAdmin:{
         type:Boolean,
         default:false,

@@ -18,6 +18,7 @@ const CommonFunctions_1 = require("../../functions/CommonFunctions");
 const otp_1 = __importDefault(require("../../../frameworks/database/models/otp"));
 const category_1 = __importDefault(require("../../../frameworks/database/models/category"));
 const course_1 = __importDefault(require("../../../frameworks/database/models/course"));
+const order_1 = __importDefault(require("../../../frameworks/database/models/order"));
 const jwt = require('jsonwebtoken');
 class UserRepositoryImpl {
     save(user) {
@@ -72,6 +73,25 @@ class UserRepositoryImpl {
             catch (error) {
                 console.error('Error verifying OTP from database:', error);
                 return null;
+            }
+        });
+    }
+    googleAuth(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { Name, Email, Mobile, Password } = user;
+                console.log(user, 'lasttt');
+                const newUser = new user_1.default({ Name, Email, Mobile, Password });
+                console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
+                yield newUser.save();
+                let token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
+                let refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user, 'user');
+                console.log('tokennn', token);
+                return { user: newUser ? newUser.toObject() : null, token, refreshToken };
+            }
+            catch (error) {
+                console.log(error);
+                return { user: null, token: null, refreshToken: null };
             }
         });
     }
@@ -159,6 +179,20 @@ class UserRepositoryImpl {
             catch (error) {
                 console.log(error);
                 return [];
+            }
+        });
+    }
+    placeOrder(order) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { CourseId, TutorId, StudentId, Price, Payment } = order;
+                const newOrder = new order_1.default({ CourseId, TutorId, StudentId, Price, Payment });
+                yield newOrder.save();
+                return { order: newOrder ? newOrder.toObject() : null };
+            }
+            catch (error) {
+                console.log(error);
+                return { order: null };
             }
         });
     }

@@ -11,6 +11,10 @@ export default interface UserDocument extends   Document {
     type:Boolean,
     default:false
    }
+   isGoogle:{
+      type:Boolean,
+    default:false
+   },
    Image:string;
    UpdatedAt:Date;
    wishlist:ObjectId;

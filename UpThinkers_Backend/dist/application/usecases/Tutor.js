@@ -272,5 +272,22 @@ class TutorInteractorImpl {
             }
         });
     }
+    getStudents(courseId, tutorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const student = yield this.Repository.getStudents(courseId, tutorId);
+                if (student) {
+                    return student;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return [];
+            }
+        });
+    }
 }
 exports.TutorInteractorImpl = TutorInteractorImpl;

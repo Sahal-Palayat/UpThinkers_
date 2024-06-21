@@ -22,7 +22,7 @@ function TutorLogin() {
     const dispatch =useDispatch()
     const navigate= useNavigate()
     const error= useSelector((state)=>state.tutor.error)
-    const {token,setToken} = useContext(AuthContext)
+    const {token,setTutorToken} = useContext(AuthContext)
 
 
     
@@ -61,13 +61,14 @@ function TutorLogin() {
     if(!hasError){
         try {
             await dispatch(tutorLogin({ email, password })).then((response) => {
+                
                     if (response.payload) {
                       console.log(response.payload);
                         toast.success(response?.payload?.message,{
                                 autoClose:1500,
                                 onClose:()=>{
                                     if(response.payload.tutor){
-                                        setToken(response.payload.refreshToken)
+                                        setTutorToken(response.payload.refreshToken)
                                         navigate('/tutor/home')
                                     }
                                 },

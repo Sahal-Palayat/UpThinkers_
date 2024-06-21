@@ -73,9 +73,9 @@ function AdminSidebar() {
                     <h1 onClick={() => navigate('/admin/categorylist')} className='cursor-pointer p-2 hover:bg-customGreen rounded-md mt-1'>Category List</h1>
                     {/* <h1 className='cursor-pointer p-2 hover:bg-customGreen rounded-md mt-1'>Friends</h1> */}
                 </div>
-                <div  className='p-2.5 mt-3  flex items-center rounded-md px-4 duration-300 cursor-pointer bg-customBlue text-white hover:bg-customGreen'>
+                <div  onClick={logout} className='p-2.5 mt-3  flex items-center rounded-md px-4 duration-300 cursor-pointer bg-customBlue text-white hover:bg-customGreen'>
                     <i className='bi bi-box-arrow-in-right '></i>
-                    <span className='text-[15px] ml-4 text-gray-200' onClick={logout}>Logout</span>
+                    <span className='text-[15px] ml-4 text-gray-200'>Logout</span>
 
                 </div>
             </div>

@@ -10,6 +10,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import { uploadImages } from '../../../Services/uploadImages';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const AddCourse = () => {
     const [name, setName] = useState('');
@@ -29,6 +30,10 @@ const AddCourse = () => {
     const [durationError, setDurationError] = useState('');
     const [categoryError, setCategoryError] = useState('');
     const [imageError, setImageError] = useState('');
+
+    const { tutor } = useSelector((state) => state.tutor)
+
+    console.log(tutor._id,'llllllllllllllllllllllllllllllllllllll');
 
 
     const navigate = useNavigate()
@@ -92,6 +97,7 @@ const AddCourse = () => {
         e.preventDefault();
         let img = await uploadImages(image);
         console.log(img);
+        const tutorId= tutor._id
 
         let hasError = false;
 
@@ -125,7 +131,7 @@ const AddCourse = () => {
                 const token = Cookies.get('adminToken');
 
 
-                const courseData = { name, description, price, duration, selectedCategory, img };
+                const courseData = { name, description, price, duration, selectedCategory, img,tutorId };
 
                 const response = await axios.post(`${config.TUTOR_BASE_URL}/addcourse`, courseData, {
                     headers: {
@@ -201,10 +207,9 @@ const AddCourse = () => {
                                             <label className="block mb-2 text-sm font-bold text-gray-700 dark:text-black" htmlFor="description">
                                                 Description
                                             </label>
-                                            <input
+                                            <textarea
                                                 className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 dark:text-black border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                                                 id="description"
-                                                type="text"
                                                 name="description"
                                                 placeholder="Description"
                                                 value={description}

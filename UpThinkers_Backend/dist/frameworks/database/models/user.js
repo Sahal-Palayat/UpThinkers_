@@ -23,6 +23,10 @@ const userSchema = new mongoose_1.Schema({
     CreatedAt: Date,
     Image: String,
     UpdatedAt: Date,
+    isGoogle: {
+        type: Boolean,
+        default: false
+    },
     isAdmin: {
         type: Boolean,
         default: false,

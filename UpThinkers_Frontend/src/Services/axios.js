@@ -64,13 +64,19 @@ axiosApiUser.interceptors.request.use((config) => {
 
 
 
-axiosApiAdmin.interceptors.request.use(response=>{
-    const adminToken=Cookies.get("adminToken")
-    if(adminToken){
-      response.headers.Authorization=adminToken
+
+axiosApiAdmin.interceptors.request.use((config) => {
+    const token = Cookies.get('adminToken');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        console.error('Token is not available');
     }
-    return config
-  })
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
   
   axiosApiAdmin.interceptors.response.use((response) => {
     return response;  
@@ -100,6 +106,21 @@ axiosApiAdmin.interceptors.request.use(response=>{
 }, (error) => {
     return Promise.reject(error);
 });
+
+// axiosApiTutor.interceptors.response.use((response) => {
+//     return response;  
+//   }, (error) => {
+//     if (error.response) {
+//       console.error("Response Error:", error.response.data);
+//       console.error("Status Code:", error.response.status);
+//       console.error("Headers:", error.response.headers);
+//     } else if (error.request) {
+//       console.error("Request Error:", error.request);
+//     } else {
+//       console.error("Error:", error.message);
+//     }
+//     return Promise.reject(error);
+//   });
 
 
 

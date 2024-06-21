@@ -3,6 +3,7 @@ import { SignupDataTutor } from "../../entities/signUpDataTutor";
 import { Course } from "../../entities/course";
 import { Category } from "../../entities/category";
 import { Lesson } from "../../entities/lesson";
+import { User } from "../../entities/user";
 
 export interface TutorInteractor {
     register(tutorData: { Name: string, Password: string, Email: string, Mobile: number }): Promise<{ tutor: Tutor | null, tutorToken: string | null }>
@@ -18,4 +19,6 @@ export interface TutorInteractor {
     deleteCourse(id:string): Promise<Course|null>;
     addLesson(lessonData:{Title:string,Content:string,Image:string,Video:string,Documents:[],Course:string}):Promise<{lesson:Lesson|null}>
     getLessons(id:string):Promise<Course |null>
+    getStudents(courseId:string,tutorId:string):Promise<User[]|[]>;
+
 }

@@ -8,6 +8,8 @@ import { Category } from '../../entities/category';
 import CategoryModel from '../../../frameworks/database/models/category';
 import { Course } from '../../entities/course';
 import CourseModel from '../../../frameworks/database/models/course';
+import { Order } from '../../entities/order';
+import OrderModel from '../../../frameworks/database/models/order';
 const jwt = require('jsonwebtoken')
 
 
@@ -17,9 +19,6 @@ export class UserRepositoryImpl implements UserRepository {
     async save(user: User): Promise<{ user: User | null, token: string | null, refreshToken: string | null }> {
       
       try {
-        
-      
-      
         console.log('repositoryy');
 
         const { Name, Email, Mobile, Password } = user
@@ -75,6 +74,27 @@ export class UserRepositoryImpl implements UserRepository {
         } catch (error) {
             console.error('Error verifying OTP from database:', error);
             return null;
+        }
+    }
+
+    async googleAuth(user: User): Promise<{ user: User | null, token: string | null, refreshToken: string | null }>{
+        try {
+            const { Name, Email, Mobile, Password } = user
+            console.log(user, 'lasttt');
+            const newUser = new UserModel({ Name, Email, Mobile, Password })
+            console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
+
+            await newUser.save()
+
+            let token = await genAccessToken(user,'user')
+            let refreshToken = await genRefreshToken(user,'user')
+            console.log('tokennn', token);
+            return { user: newUser? newUser.toObject() as User : null, token, refreshToken }
+            
+        } catch (error) {
+            console.log(error);
+            return {user:null,token:null,refreshToken:null}
+            
         }
     }
 
@@ -176,6 +196,20 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    async placeOrder(order:Order):Promise<{order:Order | null} > {
+        try {
+            const {CourseId,TutorId,StudentId,Price,Payment} = order
+            const newOrder = new OrderModel({CourseId,TutorId,StudentId,Price,Payment})
+            await newOrder.save()
+            return {order: newOrder? newOrder.toObject() as Order : null}
+            
+        } catch (error) {
+            console.log(error);
 
-}
+            return {order: null}
+        }
+    }
+
+
+} 
 

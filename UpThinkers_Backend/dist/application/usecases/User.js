@@ -12,10 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserInteractorImpl = void 0;
 const CommonFunctions_1 = require("../functions/CommonFunctions");
 class UserInteractorImpl {
-    constructor(Repository, mailer) {
-        this.Repository = Repository;
+    constructor(repository, mailer) {
+        this.repository = repository;
         this.mailer = mailer;
-        // this.Repository.save()
+        // this.repository.save()
     }
     register(userData) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -23,13 +23,12 @@ class UserInteractorImpl {
                 const newUser = {
                     Name: userData.Name,
                     Email: userData.Email,
-                    Mobile: userData.Mobile,
                     Password: userData.Password,
                     CreatedAt: new Date()
                 };
-                console.log(newUser);
-                const { user, token } = yield this.Repository.save(newUser);
-                return { user, token };
+                console.log(newUser, 'usecaseeeeeeeeeeeee');
+                const { user, token, refreshToken } = yield this.repository.save(newUser);
+                return { user, token, refreshToken };
             }
             catch (error) {
                 console.error('Error during signup:', error);
@@ -41,7 +40,7 @@ class UserInteractorImpl {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('2', signupData);
             const email = signupData.email;
-            const userExists = yield this.Repository.userExists(email);
+            const userExists = yield this.repository.userExists(email);
             console.log(userExists, "userData");
             if (userExists) {
                 return { userExists: true, isMailSent: false };
@@ -50,7 +49,7 @@ class UserInteractorImpl {
                 const { otp, success } = yield this.mailer.sendMail(email);
                 console.log(otp);
                 if (success) {
-                    const saveToDB = yield this.Repository.saveToDB(signupData, otp);
+                    const saveToDB = yield this.repository.saveToDB(signupData, otp);
                     return { userExists: false, isMailSent: true };
                 }
                 else {
@@ -66,9 +65,9 @@ class UserInteractorImpl {
     verifyOtp(otp) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const isUser = yield this.Repository.verifyotp(otp);
+                const isUser = yield this.repository.verifyotp(otp);
                 if (isUser) {
-                    const { user, token, refreshToken } = yield this.Repository.save(isUser);
+                    const { user, token, refreshToken } = yield this.repository.save(isUser);
                     if (user && token) {
                         return { success: true, token, refreshToken, user };
                     }
@@ -81,10 +80,29 @@ class UserInteractorImpl {
             }
         });
     }
+    googleAuth(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newUser = {
+                    Name: data.Name,
+                    Email: data.Email,
+                    Mobile: data.Mobile,
+                    Password: data.Password
+                };
+                console.log(newUser);
+                const { user, token, refreshToken } = yield this.repository.googleAuth(newUser);
+                return { user, token, refreshToken };
+            }
+            catch (error) {
+                console.log(error);
+                return { user: null, token: null, refreshToken: null };
+            }
+        });
+    }
     login(credentials) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { user, message, token } = yield this.Repository.findCredentials(credentials.email, credentials.password);
+                const { user, message, token } = yield this.repository.findCredentials(credentials.email, credentials.password);
                 console.log(user, token, message, 'loggggg');
                 const refreshToken = user ? yield (0, CommonFunctions_1.genRefreshToken)(user, 'user') : '';
                 return { user, message, token, refreshToken };
@@ -98,7 +116,7 @@ class UserInteractorImpl {
     getUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield this.Repository.getUsers();
+                const user = yield this.repository.getUsers();
                 if (user) {
                     return user;
                 }
@@ -118,7 +136,7 @@ class UserInteractorImpl {
                 const { otp, success } = yield this.mailer.sendMail(emailId);
                 console.log(otp);
                 if (success) {
-                    const updateOTP = yield this.Repository.updateOTP(emailId, otp);
+                    const updateOTP = yield this.repository.updateOTP(emailId, otp);
                     return updateOTP;
                 }
                 else {
@@ -134,7 +152,7 @@ class UserInteractorImpl {
     getCategory() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const category = yield this.Repository.getCategory();
+                const category = yield this.repository.getCategory();
                 if (category) {
                     return category;
                 }
@@ -151,7 +169,7 @@ class UserInteractorImpl {
     getCourse() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const course = yield this.Repository.getCourse();
+                const course = yield this.repository.getCourse();
                 if (course) {
                     return course;
                 }
@@ -162,6 +180,26 @@ class UserInteractorImpl {
             catch (error) {
                 console.log(error);
                 return [];
+            }
+        });
+    }
+    placeOrder(orderData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const newOrder = {
+                    CourseId: orderData.CourseId,
+                    TutorId: orderData.TutorId,
+                    StudentId: orderData.StudentId,
+                    Price: orderData.Price,
+                    Payment: orderData.Payment,
+                    CreatedAt: new Date()
+                };
+                const order = yield this.repository.placeOrder(newOrder);
+                return order;
+            }
+            catch (error) {
+                console.log(error);
+                return { order: null };
             }
         });
     }

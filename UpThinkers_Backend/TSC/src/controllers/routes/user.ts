@@ -17,11 +17,13 @@ userRouter.post('/sendMail',controller.sendMail.bind(controller))
 userRouter.post('/verifyOtp',controller.verifyOtp.bind(controller))
 userRouter.post('/resendMail/:emailId', controller.resendMail.bind(controller));
 userRouter.post('/login',controller.login.bind(controller))  
+userRouter.post('/googlauth',controller.googleAuth.bind(controller))
 // userRouter.get('/home',userAuth,controller.getHome.bind(controller))
 
 
 userRouter.get('/categorylist',userAuth,controller.getCategory.bind(controller))
 userRouter.get('/courselist',userAuth,controller.getCourse.bind(controller))
+userRouter.post('/placeorder',userAuth,controller.placeOrder.bind(controller))
 
 
    

@@ -7,6 +7,7 @@ import { Course } from "../entities/course";
 import { Category } from "../entities/category";
 import { genRefreshToken } from "../functions/CommonFunctions";
 import { Lesson } from "../entities/lesson";
+import { User } from "../entities/user";
 
 export class TutorInteractorImpl implements TutorInteractor {
     constructor(private readonly Repository: TutorRepository, private readonly mailer: IMailer) { }
@@ -276,6 +277,20 @@ export class TutorInteractorImpl implements TutorInteractor {
             return null
             
         }
+    }
+    async getStudents(courseId:string,tutorId:string): Promise<User[] | []> {
+        try {
+            const student = await this.Repository.getStudents(courseId,tutorId)
+            if (student) {
+                return student
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            return []
+        }
+        
     }
 }
 

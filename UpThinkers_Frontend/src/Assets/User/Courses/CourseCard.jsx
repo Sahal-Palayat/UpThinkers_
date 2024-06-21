@@ -3,7 +3,7 @@ import { axiosApiUser } from '../../../Services/axios';
 
 
 function CourseCard() {
-    const [course,setCourse]= useState([])
+    const [course, setCourse] = useState([])
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -17,21 +17,43 @@ function CourseCard() {
         }
         fetchCourses();
     }, []);
-    console.log(course,'courseeeeeee');
-  return (
-    <>
-    <section className="homeAbout">
-        
-    <div className="relative pt-2 lg:pt-2 min-h-screen">
-    <h1 className="text-4xl font-bold text-customBlue pb-8 ml-20 mt-10">Best Popular Courses</h1>
+    console.log(course, 'courseeeeeee');
+    return (
+        <>
+            <section className="homeAbout">
+
+                <div className="relative pt-2 lg:pt-2 min-h-screen">
+                    <h1 className="text-4xl font-bold text-customBlue pb-8 ml-20 mt-10">Best Popular Courses</h1>
+                    <button
+                        className=" float-right mr-10 flex select-none items-end gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-s font-bold uppercase text-customBlue transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        type="button"
+                        data-ripple-dark="true"
+                    >
+                        Learn More
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            aria-hidden="true"
+                            className="h-4 w-4"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                            ></path>
+                        </svg>
+                    </button>
                     <div className="bg-cover w-full flex flex-wrap">
                         {course.length > 0 && course.map((courses) => (
                             <div key={courses._id} className="w-full md:w-3/12 lg:w-3/12 xl:w-3/12 p-2">
                                 <div className="w-full bg-white p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg rounded-2xl">
-                                    <article  className="bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl border">
-                                        <div   onClick={() => navigate(`/user/coursedetails`, { state: { course: courses } })}
+                                    <article className="bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl border">
+                                        <div onClick={() => navigate(`/user/coursedetails`, { state: { course: courses } })}
 
-                                        className=" cursor-pointer relative mb-4 rounded-2xl">
+                                            className=" cursor-pointer relative mb-4 rounded-2xl">
                                             <img className="h-80 rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
                                                 src={courses.Image} alt="" />
                                             <div className="absolute bottom-3 left-3 inline-flex items-center rounded-lg bg-white p-2 shadow-md">
@@ -72,7 +94,7 @@ function CourseCard() {
                                             <p className="block relative group-hover:text-red-700 transition-colors duration-200">
                                                 {courses.Name}
                                             </p>
-                                            
+
 
                                             <p>{courses.Description}</p>
                                         </h3>
@@ -82,9 +104,9 @@ function CourseCard() {
                         ))}
                     </div>
                 </div>
-    </section>
-  </>
-  )
+            </section>
+        </>
+    )
 }
 
 export default CourseCard

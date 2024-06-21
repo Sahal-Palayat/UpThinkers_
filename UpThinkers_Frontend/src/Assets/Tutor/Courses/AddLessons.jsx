@@ -50,12 +50,12 @@ const AddLessons = () => {
                     setVideoError('');
                 }
                 break;
-                case 'documents':
-                    if (files && files.length > 0) {
-                        setDocuments(files); 
-                        setDocumentsError('');
-                    }
-                    break;
+            case 'documents':
+                if (files && files.length > 0) {
+                    setDocuments(files);
+                    setDocumentsError('');
+                }
+                break;
             case 'image':
                 if (files && files.length > 0) {
                     setImage(files[0]);
@@ -74,9 +74,9 @@ const AddLessons = () => {
         let vdo = await uploadVideo(video);
         const pdf = [];
         for (let i = 0; i < documents.length; i++) {
-        const Pdf = await uploadPDF(documents[i]);
-        pdf.push(Pdf);
-         }
+            const Pdf = await uploadPDF(documents[i]);
+            pdf.push(Pdf);
+        }
         let id = course._id
 
         console.log(img, 'imageeeeeeee');
@@ -111,7 +111,10 @@ const AddLessons = () => {
                 if (response.status === 200) {
                     toast.success('Course added successfully');
                     console.log('Course added successfully');
+                    setTimeout(() => {
                         navigate('/tutor/courselist');
+                    }, 2000);
+                   
                 } else if (response.status === 302) {
                     toast.error('Course adding error');
                     console.log('Course adding error');
@@ -186,7 +189,7 @@ const AddLessons = () => {
                                                 <label htmlFor="lessonDescription" className="pb-2 text-sm font-bold text-gray-800 dark:text-black">
                                                     Lesson Description
                                                 </label>
-                                                <input
+                                                <textarea
                                                     id="content"
                                                     name="content"
                                                     value={content}
@@ -194,7 +197,6 @@ const AddLessons = () => {
                                                     className="bg-transparent border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 resize-none placeholder-gray-500 text-gray-500 dark:text-gray-400"
                                                     placeholder="Let the world know who you are"
                                                     rows={5}
-                                                    defaultValue={""}
                                                 />
                                                 <p className="w-full text-right text-xs pt-1 text-gray-500 dark:text-gray-400">
                                                     Character Limit: 200

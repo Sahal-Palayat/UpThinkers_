@@ -26,13 +26,13 @@ function CategoryCard() {
             <div className="flex overflow-x-scroll scrollbar-hide  space-x-8 px-4">
                 {category.length > 0 && category.map((cat, index) => (
                     <div key={index} className="flex-shrink-0 w-80 flex flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-                        <div className="p-6">
+                        <div className="p-6 ">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
                                 aria-hidden="true"
-                                className="mb-4 h-12 w-12 text-pink-500"
+                                className="mb-4 h-12 w-12 ml-28 text-customBlue"
                             >
                                 <path
                                     fillRule="evenodd"
@@ -51,11 +51,11 @@ function CategoryCard() {
                         </div>
                         <div className="p-6 pt-0">
                             <a
-                                className="!font-medium !text-blue-gray-900 !transition-colors hover:!text-pink-500 cursor-pointer"
+                                className="!font-medium !text-blue-gray-900 !transition-colors hover:!text-customBlue cursor-pointer"
                                 href="#"
                             >
                                 <button
-                                    className="flex select-none items-center gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-pink-500 transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                    className="flex select-none items-center gap-2 rounded-lg py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-customBlue transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                                     type="button"
                                     data-ripple-dark="true"
                                 >

@@ -20,6 +20,7 @@ const course_1 = __importDefault(require("../../../frameworks/database/models/co
 const category_1 = __importDefault(require("../../../frameworks/database/models/category"));
 const lesson_1 = __importDefault(require("../../../frameworks/database/models/lesson"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const order_1 = __importDefault(require("../../../frameworks/database/models/order"));
 class TutorRepositoryImpl {
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -235,18 +236,34 @@ class TutorRepositoryImpl {
                 const [data] = yield course_1.default.aggregate([{
                         $match: { _id: new mongoose_1.default.Types.ObjectId(id) },
                     },
-                    { $lookup: {
+                    {
+                        $lookup: {
                             from: "lessons",
                             localField: "_id",
                             foreignField: "Course",
                             as: "lessons"
-                        } }
+                        }
+                    }
                 ]);
                 return data;
             }
             catch (error) {
                 console.log(error);
                 return null;
+            }
+        });
+    }
+    getStudents(courseId, tutorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const orders = yield order_1.default.find({ TutorId: tutorId, CourseId: courseId })
+                    .populate('StudentId', 'Name Email');
+                const students = orders.map(order => order.StudentId);
+                return students;
+            }
+            catch (error) {
+                console.error('Error fetching users:', error);
+                return [];
             }
         });
     }

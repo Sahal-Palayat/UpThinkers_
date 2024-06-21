@@ -11,6 +11,9 @@ import CategoryModel from "../../../frameworks/database/models/category";
 import { Lesson } from "../../entities/lesson";
 import LessonModel from "../../../frameworks/database/models/lesson";
 import mongoose from "mongoose";
+import { User } from "../../entities/user";
+import UserModel from "../../../frameworks/database/models/user";
+import OrderModel from "../../../frameworks/database/models/order";
 
 
 
@@ -38,9 +41,7 @@ export class TutorRepositoryImpl implements TutorRepository {
         } catch (error) {
             console.log(error);
             throw error
-
         }
-
     }
 
     async tutorExists(email: string): Promise<boolean> {
@@ -158,8 +159,6 @@ export class TutorRepositoryImpl implements TutorRepository {
 
     async getCategory(): Promise<Category[] | []> {
         try {
-
-
             const category: Category[] = await CategoryModel.find();
             return category
 
@@ -243,21 +242,38 @@ export class TutorRepositoryImpl implements TutorRepository {
             //     }
             // ]);
             // return lessons
-            const [data]:Course[] = await CourseModel.aggregate([{
+            const [data]: Course[] = await CourseModel.aggregate([{
                 $match: { _id: new mongoose.Types.ObjectId(id) },
             },
-            {$lookup:{
-                from:"lessons",
-                localField:"_id",
-                foreignField:"Course",
-                as:"lessons"
-            }}
-        ])
+            {
+                $lookup: {
+                    from: "lessons",
+                    localField: "_id",
+                    foreignField: "Course",
+                    as: "lessons"
+                }
+            }
+            ])
             return data
         } catch (error) {
             console.log(error);
             return null
         }
     }
+
+    async getStudents(courseId: string, tutorId: string): Promise<User[] | []> {
+        try {
+            const orders = await OrderModel.find({ TutorId: tutorId, CourseId: courseId })
+                .populate('StudentId', 'Name Email');
+
+            const students: User[] = orders.map(order => order.StudentId as User);
+            return students;
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            return [];
+        }
+    }
+
+
 
 }

@@ -18,7 +18,7 @@ function AdminLogin() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const error = useSelector((state) => state.user.error)
-    const { token, setToken } = useContext(AuthContext)
+    const { adminToken, setAdminToken } = useContext(AuthContext)
 
     useEffect(() => {
         console.log('okkkk');
@@ -59,7 +59,7 @@ function AdminLogin() {
                                 autoClose:1500,
                                 onClose:()=>{
                                     if(response.payload.user){
-
+                                        setAdminToken(response.payload.adminToken)
                                         setToken(response.payload.refreshToken)
                                         navigate('/admin/home')
                                     }

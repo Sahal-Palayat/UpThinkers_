@@ -90,7 +90,7 @@ export const tutorAuth = async (req: Request, res: Response, next: NextFunction)
                 } else if (err.name === 'TokenExpiredError') {
                     console.log(err);
                     
-                    return res.status(402).json({ error: 'Token expired' });
+                    return res.status(309).json({ error: 'Token expired' });
                 } else {
                     console.log(err);
                     return res.status(403).json({ error: 'Token verification failed' });

@@ -6,6 +6,7 @@ import { TutorInteractorImpl } from '../../application/usecases/Tutor';
 import { TutorRepositoryImpl } from '../../application/repository/Tutor/TutorRepository';
 import { tutorAuth } from '../middlewares/authmiddleware';
 import { CourseController } from '../controller/CourseController';
+import {} from 'util-functions-nodejs'
 
 const repository = new TutorRepositoryImpl()
 const mailer= new MailerImp()
@@ -25,12 +26,17 @@ tutorRouter.get('/categorylist',tutorAuth,controller.getCategory.bind(controller
 tutorRouter.post('/addcourse',courseController.addCourse.bind(courseController))
 tutorRouter.get('/courselist',courseController.getCourse.bind(courseController))
 
-tutorRouter.delete('/deletecourse/:id', courseController.deleteCourse.bind(courseController));
-tutorRouter.put('/editcourse/:id',courseController.editCourse.bind((courseController)))
+tutorRouter.delete('/deletecourse/:id', tutorAuth,courseController.deleteCourse.bind(courseController));
+tutorRouter.put('/editcourse/:id',tutorAuth,courseController.editCourse.bind((courseController)))
 tutorRouter.post('/addlesson/:id',tutorAuth,courseController.addLesson.bind(courseController))
 tutorRouter.get('/getlessons/:id',tutorAuth,courseController.getLessons.bind(courseController))
 
+tutorRouter.get('/getstudents',courseController.getStudents.bind(courseController))
 
 
 
-export default tutorRouter; 
+
+
+
+
+export default tutorRouter;

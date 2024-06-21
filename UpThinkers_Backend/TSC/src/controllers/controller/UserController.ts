@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import { UserInteractor } from "../../application/interfaces/usecases/UserInteractor";
+import { timeLog } from "console";
 
 export class UserController {
 
@@ -59,6 +60,21 @@ export class UserController {
         } catch (error) {
             console.error('Error verifying OTP:', error);
             res.status(500).json({ success: false, message: 'Internal server error.' });
+        }
+    }
+
+    async googleAuth(req:Request,res:Response,next: NextFunction) {
+        try {
+            const { name, email, sub } = req.body
+            console.log(name, email, sub);
+            
+            const user = await this.interactor.googleAuth({ Name: name, Password: sub, Email: email })
+            res.status(200).json({ message: "User registered successfully", user: user?.user, token: user?.token ,refreshToken: user?.refreshToken});
+
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
         }
     }
 
@@ -145,6 +161,22 @@ export class UserController {
         try {
             const course = await this.interactor.getCourse()
             res.status(200).json({ course })
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
+            
+        }
+    }
+
+
+
+    async placeOrder(req:Request,res:Response,next: NextFunction) {
+        try {
+            console.log(req.body);
+            const {courseId,studentId,tutorId,amount,payment}= req.body
+            const order = await this.interactor.placeOrder({CourseId:courseId,TutorId:tutorId,StudentId:studentId,Price:amount,Payment:payment})
+            res.status(200).json({ order })
             
         } catch (error) {
             console.log(error);

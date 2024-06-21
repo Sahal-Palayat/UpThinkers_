@@ -3,6 +3,7 @@ import TutorSidebar from '../../Components/TutorComponents/TutorSidebar';
 import { useNavigate } from 'react-router-dom';
 import { axiosApiTutor } from '../../../Services/axios';
 import Cookies from 'js-cookie';
+import Swal from 'sweetalert2';
 
 const CourseList = () => {
     const navigate = useNavigate();
@@ -30,6 +31,28 @@ const CourseList = () => {
         }
     };
 
+    const handleDeleteClick = (event, courseId) => {
+        event.stopPropagation();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteCourse(courseId);
+                Swal.fire(
+                    'Deleted!',
+                    'Your course has been deleted.',
+                    'success'
+                );
+            }
+        });
+    };
+
 
     return (
         <div>
@@ -48,10 +71,10 @@ const CourseList = () => {
                         {course.length > 0 && course.map((courses) => (
                             <div key={courses._id} className="w-full md:w-3/12 lg:w-6/12 xl:w-6/12 p-2">
                                 <div className="w-full bg-white p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg rounded-2xl">
-                                    <article  className="bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl border">
-                                        <div   onClick={() => navigate(`/tutor/coursedetails`, { state: { course: courses } })}
+                                    <article className="bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl border">
+                                        <div onClick={() => navigate(`/tutor/coursedetails`, { state: { course: courses } })}
 
-                                        className=" cursor-pointer relative mb-4 rounded-2xl">
+                                            className=" cursor-pointer relative mb-4 rounded-2xl">
                                             <img className="h-80 rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
                                                 src={courses.Image} alt="" />
                                             <div className="absolute bottom-3 left-3 inline-flex items-center rounded-lg bg-white p-2 shadow-md">
@@ -93,12 +116,9 @@ const CourseList = () => {
                                                 {courses.Name}
                                             </p>
                                             <span>
-                                                <button 
-                                                    onClick={(event) => {
-                                                        event.stopPropagation(); 
-                                                        deleteCourse(courses._id);
-                                                    }} 
-                                                    type="button" 
+                                                <button
+                                                    onClick={(event) => handleDeleteClick(event, courses._id)}
+                                                    type="button"
                                                     className="float-end text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
                                                 >
                                                     Delete

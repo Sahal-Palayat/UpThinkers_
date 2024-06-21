@@ -9,10 +9,10 @@ export class CourseController {
     async addCourse(req: Request, res: Response, next: NextFunction) {
         try {
             console.log(req.body);
-            const { name, description, price, duration, selectedCategory, img} = req.body
+            const { name, description, price, duration, selectedCategory, img,tutorId} = req.body
                 
-            console.log( name, description, price, duration, selectedCategory, img);
-            const success = await this.interactor.addCourse({Name:name,Description:description,Duration:duration,Price:price,Category:selectedCategory,Image:img,OfferPrice:price,lessons:[],Status:true,CreatedAt:new Date,UpdatedAt:new Date,Tutor:'any'})
+            console.log( name, description, price, duration, selectedCategory, img,tutorId);
+            const success = await this.interactor.addCourse({Name:name,Description:description,Duration:duration,Price:price,Category:selectedCategory,Image:img,OfferPrice:price,lessons:[],Status:true,CreatedAt:new Date,UpdatedAt:new Date,Tutor:tutorId})
             if (success) {
                 res.status(200).json({ success: true, message: 'Category added successfully.' });
             } else {
@@ -125,5 +125,19 @@ export class CourseController {
         }
     }
 
+
+
+    async getStudents(req:Request,res:Response,next:NextFunction){
+        try {
+
+            const {courseId,tutorId}=req.body
+            const students = await this.interactor.getStudents(courseId,tutorId);
+            res.status(200).json(students);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ success: false, message:'internal server error'})
+            
+        }
+    }
 
 }

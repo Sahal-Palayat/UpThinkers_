@@ -7,16 +7,20 @@ import store from './Store/store.js'
 import { AuthContext, AuthProvider } from './Context/AuthContext.jsx'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
-
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import { config } from './config.jsx'
 
 const persistor= persistStore(store)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
+  
       <Provider store={store}>
         <PersistGate persistor={persistor} >
+          <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
           <App />
+          </GoogleOAuthProvider>
         </PersistGate>
       </Provider>
     </AuthProvider>

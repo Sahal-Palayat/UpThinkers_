@@ -18,9 +18,9 @@ class CourseController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log(req.body);
-                const { name, description, price, duration, selectedCategory, img } = req.body;
-                console.log(name, description, price, duration, selectedCategory, img);
-                const success = yield this.interactor.addCourse({ Name: name, Description: description, Duration: duration, Price: price, Category: selectedCategory, Image: img, OfferPrice: price, lessons: [], Status: true, CreatedAt: new Date, UpdatedAt: new Date, Tutor: 'any' });
+                const { name, description, price, duration, selectedCategory, img, tutorId } = req.body;
+                console.log(name, description, price, duration, selectedCategory, img, tutorId);
+                const success = yield this.interactor.addCourse({ Name: name, Description: description, Duration: duration, Price: price, Category: selectedCategory, Image: img, OfferPrice: price, lessons: [], Status: true, CreatedAt: new Date, UpdatedAt: new Date, Tutor: tutorId });
                 if (success) {
                     res.status(200).json({ success: true, message: 'Category added successfully.' });
                 }
@@ -119,6 +119,19 @@ class CourseController {
                 console.log(id);
                 const lessons = yield this.interactor.getLessons(id);
                 res.status(200).json(lessons);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ success: false, message: 'internal server error' });
+            }
+        });
+    }
+    getStudents(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { courseId, tutorId } = req.body;
+                const students = yield this.interactor.getStudents(courseId, tutorId);
+                res.status(200).json(students);
             }
             catch (error) {
                 console.log(error);

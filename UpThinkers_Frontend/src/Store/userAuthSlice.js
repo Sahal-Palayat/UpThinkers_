@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { config } from "../config";
 
+
 export const userRegister= createAsyncThunk('user/register',async ( signupData,thunkAPI)=>{
     try {
         console.log(signupData);
@@ -90,6 +91,8 @@ const initialState= {
         },
         setUser:(state,action)=>{
             state.user=action.payload
+            
+        //    Cookies.set('token',state.token)
         }
 
     },
@@ -103,6 +106,7 @@ const initialState= {
                 state.loading=false
                 state.msg=action.payload.message;
                 state.user=action.payload.user
+                state.token=action.payload.token
                 console.log(state.user,'ithaaaaaan user');
 
            })
