@@ -57,7 +57,7 @@ function Navbar() {
           <NavLink to='/home'>Home</NavLink>
           <NavLink to='/view'>Docs</NavLink>
           <NavLink to='/courselist'>Courses</NavLink>
-          <NavLink to='/onlineExam'>OnlineExam</NavLink>
+          <NavLink to='/tutorspage'>Tutors</NavLink>
           <NavLink to='/admission'>Admission</NavLink>
           <NavLink to='/media'>Media</NavLink>
           <NavLink to='/about'>About</NavLink>

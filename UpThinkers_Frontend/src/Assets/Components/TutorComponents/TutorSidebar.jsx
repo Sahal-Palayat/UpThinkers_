@@ -54,7 +54,7 @@ function TutorSidebar() {
                         <i className="fas fa-gift"></i>
                         <span>Profile</span>
                     </div>
-                    <div href="" onClick={() => navigate('/tutor/courselist')} className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group hover:bg-gradient-to-r hover:from-customGreen hover:to-cyan-400 hover:text-white">
+                    <div href="#" onClick={() => navigate('/tutor/courselist')} className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group hover:bg-gradient-to-r hover:from-customGreen hover:to-cyan-400 hover:text-white">
                         <i className="fas fa-store"></i>
                         <span>Course</span>
                     </div>

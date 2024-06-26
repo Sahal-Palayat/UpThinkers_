@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { config } from '../config';
 import Cookies from 'js-cookie'
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 // import toast from 'react-hot-toast';
 
 
@@ -43,21 +45,23 @@ axiosApiUser.interceptors.request.use((config) => {
 });
 
 
-// axiosApiUser.interceptors.response.use((response) => {
-//     if(token){
-//         response.headers.Authorization=token
-//       }
-//     if (response.status === 208) {
-//         Cookies.remove('token')
-//         window.location.href = '/login'
-//     }
-//     return response
-// }, (err) => {
-//     console.log(err, "this is the error");
-
-//     const { response } = err;
-    
-// })
+axiosApiUser.interceptors.response.use((response) => {
+    if(token){
+        response.headers.Authorization=token
+      }
+    if (response.status === 208) {
+        Cookies.remove('token')
+        window.location.href = '/login'
+    }
+    return response
+}, (err) => {
+    const { response } = err;
+    console.log(err,"______")
+    if(response.status === 401) {
+        Cookies.remove('token')
+        window.location.href = '/login'
+    }
+})
 
 
 

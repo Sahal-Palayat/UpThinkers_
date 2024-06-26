@@ -10,6 +10,8 @@ import SingleCourse from '../Assets/User/Courses/SingleCourse';
 import CheckoutPage from '../Assets/User/Checkout/CheckoutPage';
 import ProfilePage from '../Assets/User/Profile/ProfilePage';
 import PrivateRoute from './PrivateRoute';
+import TutorsPage from '../Assets/User/TutorDetails/TutorsPage';
+import TutorDetails from '../Assets/User/TutorDetails/TutorDetails';
 
 
 const UserRouter = () => {
@@ -29,6 +31,8 @@ const UserRouter = () => {
     <Route path="/coursedetails" element={<PrivateRoute><SingleCourse /></PrivateRoute>} />
     <Route path="/checkout" element={<PrivateRoute><CheckoutPage /></PrivateRoute>} />
     <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+    <Route path="/tutorspage" element={<PrivateRoute><TutorsPage /></PrivateRoute>} />
+    <Route path="/tutordetails" element={<PrivateRoute><TutorDetails /></PrivateRoute>} />
   </Routes>
   );
 };

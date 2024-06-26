@@ -49,12 +49,12 @@ function CourseCard() {
                     <div className="bg-cover w-full flex flex-wrap">
                         {course.length > 0 && course.map((courses) => (
                             <div key={courses._id} className="w-full md:w-3/12 lg:w-3/12 xl:w-3/12 p-2">
-                                <div className="w-full bg-white p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg rounded-2xl">
-                                    <article className="bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl border">
+                                <div className="w-full ml-10 bg-white p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg ">
+                                    <article className=" bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl  border">
                                         <div onClick={() => navigate(`/user/coursedetails`, { state: { course: courses } })}
 
                                             className=" cursor-pointer relative mb-4 rounded-2xl">
-                                            <img className="h-80 rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
+                                            <img className="h-60  w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
                                                 src={courses.Image} alt="" />
                                             <div className="absolute bottom-3 left-3 inline-flex items-center rounded-lg bg-white p-2 shadow-md">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="h-5 w-5 text-red-700">
