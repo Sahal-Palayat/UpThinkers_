@@ -29,7 +29,7 @@ export const userAuth = async (req: Request, res: Response, next: NextFunction) 
 
 
 
-        let decoded: any = null
+        // let decoded: any = null
         const secret = process.env.JWT_SECRET || ''
         jwt.verify(token, secret, async (err, data: any) => {
             if (err) {

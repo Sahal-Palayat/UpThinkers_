@@ -12,5 +12,5 @@ const app = (0, server_1.default)(config_1.default);
 (0, express_1.default)(app);
 (0, router_1.default)(app);
 (0, Mongoose_1.default)(config_1.default);
-// const io = createSocketIoServer(server)     
+// const io = createSocketIoServer(server)
 exports.default = app;

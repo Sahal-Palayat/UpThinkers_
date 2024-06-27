@@ -28,7 +28,7 @@ const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
         if (!token) {
             return res.status(401).json({ error: 'No token found' });
         }
-        let decoded = null;
+        // let decoded: any = null
         const secret = process.env.JWT_SECRET || '';
         jsonwebtoken_1.default.verify(token, secret, (err, data) => __awaiter(void 0, void 0, void 0, function* () {
             if (err) {
