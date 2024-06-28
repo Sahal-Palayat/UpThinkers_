@@ -75,7 +75,7 @@ function ChatPage() {
                                    
                                    
                                     <div className="bg-white px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
-                                        <div>
+                                        <div> 
                                             <img
                                                 className="h-12 w-12 rounded-full"
                                                 src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"
@@ -88,7 +88,7 @@ function ChatPage() {
                                                 <p className="text-xs text-grey-darkest">12:45 pm</p>
                                             </div>
                                             <p className="text-grey-dark mt-1 text-sm">Get Andrés on this movie ASAP!</p>
-                                        </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
