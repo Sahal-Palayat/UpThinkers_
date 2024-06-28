@@ -4,27 +4,26 @@ import mongooseConfig from './src/frameworks/database/Mongoose'
 import RouterConfig from './src/frameworks/server/router'
 import expressConfig from './src/frameworks/server/express'
 import { Server } from 'socket.io';
+import { connectSocket } from './src/application/functions/Socket/SocketCode'
+import http from 'http';
 
 const app = server(config)
 expressConfig(app);
 RouterConfig(app);
 mongooseConfig(config)
 
-const io = new Server(server);
+export const serverr = http.createServer(app)
 
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-  
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-  
-    socket.on('chat message', (msg) => {
-      io.emit('chat message', msg);
-    });
-  });
+const io = new Server(serverr, {
+    cors: {
+        origin: 'http://localhost:5173',
+        methods: ["GET", "POST"],
+        credentials: true
+    } 
+}) 
 
+connectSocket(io)
 
 
 

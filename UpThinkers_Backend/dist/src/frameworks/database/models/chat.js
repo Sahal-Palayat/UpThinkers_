@@ -1,20 +1,34 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require('mongoose');
-const chatSchema = mongoose.Schema({
-    ChatName: { type: String, trim: true },
-    Students: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'UserModel',
-        }
-    ],
-    LatestMessage: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Message',
-    },
-}, {
-    timestamps: true
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
 });
-const ChatModel = mongoose.model('Chat', chatSchema);
-exports.default = ChatModel;
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ChatModel = void 0;
+const mongoose_1 = __importStar(require("mongoose"));
+const chat_1 = require("../../../entities/chat");
+const chatSchema = new mongoose_1.Schema({
+    userId: { type: [String], default: [], required: true },
+    archived: { type: Boolean, default: false, required: true },
+    details: { type: [chat_1.messageSchema], default: [], required: true }
+});
+exports.ChatModel = mongoose_1.default.model('chats', chatSchema);
