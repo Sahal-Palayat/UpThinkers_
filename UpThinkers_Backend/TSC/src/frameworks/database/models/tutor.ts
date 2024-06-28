@@ -14,7 +14,7 @@ const tutorSchema= new Schema<TutorDocument>({
     Image:String,
     UpdatedAt:Date,
     wishlist:[],
-    isBlocked:{
+    isBlocked:{ 
         type:Boolean,
         default:false,
     },

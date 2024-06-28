@@ -2,6 +2,7 @@ import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { config } from "../config";
+import { axiosApiAdmin } from "../Services/axios";
 
 
 
@@ -12,25 +13,25 @@ export const adminLogin = createAsyncThunk('admin/login',async (loginData,thunkA
         console.log('yessss');
         console.log(loginData);
 
-        const response = await fetch(`${config.ADMIN_BASE_URL}/login`,{
-            method:'POST',
+        const response = await axiosApiAdmin.post(`/login`,loginData,{
+           
             headers:{
                 'Content-Type':'application/json',
             },
-            body:JSON.stringify(loginData)
+          
         })
 
         if(response.status===302){
             console.log('response',response);
 
-            const data= await response.json()
+            const data= await response.data
             console.log(response);
             throw new Error(data.message)
         }
 
        
 
-        const data = await response.json()
+        const data = await response.data
 
         Cookies.set('adminToken',data.adminToken)
         Cookies.set('refreshToken',data.refreshToken,{expires:7})

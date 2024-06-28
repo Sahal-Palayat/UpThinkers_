@@ -10,6 +10,7 @@ import EditCourse from '../Assets/Tutor/Courses/EditCourse';
 import CourseDetails from '../Assets/Tutor/Courses/CourseDetails';
 import AddLessons from '../Assets/Tutor/Courses/AddLessons';
 import EnrolledStudents from '../Assets/Tutor/Courses/EnrolledStudents';
+import ChatPageTutor from '../Assets/Tutor/ChatPage/ChatPageTutor';
 
 const TutorRouter = () => {
   const { tutorToken } = useContext(AuthContext);
@@ -26,7 +27,7 @@ const TutorRouter = () => {
       <Route path="/coursedetails" element={tutorToken ? <CourseDetails /> : <Navigate to="/tutor/login" />} />
       <Route path="/coursedetails/addlessons" element={tutorToken ? <AddLessons /> : <Navigate to="/tutor/login" />} />
       <Route path="/coursedetails/enrolledstudents" element={tutorToken ? <EnrolledStudents /> : <Navigate to="/tutor/login" />} />
-
+      <Route path='/tutorchat' element={tutorToken ? <ChatPageTutor /> : <Navigate to="/tutor/login" />} />
     </Routes>
   );
 };

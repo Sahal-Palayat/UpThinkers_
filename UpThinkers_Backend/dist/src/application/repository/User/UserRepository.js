@@ -221,5 +221,18 @@ class UserRepositoryImpl {
             }
         });
     }
+    getEnrolledCourse(studentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const enrolledStudents = yield order_1.default.find({ StudentId: studentId });
+                const enrolledCourse = yield course_1.default.find({ _id: { $in: enrolledStudents.map(order => order.CourseId) } });
+                return enrolledCourse;
+            }
+            catch (error) {
+                console.log(error);
+                return [];
+            }
+        });
+    }
 }
 exports.UserRepositoryImpl = UserRepositoryImpl;

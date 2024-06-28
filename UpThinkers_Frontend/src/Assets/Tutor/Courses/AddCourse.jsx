@@ -128,14 +128,11 @@ const AddCourse = () => {
 
         if (!hasError) {
             try {
-                const token = Cookies.get('adminToken');
-
-
                 const courseData = { name, description, price, duration, selectedCategory, img,tutorId };
 
-                const response = await axios.post(`${config.TUTOR_BASE_URL}/addcourse`, courseData, {
+                const response = await axiosApiTutor.post(`/addcourse`, courseData, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                       
                         'Content-Type': 'application/json'
                     },
                 });

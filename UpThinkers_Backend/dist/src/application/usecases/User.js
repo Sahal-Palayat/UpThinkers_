@@ -237,5 +237,22 @@ class UserInteractorImpl {
             }
         });
     }
+    getEnrolledCourse(studentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const course = yield this.repository.getEnrolledCourse(studentId);
+                if (course) {
+                    return course;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return [];
+            }
+        });
+    }
 }
 exports.UserInteractorImpl = UserInteractorImpl;

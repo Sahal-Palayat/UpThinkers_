@@ -2,6 +2,7 @@ import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { config } from "../config";
+import { axiosApiTutor } from "../Services/axios";
 
 
 
@@ -9,12 +10,10 @@ export const tutorRegister= createAsyncThunk('tutor/register',async ( signupData
     try {
         console.log(signupData);
 
-        const response = await fetch('http://localhost:3030/tutor/register',{
-            method: 'POST',
+        const response = await axiosApiTutor.post('/register',signupData,{
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(signupData)
 
         })
 
@@ -23,7 +22,7 @@ export const tutorRegister= createAsyncThunk('tutor/register',async ( signupData
             throw new Error('invalid response')
         }
 
-        const data= await response.json()
+        const data= await response.data
 
         Cookies.set('token',data.token,{expires:7})
         return data
@@ -39,25 +38,24 @@ export const tutorLogin = createAsyncThunk('tutor/login',async (loginData,thunkA
         console.log('yessss');
         console.log(loginData);
 
-        const response = await fetch(`${config.TUTOR_BASE_URL}/login`,{
-            method:'POST',
+        const response = await axiosApiTutor.post(`/login`,loginData,{
+            
             headers:{
                 'Content-Type':'application/json',
             },
-            body:JSON.stringify(loginData)
         })
 
         if(response.status===302){
             console.log('response',response);
 
-            const data= await response.json()
+            const data= await response.data
             console.log(response);
             throw new Error(data.message)
         }
 
        
 
-        const data = await response.json()
+        const data = await response.data
 
         Cookies.set('tutorToken',data.tutorToken,{expires:7})
         Cookies.set('refreshToken',data.refreshToken,{expires:7})

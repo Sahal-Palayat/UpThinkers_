@@ -23,4 +23,5 @@ userRouter.get('/courselist', authmiddleware_1.userAuth, controller.getCourse.bi
 userRouter.post('/placeorder', authmiddleware_1.userAuth, controller.placeOrder.bind(controller));
 userRouter.get('/tutorslist', authmiddleware_1.userAuth, controller.getTutors.bind(controller));
 userRouter.get('/tutorcourses/:tutorId', authmiddleware_1.userAuth, controller.getTutorCourse.bind(controller));
+userRouter.get('/enrolledcourses/:userId', authmiddleware_1.userAuth, controller.getEnrolledCourse.bind(controller));
 exports.default = userRouter;

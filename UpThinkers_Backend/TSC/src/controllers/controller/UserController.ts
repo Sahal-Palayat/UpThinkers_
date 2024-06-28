@@ -213,6 +213,19 @@ export class UserController {
         }
     }
 
+
+    async getEnrolledCourse(req: Request, res: Response,next: NextFunction){
+        try {
+            const studentId= req.params.userId
+            const enrolledCourse= await this.interactor.getEnrolledCourse(studentId)
+            res.status(200).json({enrolledCourse})
+            
+        } catch (error) {
+             console.log(error)
+            res.status(500).json({'error': error})
+        }
+    }
+
 }
 
 

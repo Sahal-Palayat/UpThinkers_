@@ -19,4 +19,5 @@ export interface UserRepository{
     placeOrder(order:Order):Promise<{order:Order | null}>
     getTutors():Promise<Tutor[] | [] >;
     getTutorCourse(tutorId:string):Promise<Course[]|[]>
+    getEnrolledCourse(studentId:string):Promise<Course[]|[]>
 }

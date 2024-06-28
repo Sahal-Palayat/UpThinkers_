@@ -2,19 +2,19 @@ import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { config } from "../config";
+import axios from "axios";
+import { axiosApiUser } from "../Services/axios";
+
 
 
 export const userRegister= createAsyncThunk('user/register',async ( signupData,thunkAPI)=>{
     try {
         console.log(signupData);
 
-        const response = await fetch(`${config.USER_BASE_URL}/register`,{
-            method: 'POST',
+        const response = await axiosApiUser.post(`/register`,signupData,{
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(signupData)
-
         })
 
         if(!response.ok){
@@ -22,7 +22,7 @@ export const userRegister= createAsyncThunk('user/register',async ( signupData,t
             throw new Error('invalid response')
         }
 
-        const data= await response.json()
+        const data= await response.data
 
         Cookies.set('token',data.token,{expires:7})
         return data
@@ -36,25 +36,23 @@ export const userLogin = createAsyncThunk('user/login',async (loginData,thunkAPI
         console.log('yessss');
         console.log(loginData);
 
-        const response = await fetch(`${config.USER_BASE_URL}/login`,{
-            method:'POST',
+        const response = await axiosApiUser.post(`/login`,loginData,{ 
             headers:{
                 'Content-Type':'application/json',
             },
-            body:JSON.stringify(loginData)
         })
 
         if(response.status===302){
             console.log('response',response);
 
-            const data= await response.json()
+            const data= await response.data
             console.log(response);
             throw new Error(data.message)
         }
 
             
 
-        const data = await response.json()
+        const data = await response.data
 
         Cookies.set('token',data.token,{expires:7})
         Cookies.set('refreshToken',data.refreshToken,{expires:7})

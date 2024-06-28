@@ -198,5 +198,18 @@ class UserController {
             }
         });
     }
+    getEnrolledCourse(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const studentId = req.params.userId;
+                const enrolledCourse = yield this.interactor.getEnrolledCourse(studentId);
+                res.status(200).json({ enrolledCourse });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ 'error': error });
+            }
+        });
+    }
 }
 exports.UserController = UserController;

@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^2.2.4",
     "axios": "^1.6.8",
     "bootstrap-icons": "^1.11.3",
+    "dotenv": "^16.4.5",
     "formik": "^2.4.6",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
@@ -31,6 +32,7 @@
     "react-toastify": "^10.0.5",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
+    "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.11",
     "sweetalert2": "^11.11.0"
   },

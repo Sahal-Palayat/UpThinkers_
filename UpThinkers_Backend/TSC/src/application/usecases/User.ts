@@ -246,5 +246,20 @@ export class UserInteractorImpl implements UserInteractor {
             return []
         }
     }
+
+
+    async getEnrolledCourse(studentId:string):Promise<Course[]|[]>{
+        try {
+            const course = await this.repository.getEnrolledCourse(studentId)
+            if (course) {
+                return course
+            } else {
+                return []
+            }
+        } catch (error) {
+            console.log(error);
+            return []
+        }
+    }
 }
 

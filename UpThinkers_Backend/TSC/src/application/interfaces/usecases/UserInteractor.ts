@@ -19,4 +19,5 @@ export interface UserInteractor {
     placeOrder(orderData:{CourseId: string, TutorId: string,StudentId:string,Price:string,Payment :string}): Promise<{order:Order | null }>
     getTutors(): Promise<Tutor[] | []>;
     getTutorCourse(tutorId:string):Promise<Course[]|[]>
+    getEnrolledCourse(studentId:string):Promise<Course[]|[]>
 } 

@@ -233,5 +233,19 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    async getEnrolledCourse(studentId: string): Promise<Course[]|[]>{
+        try {
+            const enrolledStudents: Order[] = await OrderModel.find({StudentId:studentId});
+
+            
+            const enrolledCourse: Course[] = await CourseModel.find({_id:{$in:enrolledStudents.map(order=>order.CourseId)}});
+            return enrolledCourse
+        } catch (error) {
+            console.log(error);
+            return []
+            
+        }
+    }
+
 } 
 
