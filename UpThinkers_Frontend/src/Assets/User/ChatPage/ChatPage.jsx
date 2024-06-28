@@ -72,7 +72,7 @@ function ChatPage() {
                                             <p className="text-grey-dark mt-1 text-sm">Get Andrés on this movie ASAP!</p>
                                         </div>
                                     </div>
-                                   
+                        
                                    
                                     <div className="bg-white px-3 flex items-center hover:bg-grey-lighter cursor-pointer">
                                         <div> 
