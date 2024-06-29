@@ -28,6 +28,47 @@ function Navbar() {
   console.log(user, 'navbarrrrr');
 
 
+  const [isToastActive, setIsToastActive] = useState(false);
+  const [messageSocket, setMessageSocket] = useState(null);
+  const [chatWindow, setChatwindow] = useState(false)
+
+  useEffect(() => {
+    const handleMessage = async () => {
+        // const { data } = await getUserById(messResponse.sender);
+        if ( !isToastActive) {
+            setIsToastActive(true);
+            // toastFunction({
+            //     Link: data.profileImage,
+            //     SenderId: data.channelName,
+            //     Message: messResponse.message,
+            //     onClose: () => setIsToastActive(false),
+            // });
+        }
+    };
+
+    if (messageSocket) {
+        messageSocket.on('incoming_message', handleMessage);
+    }
+
+    return () => {
+        if (messageSocket) {
+            messageSocket.off('incoming_message', handleMessage);
+        }
+    };
+}, [isToastActive, messageSocket]);
+
+
+useEffect(() => {
+  if (user && user?._id) {
+      const messageSocket = io(process.env.REACT_APP_CHAT_MANAGEMENT_URL || "")
+      setMessageSocket(messageSocket);
+      messageSocket.emit('join', user._id)
+  }
+}, [])
+
+
+
+
   const logout = () => {
     Cookies.remove('token')
     setToken(null)

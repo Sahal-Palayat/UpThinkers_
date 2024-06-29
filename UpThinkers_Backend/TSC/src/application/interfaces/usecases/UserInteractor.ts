@@ -20,4 +20,5 @@ export interface UserInteractor {
     getTutors(): Promise<Tutor[] | []>;
     getTutorCourse(tutorId:string):Promise<Course[]|[]>
     getEnrolledCourse(studentId:string):Promise<Course[]|[]>
+    addImage(studentId:string, image:string):Promise<User[]|[]>
 } 

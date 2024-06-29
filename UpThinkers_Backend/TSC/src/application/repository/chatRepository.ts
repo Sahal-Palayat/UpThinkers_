@@ -1,6 +1,6 @@
-import { messageArray,ChatDocument } from "../../../entities/chat";
-import { ChatModel } from "../../../frameworks/database/models/chat";
-import { chat_repo_interface } from "../../interfaces/repositories/chat-repository";
+import { messageArray,ChatDocument } from "../../entities/chat";
+import { ChatModel } from "../../frameworks/database/models/chat";
+import { chat_repo_interface } from "../interfaces/repositories/chat-repository";
 
 
 class ChatRepository implements chat_repo_interface {

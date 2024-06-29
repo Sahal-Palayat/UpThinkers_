@@ -211,5 +211,18 @@ class UserController {
             }
         });
     }
+    addImage(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const studentId = req.params.userId;
+                const { img } = req.body;
+                console.log(img, studentId, 'saaaaaaaaaaaaaaaaaaaaa');
+                const uploadImage = yield this.interactor.addImage(studentId, img);
+                res.status(200).json({ uploadImage });
+            }
+            catch (error) {
+            }
+        });
+    }
 }
 exports.UserController = UserController;

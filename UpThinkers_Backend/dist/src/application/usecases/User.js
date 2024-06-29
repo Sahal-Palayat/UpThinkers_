@@ -254,5 +254,22 @@ class UserInteractorImpl {
             }
         });
     }
+    addImage(studentId, image) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.repository.addImage(studentId, image);
+                if (user) {
+                    return user;
+                }
+                else {
+                    return [];
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return [];
+            }
+        });
+    }
 }
 exports.UserInteractorImpl = UserInteractorImpl;

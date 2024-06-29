@@ -96,7 +96,7 @@ const AddCourse = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let img = await uploadImages(image);
-        console.log(img);
+        console.log(img,'imaaaaaaaaaaaaaaaaaaaaaaaaaaage');
         const tutorId= tutor._id
 
         let hasError = false;

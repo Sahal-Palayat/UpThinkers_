@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectSocket = void 0;
-const chatRepository_1 = require("./chatRepository");
+const chatRepository_1 = require("../../repository/chatRepository");
 const connectSocket = (io) => {
     io.on('connection', (socket) => {
         console.log("scoket connected");

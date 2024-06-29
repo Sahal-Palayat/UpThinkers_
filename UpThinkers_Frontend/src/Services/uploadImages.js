@@ -4,7 +4,9 @@ import { config } from '../config';
 
 export const uploadImages = async (imageFile) => {
   console.log('inside upload image');
-  console.log(imageFile);
+  console.log(imageFile,"{}{}{}{}{}{}");
+
+console.log(config.CLOUDINARY_PRESET_KEY,config.CLOUDINARY);
 
   const presetKey = config.CLOUDINARY_PRESET_KEY;
   const userKey = config.CLOUDINARY;

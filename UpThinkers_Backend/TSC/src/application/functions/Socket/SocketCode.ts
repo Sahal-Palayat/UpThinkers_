@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { ChatDocument } from '../../../entities/chat';
-import { chatRepoLayer } from './chatRepository';
+import { chatRepoLayer } from '../../repository/chatRepository';
 
 export const connectSocket = (io: any) => {
 

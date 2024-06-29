@@ -226,6 +226,21 @@ export class UserController {
         }
     }
 
+
+    async addImage(req: Request, res: Response,next: NextFunction){
+        try {
+            const studentId= req.params.userId
+            const { img } = req.body
+            console.log(img,studentId,'saaaaaaaaaaaaaaaaaaaaa');
+            const uploadImage = await this.interactor.addImage(studentId, img)
+            res.status(200).json({ uploadImage })
+
+            
+        } catch (error) {
+            
+        }
+    }
+
 }
 
 

@@ -27,6 +27,6 @@ userRouter.post('/placeorder',userAuth,controller.placeOrder.bind(controller))
 userRouter.get('/tutorslist',userAuth,controller.getTutors.bind(controller))
 userRouter.get('/tutorcourses/:tutorId',userAuth,controller.getTutorCourse.bind(controller))
 userRouter.get('/enrolledcourses/:userId',userAuth,controller.getEnrolledCourse.bind(controller))
-
+userRouter.post('/addimage/:userId',userAuth,controller.addImage.bind(controller))
 
 export default userRouter;

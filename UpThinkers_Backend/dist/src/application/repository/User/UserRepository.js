@@ -234,5 +234,17 @@ class UserRepositoryImpl {
             }
         });
     }
+    addImage(studentId, image) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const updatedUser = yield user_1.default.findOneAndUpdate({ _id: studentId }, { $set: { Image: image } }, { new: true });
+                return updatedUser ? [updatedUser.toObject()] : [];
+            }
+            catch (error) {
+                console.log(error);
+                return [];
+            }
+        });
+    }
 }
 exports.UserRepositoryImpl = UserRepositoryImpl;

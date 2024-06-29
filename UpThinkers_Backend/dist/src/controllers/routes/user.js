@@ -24,4 +24,5 @@ userRouter.post('/placeorder', authmiddleware_1.userAuth, controller.placeOrder.
 userRouter.get('/tutorslist', authmiddleware_1.userAuth, controller.getTutors.bind(controller));
 userRouter.get('/tutorcourses/:tutorId', authmiddleware_1.userAuth, controller.getTutorCourse.bind(controller));
 userRouter.get('/enrolledcourses/:userId', authmiddleware_1.userAuth, controller.getEnrolledCourse.bind(controller));
+userRouter.post('/addimage/:userId', authmiddleware_1.userAuth, controller.addImage.bind(controller));
 exports.default = userRouter;

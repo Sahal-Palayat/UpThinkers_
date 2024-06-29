@@ -261,5 +261,21 @@ export class UserInteractorImpl implements UserInteractor {
             return []
         }
     }
+
+     async addImage(studentId: string, image: string): Promise<User[] | []> {
+        try {
+            const user = await this.repository.addImage(studentId, image)
+            if (user) {
+                return user
+            } else {
+                return []
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return []
+            
+        }
+    }
 }
 
