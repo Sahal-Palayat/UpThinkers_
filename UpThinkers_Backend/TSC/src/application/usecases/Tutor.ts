@@ -185,9 +185,9 @@ export class TutorInteractorImpl implements TutorInteractor {
         }
     }
 
-    async getCourse(): Promise<Course[] | []> {
+    async getCourse(tutorId:string): Promise<Course[] | []> {
         try {
-            const course = await this.Repository.getCourse()
+            const course = await this.Repository.getCourse(tutorId)
             if (course) {
                 return course
             } else {
@@ -295,6 +295,25 @@ export class TutorInteractorImpl implements TutorInteractor {
             return []
         }
         
+    }
+
+    async getTutorById(tutorId:string): Promise<Tutor|null>{
+        try {
+            const tutor = await this.Repository.getTutorById(tutorId)
+            console.log(tutorId,'ithan titiphij');
+            
+            if (tutor) {
+                
+                return tutor
+            } else {
+                return null
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return null
+            
+        }
     }
 }
 

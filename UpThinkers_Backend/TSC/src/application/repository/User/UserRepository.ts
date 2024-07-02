@@ -157,6 +157,16 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    async getUserById (userId:string):Promise<User|null>{
+        try {
+            return await UserModel.findById(userId);
+            
+        } catch (error) {
+            console.log(error);
+            return null
+            
+        }
+    }
 
     async updateOTP(emailId: string, newOtp: string): Promise<boolean> {
         try {
@@ -190,11 +200,19 @@ export class UserRepositoryImpl implements UserRepository {
         try {
             const course: Course[] = await CourseModel.find();
             return course
-
         } catch (error) {
             console.log(error);
             return []
 
+        }
+    }
+
+    async getCourseById(id: string): Promise<Course | null> {
+        try {
+            return await CourseModel.findById(id)
+        } catch (error) {
+            console.log(error);
+            return null
         }
     }
 
@@ -209,6 +227,15 @@ export class UserRepositoryImpl implements UserRepository {
             console.log(error);
 
             return { order: null }
+        }
+    }
+
+    async getAllOrder():Promise<Order[]|[]> {
+        try {
+            return await OrderModel.find() ?? [];
+        } catch (error) {
+            console.log(error);
+            return []
         }
     }
 
@@ -232,6 +259,7 @@ export class UserRepositoryImpl implements UserRepository {
             return [];
         }
     }
+
 
     async getEnrolledCourse(studentId: string): Promise<Course[] | []> {
         try {
@@ -264,4 +292,4 @@ export class UserRepositoryImpl implements UserRepository {
 
 }
 
- 
+  

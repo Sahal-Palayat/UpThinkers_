@@ -271,5 +271,22 @@ class UserInteractorImpl {
             }
         });
     }
+    getUserById(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield this.repository.getUserById(userId);
+                if (user) {
+                    return user;
+                }
+                else {
+                    return null;
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return null;
+            }
+        });
+    }
 }
 exports.UserInteractorImpl = UserInteractorImpl;

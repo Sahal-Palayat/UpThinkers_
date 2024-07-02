@@ -277,5 +277,19 @@ export class UserInteractorImpl implements UserInteractor {
             
         }
     }
+
+    async getUserById(userId: string): Promise<User | null> {
+        try {
+            const user = await this.repository.getUserById(userId)
+            if (user) {
+                return user
+            } else {
+                return null
+            }
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    }
 }
 

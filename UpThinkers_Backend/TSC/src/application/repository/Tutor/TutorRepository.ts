@@ -171,10 +171,9 @@ export class TutorRepositoryImpl implements TutorRepository {
         }
     }
 
-    async getCourse(): Promise<Course[] | []> {
-
+    async getCourse(tutorId:string): Promise<Course[] | []> {
         try {
-            const courses: Course[] = await CourseModel.find();
+            const courses: Course[] = (await CourseModel.find()).filter(item => item.TutorId+"" === tutorId);
             return courses
 
         } catch (error) {
@@ -201,9 +200,12 @@ export class TutorRepositoryImpl implements TutorRepository {
 
     async deleteCourse(id: string): Promise<Course | null> {
         try {
-            const deletedCourse = await CourseModel.findOneAndDelete({ _id: id });
-            return deletedCourse as Course | null;
-
+            const deletedCourse = await CourseModel.findOneAndUpdate(
+                { _id: id },
+                { isDeleted: true, deletedAt: new Date() },
+                { new: true }
+              );
+              return deletedCourse as Course | null;
         } catch (error) {
             console.log(error);
             throw error
@@ -263,7 +265,7 @@ export class TutorRepositoryImpl implements TutorRepository {
         }
     }
 
-  
+
 
     async getStudents(courseId: string): Promise<studCourse[] | []> {
         try {
@@ -271,9 +273,12 @@ export class TutorRepositoryImpl implements TutorRepository {
             const data = await Promise.all(order.map(async (item) => {
                 const student = await UserModel.findById(item.StudentId);
                 const course = await CourseModel.findById(item.CourseId)
-                return { studentName: student?.Name+"", courseName: course?.Name+"" }
+                return {
+                    studentName: student?.Name + "",
+                    courseName: course?.Name + "",
+                    studentId:student?._id+""
+                }
             }))
-            console.log(data);
             return data
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -281,6 +286,16 @@ export class TutorRepositoryImpl implements TutorRepository {
         }
     }
 
+    async getTutorById(tutorId: string): Promise<Tutor|null>{
+        try {
+            return await TutorModel.findById(tutorId);
+            
+        } catch (error) {
+            console.log(error);
+            return null   
+        }
+
+    }
 
 
 }

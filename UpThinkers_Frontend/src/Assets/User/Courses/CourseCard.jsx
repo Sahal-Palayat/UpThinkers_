@@ -10,14 +10,12 @@ function CourseCard() {
             try {
                 const { data } = await axiosApiUser.get('/courselist');
                 setCourse(data.course);
-                console.log(data);
             } catch (error) {
                 console.error('Error fetching courses:', error);
             }
         }
         fetchCourses();
     }, []);
-    console.log(course, 'courseeeeeee');
     return (
         <>
             <section className="homeAbout">

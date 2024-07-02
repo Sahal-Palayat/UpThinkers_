@@ -241,6 +241,22 @@ export class UserController {
         }
     }
 
+    async getUserById(req: Request, res: Response, next:NextFunction){
+        try {
+            const userId:string= req.query.userId as string
+            const user= await this.interactor.getUserById(userId )
+            res.status(200).json({user})
+            
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
+            
+        }
+    }
+
+    
+
 }
 
 

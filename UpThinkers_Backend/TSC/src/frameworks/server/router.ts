@@ -11,6 +11,7 @@ const RouterConfig:Function =(app:Application)=>{
     app.use('/admin',adminRouter)
     app.use('/tutor',tutorRouter)
     app.use('/auth',authRouter)
+    
 }
 
 

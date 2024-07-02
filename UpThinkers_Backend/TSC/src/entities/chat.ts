@@ -7,7 +7,7 @@ export interface ChatDocument extends Document {
 }
 
 
-export type messageArray = {
+export type messageArray = { 
     to: string,
     time: string,
     sender: string,

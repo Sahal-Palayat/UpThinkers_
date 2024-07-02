@@ -15,6 +15,7 @@ export default interface CourseDocument extends   Document {
     Rating : number,
     TutorId:ObjectId,
     isApproved : boolean;
+    isDeleted:boolean;
     CreatedAt:Date,
     UpdatedAt:Date,
 }

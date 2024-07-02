@@ -163,10 +163,10 @@ class TutorRepositoryImpl {
             }
         });
     }
-    getCourse() {
+    getCourse(tutorId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const courses = yield course_1.default.find();
+                const courses = (yield course_1.default.find()).filter(item => item.TutorId + "" === tutorId);
                 return courses;
             }
             catch (error) {
@@ -190,7 +190,7 @@ class TutorRepositoryImpl {
     deleteCourse(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const deletedCourse = yield course_1.default.findOneAndDelete({ _id: id });
+                const deletedCourse = yield course_1.default.findOneAndUpdate({ _id: id }, { isDeleted: true, deletedAt: new Date() }, { new: true });
                 return deletedCourse;
             }
             catch (error) {
@@ -261,14 +261,28 @@ class TutorRepositoryImpl {
                 const data = yield Promise.all(order.map((item) => __awaiter(this, void 0, void 0, function* () {
                     const student = yield user_1.default.findById(item.StudentId);
                     const course = yield course_1.default.findById(item.CourseId);
-                    return { studentName: (student === null || student === void 0 ? void 0 : student.Name) + "", courseName: (course === null || course === void 0 ? void 0 : course.Name) + "" };
+                    return {
+                        studentName: (student === null || student === void 0 ? void 0 : student.Name) + "",
+                        courseName: (course === null || course === void 0 ? void 0 : course.Name) + "",
+                        studentId: (student === null || student === void 0 ? void 0 : student._id) + ""
+                    };
                 })));
-                console.log(data);
                 return data;
             }
             catch (error) {
                 console.error('Error fetching users:', error);
                 return [];
+            }
+        });
+    }
+    getTutorById(tutorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield tutor_1.default.findById(tutorId);
+            }
+            catch (error) {
+                console.log(error);
+                return null;
             }
         });
     }

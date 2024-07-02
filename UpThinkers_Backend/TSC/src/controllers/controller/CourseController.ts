@@ -31,7 +31,7 @@ export class CourseController {
         
         try {
             console.log('coursilek keri');
-            const course = await this.interactor.getCourse();
+            const course = await this.interactor.getCourse(req.query.tutorId as string);
             res.status(200).json(course);
             
             

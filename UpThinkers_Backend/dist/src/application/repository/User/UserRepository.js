@@ -147,6 +147,17 @@ class UserRepositoryImpl {
             }
         });
     }
+    getUserById(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield user_1.default.findById(userId);
+            }
+            catch (error) {
+                console.log(error);
+                return null;
+            }
+        });
+    }
     updateOTP(emailId, newOtp) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -183,6 +194,17 @@ class UserRepositoryImpl {
             }
         });
     }
+    getCourseById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield course_1.default.findById(id);
+            }
+            catch (error) {
+                console.log(error);
+                return null;
+            }
+        });
+    }
     placeOrder(order) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -194,6 +216,18 @@ class UserRepositoryImpl {
             catch (error) {
                 console.log(error);
                 return { order: null };
+            }
+        });
+    }
+    getAllOrder() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            try {
+                return (_a = yield order_1.default.find()) !== null && _a !== void 0 ? _a : [];
+            }
+            catch (error) {
+                console.log(error);
+                return [];
             }
         });
     }

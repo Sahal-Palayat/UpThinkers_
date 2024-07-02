@@ -16,11 +16,11 @@ export interface TutorInteractor {
     resendMail(email: string):  Promise<boolean>;
     addCourse(courseData:{Name:string,Status:boolean,Description:string,Image:string,Price:number,OfferPrice:number, Duration:string,Category:string,lessons:[],TutorId:string,CreatedAt:Date,UpdatedAt:Date,}): Promise <{course:Course |null}>
     getCategory():Promise<Category[] |[]>;
-    getCourse():Promise<Course[] |[]>;
+    getCourse(tutorId:string):Promise<Course[] |[]>;
     editCourse(id:string,courseData:{Name:string,Status:boolean,Description:string,Image:string,Price:number,OfferPrice:number, Duration:string,Category:string,lessons:[],Tutor:string,CreatedAt:Date,UpdatedAt:Date,}): Promise <{course:Course |null}>
     deleteCourse(id:string): Promise<Course|null>;
     addLesson(lessonData:{Title:string,Content:string,Image:string,Video:string,Documents:[],Course:string}):Promise<{lesson:Lesson|null}>
     getLessons(id:string):Promise<Course |null>
     getStudents(courseId:string):Promise<studCourse[]|[]>;
-
+    getTutorById(tutorId:string):Promise<Tutor|null>
 }

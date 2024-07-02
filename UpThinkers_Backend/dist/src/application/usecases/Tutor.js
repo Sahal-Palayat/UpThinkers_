@@ -174,10 +174,10 @@ class TutorInteractorImpl {
             }
         });
     }
-    getCourse() {
+    getCourse(tutorId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const course = yield this.Repository.getCourse();
+                const course = yield this.Repository.getCourse(tutorId);
                 if (course) {
                     return course;
                 }
@@ -286,6 +286,24 @@ class TutorInteractorImpl {
             catch (error) {
                 console.log(error);
                 return [];
+            }
+        });
+    }
+    getTutorById(tutorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tutor = yield this.Repository.getTutorById(tutorId);
+                console.log(tutorId, 'ithan titiphij');
+                if (tutor) {
+                    return tutor;
+                }
+                else {
+                    return null;
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return null;
             }
         });
     }

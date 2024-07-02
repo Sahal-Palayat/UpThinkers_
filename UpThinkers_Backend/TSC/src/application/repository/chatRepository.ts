@@ -1,6 +1,7 @@
-import { messageArray,ChatDocument } from "../../entities/chat";
+import { messageArray, ChatDocument } from "../../entities/chat";
 import { ChatModel } from "../../frameworks/database/models/chat";
-import { chat_repo_interface } from "../interfaces/repositories/chat-repository";
+import UserModel from "../../frameworks/database/models/user";
+import { chat_repo_interface, responseInterface } from "../interfaces/repositories/chat-repository";
 
 
 class ChatRepository implements chat_repo_interface {
@@ -16,7 +17,8 @@ class ChatRepository implements chat_repo_interface {
 
     async addChat(message: messageArray) {
         try {
-            const chat = await ChatModel.findOne({ userId: { $all: [message.sender, message.to] } })
+            const chat = await ChatModel.findOne({ userId: { $all: [message.sender, message.to] } });
+            console.log(chat, "this is the chat");
             if (chat) {
                 chat.details.push(message)
                 await chat.save();
@@ -46,6 +48,27 @@ class ChatRepository implements chat_repo_interface {
         }
         return { status: true, message: "success", data: chat }
     }
+
+    async getChats(userId: string, personId: string) {
+        try {
+            return { status: true, message: "success", data: await ChatModel.findOne({ userId: { $all: [userId, personId] } }) }
+        } catch (error: any) {
+            console.log(error);
+            return { status: false, message: error.message ?? "error occured", data: null }
+        }
+    }
+
+    async getUserById (userId:string){
+        try {
+            return {status:true, message: "success", data: await UserModel.findById(userId)}
+            
+        } catch (error:any) {
+            console.log(error);
+            return {status: false, message: error.message ?? "error occured", }
+            
+        }
+    }
+
 
 }
 

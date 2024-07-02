@@ -21,7 +21,6 @@ export const userAuth = async (req: Request, res: Response, next: NextFunction) 
 
         const token = authHeader.split(' ')[1];
 
-        console.log(token, 'tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
 
         if (!token) {
             return res.status(401).json({ error: 'No token found' });

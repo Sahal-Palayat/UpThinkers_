@@ -7,10 +7,8 @@ function CategoryCard() {
     useEffect(() => {
         const fetchCategory = async () => {
             try {
-                console.log('Fetching categories...');
                 const { data } = await axiosApiUser.get('/categorylist');
                 setCategory(data.category);
-                console.log(data, 'Categories fetched');
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
@@ -18,7 +16,6 @@ function CategoryCard() {
         fetchCategory();
     }, []);
 
-    console.log(category, 'ccccccccccccccccccccccca');
 
     return (
         <>

@@ -1,12 +1,18 @@
-import React, { useContext, useState } from 'react'
-import logo from '/logoo.png'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import React, { useContext, useState, useEffect } from 'react';
+import logo from '/logoo.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { clearUser } from '../../../Store/userAuthSlice';
 import { AuthContext } from '../../../Context/AuthContext';
 import { Nav, NavLink, Bars, NavMenu } from './NavbarElements';
-import Head from './Head';
+import { io, Socket } from 'socket.io-client';
+import { Popup } from 'reactjs-popup'
+import { v4 as uuidv4 } from 'uuid';
+import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
+import { ZIM } from "zego-zim-web";
+
+
 import {
   Menu,
   MenuHandler,
@@ -14,67 +20,100 @@ import {
   MenuItem,
   Avatar,
   Typography,
-} from "@material-tailwind/react"
-
-import './Navbar.css'
-
+} from "@material-tailwind/react";
+import './Navbar.css';
+import { config } from '../../../config';
+import ChatHome from '../../User/ChatPage/ChatHome';
+import SingleChat from '../../User/ChatPage/SingleChat';
 
 function Navbar() {
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { setToken } = useContext(AuthContext)
-  const user = useSelector((state) => state.user.user)
-  console.log(user, 'navbarrrrr');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { setToken } = useContext(AuthContext);
+  const user = useSelector((state) => state.user.user);
 
 
+  const [chatWindow, setChatwindow] = useState(false)
+  const [zp, setZP] = useState()
   const [isToastActive, setIsToastActive] = useState(false);
   const [messageSocket, setMessageSocket] = useState(null);
-  const [chatWindow, setChatwindow] = useState(false)
+
 
   useEffect(() => {
-    const handleMessage = async () => {
-        // const { data } = await getUserById(messResponse.sender);
-        if ( !isToastActive) {
-            setIsToastActive(true);
-            // toastFunction({
-            //     Link: data.profileImage,
-            //     SenderId: data.channelName,
-            //     Message: messResponse.message,
-            //     onClose: () => setIsToastActive(false),
-            // });
-        }
+    const handleMessage = (messResponse) => {
+      if (!isToastActive) {
+        setIsToastActive(true);
+        // Uncomment and implement your toast function here
+        // toastFunction({
+        //   // Link: data.profileImage,
+        //   SenderId: user._id,
+        //   Message: messResponse.message,
+        //   onClose: () => setIsToastActive(false),
+        // });
+      }
     };
 
     if (messageSocket) {
-        messageSocket.on('incoming_message', handleMessage);
+      console.log('Setting up message listener');
+      messageSocket.on('incoming_message', handleMessage);
     }
 
     return () => {
-        if (messageSocket) {
-            messageSocket.off('incoming_message', handleMessage);
-        }
+      if (messageSocket) {
+        console.log('Cleaning up message listener');
+        messageSocket.off('incoming_message', handleMessage);
+      }
     };
-}, [isToastActive, messageSocket]);
+  }, [isToastActive, messageSocket]);
 
 
-useEffect(() => {
-  if (user && user?._id) {
-      const messageSocket = io(process.env.REACT_APP_CHAT_MANAGEMENT_URL || "")
-      setMessageSocket(messageSocket);
-      messageSocket.emit('join', user._id)
-  }
+  useEffect(() => {
+    if (user && user._id) {
+      const socket = io(config.BASE_URL);
+      setMessageSocket(socket);
+      socket.emit('join', user._id);
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user && user?._id) {
+        const messageSocket = io(config.BASE_URL || "")
+        setMessageSocket(messageSocket);
+        messageSocket.emit('join', user._id)
+
+
+        const userID = user._id;
+        const userName = user.Name;
+        const appID = Number(config.ZEGO_APP_ID);
+        const serverSecret = config.ZEGO_SERVER_ID ?? "";
+        const roomId = uuidv4()
+        const TOKEN = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomId, userID, userName);
+        const zp = ZegoUIKitPrebuilt.create(TOKEN);
+        zp.addPlugins({ ZIM });
+        zp.setCallInvitationConfig({
+            ringtoneConfig: {
+                incomingCallUrl: 'https://res.cloudinary.com/dyh7c1wtm/video/upload/v1717999547/rrr_uixgh2.mp3',
+                outgoingCallUrl: 'https://res.cloudinary.com/dyh7c1wtm/video/upload/v1718002692/beggin_edited_kgcew8.mp3'
+            }
+        })
+
+        setZP(zp)
+
+    }
 }, [])
 
 
 
-
   const logout = () => {
-    Cookies.remove('token')
-    setToken(null)
-    dispatch(clearUser())
-    navigate('/login')
-  }
+    Cookies.remove('token');
+    setToken(null);
+    dispatch(clearUser());
+    navigate('/login');
+  };
 
 
   return (
@@ -84,30 +123,29 @@ useEffect(() => {
       {/* <Head /> */}
 
 
+      <div>
+        <Nav className='' >
+          <div className="ml-0">
+            <img src={logo} alt="" onClick={() => navigate('/home')} className='h-[90px] pt-4 pr-4 ml-16' />
+          </div>
+          <Bars />
 
-<div>
-      <Nav className='' >
-        <div className="ml-0">
-          <img src={logo} alt="" onClick={()=> navigate('/home')} className='h-[90px] pt-4 pr-4 ml-16' />
-        </div>
-        <Bars />
 
+          <NavMenu className='' >
 
-        <NavMenu className='' >
-
-          <NavLink to='/home'>Home</NavLink>
-          <NavLink to='/view'>Docs</NavLink>
-          <NavLink to='/courselist'>Courses</NavLink>
-          <NavLink to='/tutorspage'>Tutors</NavLink>
-          <NavLink to='/admission'>Admission</NavLink>
-          <NavLink to='/media'>Media</NavLink>
-          <NavLink to='/about'>About</NavLink>
-          <NavLink to='/contact'>Contact</NavLink>
-          <div className='start'>
+            <NavLink to='/home'>Home</NavLink>
+            <NavLink to='/view'>Docs</NavLink>
+            <NavLink to='/courselist'>Courses</NavLink>
+            <NavLink to='/tutorspage'>Tutors</NavLink>
+            <NavLink to='/admission'>Admission</NavLink>
+            <NavLink to='/media'>Media</NavLink>
+            <NavLink to='/about'>About</NavLink>
+            <NavLink to='/contact'>Contact</NavLink>
+            <div className='start'>
               <Menu >
                 <MenuHandler>
                   <Avatar
-                 
+
                     variant="circular"
                     alt="tania andrew"
                     className="cursor-pointer "
@@ -131,7 +169,7 @@ useEffect(() => {
                       />
                     </svg>
 
-                    <Typography onClick={()=>navigate('/profile')} variant="small" className="font-medium">
+                    <Typography onClick={() => navigate('/profile')} variant="small" className="font-medium">
                       My Profile
                     </Typography>
                   </MenuItem>
@@ -216,12 +254,83 @@ useEffect(() => {
                   </MenuItem>
                 </MenuList>
               </Menu>
+            </div>
+          </NavMenu>
+        </Nav>
+
+        {chatWindow && messageSocket && user && (
+          <div className="fixed md:right-[100px] md:top-0 min-w-[360px]">
+            <ChatPopup  zp={zp} setChatWindow={setChatwindow} user={user} messageSocket={messageSocket} chatWindow={chatWindow} />
           </div>
-        </NavMenu>
-      </Nav>
+        )}
+
+        {user && !chatWindow && (
+          <div onClick={() => {
+            setChatwindow(!chatWindow)
+          }} className="fixed bottom-0 right-0 mb-4 mr-4 w-[40px] h-[40px] rounded-full dark:bg-gray-900 flex items-center z-50 justify-center">
+            <button className="bg-transparent w-full h-full rounded-full text-xl text-white flex items-center justify-center">
+              <i className="fa fa-comments"></i>
+            </button>
+          </div>
+        )}
       </div>
     </>
   )
 }
 
 export default Navbar
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export function ChatPopup({ chatWindow, setChatWindow, user, messageSocket,zp }) {
+
+  // const dumChannel: channelInterface = {
+  //     _id: "", channelDescription: "", channelName: "",
+  //     Followers: [], isFollowing: true, profileImage: "",
+  //     Shorts: [], Streams: [], subscription: {}
+  //     , userId: "", userName: "", Videos: []
+  // }
+
+  const [chatHome, setChatHome] = useState(true)
+  const [chats, setChats] = useState([])
+  const [person, setPerson] = useState([])
+
+
+  const singleChatopen = (personDetails) => {
+    setPerson(personDetails)
+    // console.log(personDetails,"thisi is ht rwk presond eatils");
+    setChats(personDetails.details)
+    setChatHome(false)
+  }
+
+
+
+
+  return (
+    <div>
+      <Popup trigger={<button />} position={'right top'} open={chatWindow} onClose={() => setChatWindow(false)}>
+        {chatHome ?
+          <ChatHome singleChatopen={singleChatopen} userDetails={user} /> :
+          <SingleChat zp={zp}  personDetails={person} messages={chats} setMessages={setChats} setChatHome={setChatHome} messageSocket={messageSocket} />}
+      </Popup>
+      <div>
+        <h1>jdsdfibsh</h1>
+      </div>
+    </div>
+  )
+}

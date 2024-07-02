@@ -1,13 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectSocket = void 0;
+const socket_io_1 = require("socket.io");
 const chatRepository_1 = require("../../repository/chatRepository");
-const connectSocket = (io) => {
+const connectSocket = (server) => {
+    const io = new socket_io_1.Server(server, {
+        cors: {
+            origin: "http://localhost:5173",
+            methods: ["GET", "POST"],
+        },
+    });
     io.on('connection', (socket) => {
         console.log("scoket connected");
         socket.on('join', (Data) => { socket.join(Data); });
         socket.on('new_message', (Data) => {
             io.to(Data.to).emit('incoming_message', Data);
+            console.log(Data, "this sis thr messafe data");
             chatRepository_1.chatRepoLayer.addChat(Data);
         });
         socket.on("online", (data) => {

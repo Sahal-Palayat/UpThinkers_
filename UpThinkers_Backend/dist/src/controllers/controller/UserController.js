@@ -224,5 +224,18 @@ class UserController {
             }
         });
     }
+    getUserById(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userId = req.query.userId;
+                const user = yield this.interactor.getUserById(userId);
+                res.status(200).json({ user });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
+            }
+        });
+    }
 }
 exports.UserController = UserController;

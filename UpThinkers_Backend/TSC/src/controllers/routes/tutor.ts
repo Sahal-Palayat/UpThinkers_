@@ -7,6 +7,8 @@ import { TutorRepositoryImpl } from '../../application/repository/Tutor/TutorRep
 import { tutorAuth } from '../middlewares/authmiddleware';
 import { CourseController } from '../controller/CourseController';
 import {} from 'util-functions-nodejs'
+import * as chatController from '../controller/ChatController'
+
 
 const repository = new TutorRepositoryImpl()
 const mailer= new MailerImp()
@@ -34,7 +36,13 @@ tutorRouter.get('/getlessons/:id',tutorAuth,courseController.getLessons.bind(cou
 tutorRouter.get('/getstudents/:courseId',tutorAuth,courseController.getStudents.bind(courseController))
 
 
+tutorRouter.get('/gettutorbyid',tutorAuth,controller.getByTutorId.bind(controller))
 
+
+
+tutorRouter.get('/getExistingChatsOfUser',tutorAuth,chatController.getNewChats)
+tutorRouter.get('/getChatOfUser',tutorAuth,chatController.getChatOfUser)
+tutorRouter.get('/getuserbyid',tutorAuth,chatController.getUserById)
 
   
 
