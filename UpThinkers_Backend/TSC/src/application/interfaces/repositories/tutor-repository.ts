@@ -5,7 +5,7 @@ import { Category } from "../../entities/category";
 import { Lesson } from "../../entities/lesson";
 import { User } from "../../entities/user";
 import { Order } from "../../entities/order";
-import { studCourse } from "../CustomInterfaces/customInterface";
+import { RevenueDetails, studCourse } from "../customInterfaces/customInterface";
 
 export interface TutorRepository {
     save(tutor: Tutor): Promise<{ tutor: Tutor | null, tutorToken: string | null,refreshToken:string|null }>;
@@ -24,4 +24,6 @@ export interface TutorRepository {
     getLessons(id:string): Promise<Course | null>
     getStudents(courseId:string):Promise<studCourse[]|[]>
     getTutorById(tutorId: string): Promise<Tutor|null>
+    getRevenueDetails(tutorId:string):Promise<RevenueDetails|null>
+
 }

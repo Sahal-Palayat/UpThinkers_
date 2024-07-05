@@ -198,7 +198,7 @@ export class UserRepositoryImpl implements UserRepository {
 
     async getCourse(): Promise<Course[] | []> {
         try {
-            const course: Course[] = await CourseModel.find();
+            const course: Course[] = await CourseModel.find({ isDeleted: false });
             return course
         } catch (error) {
             console.log(error);

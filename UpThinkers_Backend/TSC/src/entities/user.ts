@@ -3,7 +3,7 @@ import { Document,ObjectId } from "mongoose";
 export default interface UserDocument extends   Document {
    Name: string;
    Email: string;
-   Mobile:Number;
+   Mobile:number;
    Password: string;
    Status:boolean;
    CreatedAt:Date;

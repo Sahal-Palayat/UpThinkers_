@@ -9,7 +9,7 @@ import { genRefreshToken } from "../functions/CommonFunctions";
 import { Lesson } from "../entities/lesson";
 import { User } from "../entities/user";
 import { Order } from "../entities/order";
-import { studCourse } from "../interfaces/CustomInterfaces/customInterface";
+import { RevenueDetails, studCourse } from "../interfaces/customInterfaces/customInterface";
 
 export class TutorInteractorImpl implements TutorInteractor {
     constructor(private readonly Repository: TutorRepository, private readonly mailer: IMailer) { }
@@ -313,6 +313,24 @@ export class TutorInteractorImpl implements TutorInteractor {
             console.log(error);
             return null
             
+        }
+    }
+
+     async getRevenueDetails(tutorId: string): Promise<RevenueDetails | null> {
+        try {
+            const revenueDetails = await this.Repository.getRevenueDetails(tutorId)
+            
+            if (revenueDetails) {
+                
+                return revenueDetails
+            } else {
+                return null
+            }
+            
+        } catch (error) {
+            
+            console.log(error);
+            return null
         }
     }
 }

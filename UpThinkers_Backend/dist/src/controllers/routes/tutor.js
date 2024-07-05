@@ -51,6 +51,7 @@ tutorRouter.post('/addlesson/:id', authmiddleware_1.tutorAuth, courseController.
 tutorRouter.get('/getlessons/:id', authmiddleware_1.tutorAuth, courseController.getLessons.bind(courseController));
 tutorRouter.get('/getstudents/:courseId', authmiddleware_1.tutorAuth, courseController.getStudents.bind(courseController));
 tutorRouter.get('/gettutorbyid', authmiddleware_1.tutorAuth, controller.getByTutorId.bind(controller));
+tutorRouter.get('/getrevuenu', authmiddleware_1.tutorAuth, controller.getRevenueDetails.bind(controller));
 tutorRouter.get('/getExistingChatsOfUser', authmiddleware_1.tutorAuth, chatController.getNewChats);
 tutorRouter.get('/getChatOfUser', authmiddleware_1.tutorAuth, chatController.getChatOfUser);
 tutorRouter.get('/getuserbyid', authmiddleware_1.tutorAuth, chatController.getUserById);

@@ -161,6 +161,22 @@ export class TutorController {
         }
     }
 
+    async getRevenueDetails(req: Request, res: Response, next:NextFunction){
+        try {
+            const tutorId:string = req.query.tutorId as string;
+            console.log(tutorId,'ITH CONTRRR');
+            
+            const revenueDetails = await this.interactor.getRevenueDetails(tutorId);
+            console.log(revenueDetails)
+            res.status(200).json(revenueDetails);
+            
+        } catch (error) {
+            
+            console.log(error);
+            res.status(500).json({ error: error });
+        }
+    }
+
 
 
 }

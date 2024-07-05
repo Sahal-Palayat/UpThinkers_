@@ -185,7 +185,7 @@ class UserRepositoryImpl {
     getCourse() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const course = yield course_1.default.find();
+                const course = yield course_1.default.find({ isDeleted: false });
                 return course;
             }
             catch (error) {
