@@ -23,6 +23,7 @@ adminRouter.post( '/addcategory',adminAuth,controller.addCategory.bind(controlle
 adminRouter.get('/categorylist',adminAuth,controller.getCategory.bind(controller))
 
 adminRouter.put('/editcategory/:id', adminAuth,controller.editCategory.bind(controller));
+adminRouter.get('/getrevuenuadmin',adminAuth,controller.getRevenueDetails.bind(controller))
 
 
 export default adminRouter;

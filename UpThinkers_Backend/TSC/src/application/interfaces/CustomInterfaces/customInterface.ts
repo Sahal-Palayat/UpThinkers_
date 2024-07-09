@@ -1,4 +1,6 @@
+import { ObjectId } from "mongoose";
 import { User } from "../../entities/user";
+import { Tutor } from "../../entities/tutor";
 
 export interface studCourse {
     studentName:string,
@@ -16,6 +18,7 @@ export interface RevenueDetails {
     courses: CourseDetails[];
     uniqueStudentCount: number;
     students:User[]
+    tutorsCount:number
   }
 
 
@@ -26,6 +29,7 @@ export interface RevenueDetails {
     Duration: string;
     CreatedAt: Date;
     UpdatedAt: Date;
+    
   }
 
   

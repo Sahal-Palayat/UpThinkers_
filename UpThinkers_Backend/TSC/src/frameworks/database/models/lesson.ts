@@ -1,6 +1,7 @@
 import { Schema,model } from "mongoose";
 import mongoose, { ObjectId } from "mongoose";
 import LessonDocument from "../../../entities/lesson";
+import { Types } from "mongoose";
 
 const lessonSchema= new Schema <LessonDocument>({
     Title:String,
@@ -8,7 +9,8 @@ const lessonSchema= new Schema <LessonDocument>({
     Image:String,
     Video:String,
     Documents:[],
-    Course:{ type: mongoose.Schema.Types.ObjectId,
+    Seen:[Types.ObjectId],
+    Course:{ type:Types.ObjectId,
         ref: 'CourseModel',
    },
     Rating:{

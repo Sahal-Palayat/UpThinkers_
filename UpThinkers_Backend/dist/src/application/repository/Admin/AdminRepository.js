@@ -18,6 +18,8 @@ const CommonFunctions_1 = require("../../functions/CommonFunctions");
 const tutor_1 = __importDefault(require("../../../frameworks/database/models/tutor"));
 const mongoose_1 = require("mongoose");
 const category_1 = __importDefault(require("../../../frameworks/database/models/category"));
+const order_1 = __importDefault(require("../../../frameworks/database/models/order"));
+const course_1 = __importDefault(require("../../../frameworks/database/models/course"));
 class AdminRepositoryImpl {
     findCredentials(email, password) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -163,6 +165,76 @@ class AdminRepositoryImpl {
     categoryExists(Name) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield category_1.default.find();
+        });
+    }
+    getRevenueDetails() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const orders = yield order_1.default.find();
+                const countOrder = orders.length;
+                if (countOrder === 0)
+                    return null;
+                let totalRevenue = 0;
+                let weeklySales = 0;
+                let monthlySales = 0;
+                const currentDate = new Date();
+                const oneWeekAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
+                const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+                const courseDetails = [];
+                const studentDetails = [];
+                const studentIds = new Set();
+                for (const order of orders) {
+                    const orderDate = new Date(order.CreatedAt);
+                    const price = Number(order.Price);
+                    totalRevenue += price;
+                    if (orderDate >= oneWeekAgo) {
+                        weeklySales += price;
+                    }
+                    if (orderDate >= oneMonthAgo) {
+                        monthlySales += price;
+                    }
+                    studentIds.add(order.StudentId.toString());
+                    const student = yield user_1.default.findById(order.StudentId);
+                    if (student) {
+                        studentDetails.push({
+                            _id: student._id,
+                            Name: student.Name,
+                            Password: student.Password,
+                            Email: student.Email,
+                            Mobile: student.Mobile,
+                            Image: student.Image,
+                            CreatedAt: student.CreatedAt,
+                        });
+                    }
+                    const course = yield course_1.default.findById(order.CourseId);
+                    if (course) {
+                        courseDetails.push({
+                            Name: course.Name,
+                            Description: course.Description,
+                            Price: course.Price,
+                            Duration: course.Duration,
+                            CreatedAt: course.CreatedAt,
+                            UpdatedAt: course.UpdatedAt,
+                        });
+                    }
+                }
+                const uniqueStudentCount = studentIds.size;
+                const tutorsCount = yield tutor_1.default.countDocuments();
+                return {
+                    countOrder,
+                    totalRevenue,
+                    weeklySales,
+                    monthlySales,
+                    courses: courseDetails,
+                    uniqueStudentCount,
+                    students: studentDetails,
+                    tutorsCount
+                };
+            }
+            catch (error) {
+                console.error(error);
+                return null;
+            }
         });
     }
 }

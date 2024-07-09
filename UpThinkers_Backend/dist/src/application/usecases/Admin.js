@@ -152,5 +152,22 @@ class AdminInteractorImpl {
             }
         });
     }
+    getRevenueDetails() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const revenueDetails = yield this.Repository.getRevenueDetails();
+                if (revenueDetails) {
+                    return revenueDetails;
+                }
+                else {
+                    return null;
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return null;
+            }
+        });
+    }
 }
 exports.AdminInteractorImpl = AdminInteractorImpl;

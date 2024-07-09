@@ -288,5 +288,39 @@ class UserInteractorImpl {
             }
         });
     }
+    videoSeen(userId, lessonId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const lesson = yield this.repository.videoSeen(userId, lessonId);
+                if (lesson) {
+                    return lesson;
+                }
+                else {
+                    return { lesson: null, message: 'Video not found' };
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return { lesson: null, message: 'Error occurred while updating video status' };
+            }
+        });
+    }
+    getCertificate(userId, courseId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const lesson = yield this.repository.getCertificate(userId, courseId);
+                if (lesson) {
+                    return lesson;
+                }
+                else {
+                    return { unseenCount: 0 };
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return { unseenCount: 0 };
+            }
+        });
+    }
 }
 exports.UserInteractorImpl = UserInteractorImpl;

@@ -221,6 +221,8 @@ class UserController {
                 res.status(200).json({ uploadImage });
             }
             catch (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
             }
         });
     }
@@ -230,6 +232,35 @@ class UserController {
                 const userId = req.query.userId;
                 const user = yield this.interactor.getUserById(userId);
                 res.status(200).json({ user });
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
+            }
+        });
+    }
+    videoSeen(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userId = req.params.userId;
+                const lessonId = req.params.lessonId;
+                const result = yield this.interactor.videoSeen(userId, lessonId);
+                res.status(200).json(result);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send('Internal server error');
+            }
+        });
+    }
+    getCertificate(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const userId = req.params.userId;
+                const courseId = req.params.courseId;
+                const certificate = yield this.interactor.getCertificate(userId, courseId);
+                console.log(certificate, '[][][][][][][]][]');
+                res.status(200).json(certificate);
             }
             catch (error) {
                 console.log(error);

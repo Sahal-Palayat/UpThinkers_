@@ -7,6 +7,7 @@ import { User } from "../../entities/user";
 import { Order } from "../../entities/order";
 import { RevenueDetails, studCourse } from "../customInterfaces/customInterface";
 
+
 export interface TutorInteractor {
     register(tutorData: { Name: string, Password: string, Email: string, Mobile: number }): Promise<{ tutor: Tutor | null, tutorToken: string | null }>
     sendMail(signupData: SignupDataTutor): Promise<{ tutorExists: boolean, isMailSent: boolean }>

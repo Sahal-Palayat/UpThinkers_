@@ -367,6 +367,8 @@ export class TutorRepositoryImpl implements TutorRepository {
         }
     
         const uniqueStudentCount = studentIds.size;
+        const tutorsCount = await TutorModel.countDocuments();
+
     
         return {
           countOrder,
@@ -376,93 +378,13 @@ export class TutorRepositoryImpl implements TutorRepository {
           courses: courseDetails,
           uniqueStudentCount,
           students: studentDetails,
-
+          tutorsCount
         };
       } catch (error) {
         console.error(error);
         return null;
       }
     }
-    
 
-    // async getRevenueDetails(tutorId: string): Promise<RevenueDetails | null> {
-    //     try {
-    //       // Fetch orders with the specified tutorId and populate the CourseId and StudentId fields
-    //       const orders = await OrderModel.find({ TutorId: tutorId })
-    //         .populate('CourseId')
-            
-          
-    //       const countOrder = orders.length;
-    //       if (countOrder === 0) return null;
-      
-    //       let totalRevenue = 0;
-    //       let weeklySales = 0;
-    //       let monthlySales = 0;
-          
-    //       const currentDate = new Date();
-    //       const oneWeekAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
-    //       const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
-      
-    //       const courseDetails: CourseDetails[] = [];
-    //       const studentDetails: User[] = [];
-    //       const studentIds = new Set<string>();
-      
-    //       for (const order of orders) {
-    //         const orderDate = new Date(order.CreatedAt);
-    //         const price = Number(order.Price);
-      
-    //         totalRevenue += price;
-      
-    //         if (orderDate >= oneWeekAgo) {
-    //           weeklySales += price;
-    //         }
-      
-    //         if (orderDate >= oneMonthAgo) {
-    //           monthlySales += price;
-    //         }
-      
-    //         studentIds.add(order.StudentId._id.toString());
-      
-    //         if (!studentDetails.some(student => student._id === order.StudentId._id.toString())) {
-    //           studentDetails.push({
-    //             _id: order.StudentId._id.toString(),
-    //             Name: order.StudentId.Name,
-    //             Email: order.StudentId.Email,
-    //             // Add any other student details you need
-    //           });
-    //         }
-      
-    //         const course = order.CourseId;
-    //         if (course) {
-    //           courseDetails.push({
-    //             Name: course.Name,
-    //             Description: course.Description,
-    //             Price: course.Price,
-    //             Duration: course.Duration,
-    //             CreatedAt: course.CreatedAt,
-    //             UpdatedAt: course.UpdatedAt,
-    //           });
-    //         }
-    //       }
-      
-    //       const uniqueStudentCount = studentIds.size;
-      
-    //       return {
-    //         countOrder,
-    //         totalRevenue,
-    //         weeklySales,
-    //         monthlySales,
-    //         courses: courseDetails,
-    //         uniqueStudentCount,
-    //         students: studentDetails,
-
-    //       };
-    //     } catch (error) {
-    //       console.error(error);
-    //       return null;
-    //     }
-    //   }
-   
-      
    
 }

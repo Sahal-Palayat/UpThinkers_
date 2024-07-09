@@ -4,6 +4,7 @@ import { Category } from "../../entities/category";
 import { Course } from "../../entities/course";
 import { Order } from "../../entities/order";
 import { Tutor } from "../../entities/tutor";
+import { Lesson } from "../../entities/lesson";
 
 export interface UserRepository{
     save(user: User): Promise<{ user: User | null, token: string | null,refreshToken:string|null }>;
@@ -24,4 +25,7 @@ export interface UserRepository{
     getAllOrder():Promise<Order[] | []>
     getCourseById(id: string): Promise<Course | null>
     getUserById(userId:string):Promise<User|null>
+    videoSeen(userId:string,lessonId:string):Promise<{lesson:Lesson|null,message:string}>
+    getCertificate(userId:string,courseId:string): Promise<{ unseenCount: number }>
+
 }

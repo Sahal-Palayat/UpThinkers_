@@ -237,6 +237,8 @@ export class UserController {
 
             
         } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
             
         }
     }
@@ -255,7 +257,40 @@ export class UserController {
         }
     }
 
+
+  async videoSeen(req: Request, res: Response, next:NextFunction) {
+    try {
+        
+        const userId= req.params.userId 
+        const lessonId= req.params.lessonId 
+
+        const result = await this.interactor.videoSeen(userId, lessonId)
+        res.status(200).json(result);
+        
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+        
+  }
     
+
+  async getCertificate(req: Request, res:Response, next:NextFunction) {
+    try {
+        const userId= req.params.userId 
+        const courseId= req.params.courseId
+        const certificate= await this.interactor.getCertificate(userId, courseId)
+        console.log(certificate,'[][][][][][][]][]');
+        
+        res.status(200).json(certificate);
+       
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+        
+    }
+  }
 
 }
 

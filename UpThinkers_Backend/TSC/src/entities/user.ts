@@ -7,14 +7,15 @@ export default interface UserDocument extends   Document {
    Password: string;
    Status:boolean;
    CreatedAt:Date;
+   RefreshToken:string;
    isAdmin:{
     type:Boolean,
     default:false
    }
    isGoogle:{
       type:Boolean,
-    default:false
-   },
+    default:false 
+   }, 
    Image:string;
    UpdatedAt:Date;
    wishlist:ObjectId;

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { Document,ObjectId } from "mongoose";
 
 
@@ -8,6 +9,7 @@ export default interface LessonDocument extends   Document {
     Image:string,
     Documents:[],
     Course:ObjectId,
+    Seen:Types.ObjectId[],
     Rating:number,
     Students:ObjectId[],
     CreatedAt:Date

@@ -23,6 +23,7 @@ const userSchema = new mongoose_1.Schema({
     CreatedAt: Date,
     Image: String,
     UpdatedAt: Date,
+    RefreshToken: String,
     isGoogle: {
         type: Boolean,
         default: false

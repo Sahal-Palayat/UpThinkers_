@@ -4,6 +4,7 @@ import { User } from "../entities/user";
 import { AdminInteractor } from "../interfaces/usecases/AdminInteractor";
 import { Tutor } from "../entities/tutor";
 import { Category } from "../entities/category";
+import { RevenueDetails } from "../interfaces/customInterfaces/customInterface";
 
 
 
@@ -99,7 +100,7 @@ export class AdminInteractorImpl implements AdminInteractor {
                 Description: data.Description
             }
 
-            const cate:any = { categoryExists: false, category:null }
+            const cate: any = { categoryExists: false, category: null }
 
             const categoryExists = await this.Repository.categoryExists(newCategory.Name)
 
@@ -109,7 +110,7 @@ export class AdminInteractorImpl implements AdminInteractor {
                         cate.categoryExists = true
                         cate.category = item
                     }
-                })                
+                })
             }
 
             if (cate.categoryExists) {
@@ -152,6 +153,20 @@ export class AdminInteractorImpl implements AdminInteractor {
         } catch (error) {
             console.log(error);
             throw error;
+        }
+    }
+
+    async getRevenueDetails(): Promise<RevenueDetails | null> {
+        try {
+            const revenueDetails = await this.Repository.getRevenueDetails()
+            if (revenueDetails) {
+                return revenueDetails
+            } else {
+                return null
+            }
+        } catch (error) {
+            console.log(error);
+            return null
         }
     }
 }

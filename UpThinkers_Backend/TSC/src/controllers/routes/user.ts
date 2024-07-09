@@ -32,10 +32,15 @@ userRouter.post('/addimage/:userId',userAuth,controller.addImage.bind(controller
 userRouter.get('/getuserbyid',userAuth,controller.getUserById.bind(controller))
 
 
-//chat ---------------
+//-----------------------------chat -------------------------------------
 userRouter.get('/getChatOfUser',userAuth,chatController.getChatOfUser)
 userRouter.get('/setAllMessageSeen', userAuth, chatController.setAllMessageSeen)
 userRouter.get('/getExistingChatsOfUser',userAuth,chatController.getNewChats)
 userRouter.get('/getchats',chatController.getChats)
+
+
+
+userRouter.post('/videoseen/:lessonId/:userId',userAuth,controller.videoSeen.bind(controller))
+userRouter.get('/getcertificate/:userId/:courseId',userAuth,controller.getCertificate.bind(controller))
 
 export default userRouter;     

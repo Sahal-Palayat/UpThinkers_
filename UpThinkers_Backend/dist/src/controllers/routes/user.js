@@ -50,9 +50,11 @@ userRouter.get('/tutorcourses/:tutorId', authmiddleware_1.userAuth, controller.g
 userRouter.get('/enrolledcourses/:userId', authmiddleware_1.userAuth, controller.getEnrolledCourse.bind(controller));
 userRouter.post('/addimage/:userId', authmiddleware_1.userAuth, controller.addImage.bind(controller));
 userRouter.get('/getuserbyid', authmiddleware_1.userAuth, controller.getUserById.bind(controller));
-//chat ---------------
+//-----------------------------chat -------------------------------------
 userRouter.get('/getChatOfUser', authmiddleware_1.userAuth, chatController.getChatOfUser);
 userRouter.get('/setAllMessageSeen', authmiddleware_1.userAuth, chatController.setAllMessageSeen);
 userRouter.get('/getExistingChatsOfUser', authmiddleware_1.userAuth, chatController.getNewChats);
 userRouter.get('/getchats', chatController.getChats);
+userRouter.post('/videoseen/:lessonId/:userId', authmiddleware_1.userAuth, controller.videoSeen.bind(controller));
+userRouter.get('/getcertificate/:userId/:courseId', authmiddleware_1.userAuth, controller.getCertificate.bind(controller));
 exports.default = userRouter;

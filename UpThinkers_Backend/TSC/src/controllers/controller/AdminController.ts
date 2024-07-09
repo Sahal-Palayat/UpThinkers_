@@ -145,6 +145,21 @@ export class AdminController{
         }
     }
 
+
+    async  getRevenueDetails(req:Request,res:Response,next:NextFunction){
+        try {
+            console.log('keriiiiiiiiiii');
+            
+            const revenueDetails = await this.interactor.getRevenueDetails();
+            res.status(200).json(revenueDetails);
+
+            
+        } catch (error) {
+            res.status(500).json({ error: error });
+            console.log(error);
+            
+        }
+    }
     
 
 }

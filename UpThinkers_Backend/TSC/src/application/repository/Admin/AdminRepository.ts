@@ -7,6 +7,9 @@ import TutorModel from "../../../frameworks/database/models/tutor";
 import { isObjectIdOrHexString } from "mongoose";
 import { Category } from "../../entities/category";
 import CategoryModel from "../../../frameworks/database/models/category";
+import { CourseDetails, RevenueDetails } from "../../interfaces/customInterfaces/customInterface";
+import OrderModel from "../../../frameworks/database/models/order";
+import CourseModel from "../../../frameworks/database/models/course";
 
 export class AdminRepositoryImpl implements AdminRepository {
 
@@ -166,5 +169,91 @@ export class AdminRepositoryImpl implements AdminRepository {
         return await CategoryModel.find()
     }
     
+
+    async  getRevenueDetails(): Promise<RevenueDetails | null> {
+        try {
+          
+          const orders = await OrderModel.find();
+          
+         
+          const countOrder = orders.length;
+          if (countOrder === 0) return null;
+      
+          let totalRevenue = 0;
+          let weeklySales = 0;
+          let monthlySales = 0;
+          
+          const currentDate = new Date();
+          const oneWeekAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
+          const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+      
+          const courseDetails: CourseDetails[] = [];
+          const studentDetails: User[] = [];
+          const studentIds = new Set<string>();
+      
+          for (const order of orders) {
+            const orderDate = new Date(order.CreatedAt);
+            const price = Number(order.Price);
+      
+            totalRevenue += price;
+      
+            if (orderDate >= oneWeekAgo) {
+              weeklySales += price;
+            }
+      
+            if (orderDate >= oneMonthAgo) {
+              monthlySales += price;
+            }
+      
+         
+            studentIds.add(order.StudentId.toString());
+      
+  
+  
+           const student=await UserModel.findById(order.StudentId);
+            if(student){
+              studentDetails.push({
+                _id: student._id,
+                Name: student.Name,
+                Password: student.Password,
+                Email: student.Email,
+                Mobile: student.Mobile,
+                Image: student.Image,
+                CreatedAt: student.CreatedAt,
+              });
+            }
+  
+  
+            const course = await CourseModel.findById(order.CourseId);
+            if (course) {
+              courseDetails.push({
+                Name: course.Name,
+                Description: course.Description,
+                Price: course.Price,
+                Duration: course.Duration,
+                CreatedAt: course.CreatedAt,
+                UpdatedAt: course.UpdatedAt,
+              });
+            }
+          }
+      
+          const uniqueStudentCount = studentIds.size;
+          const tutorsCount = await TutorModel.countDocuments();
+          return {
+            countOrder,
+            totalRevenue,
+            weeklySales,
+            monthlySales,
+            courses: courseDetails,
+            uniqueStudentCount,
+            students: studentDetails,
+            tutorsCount
+          };
+        } catch (error) {
+          console.error(error);
+          return null;
+        }
+      }
+  
 
 }

@@ -338,6 +338,7 @@ class TutorRepositoryImpl {
                     }
                 }
                 const uniqueStudentCount = studentIds.size;
+                const tutorsCount = yield tutor_1.default.countDocuments();
                 return {
                     countOrder,
                     totalRevenue,
@@ -346,6 +347,7 @@ class TutorRepositoryImpl {
                     courses: courseDetails,
                     uniqueStudentCount,
                     students: studentDetails,
+                    tutorsCount
                 };
             }
             catch (error) {

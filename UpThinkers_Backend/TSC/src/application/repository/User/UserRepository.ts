@@ -12,7 +12,13 @@ import { Order } from '../../entities/order';
 import OrderModel from '../../../frameworks/database/models/order';
 import { Tutor } from '../../entities/tutor';
 import TutorModel from '../../../frameworks/database/models/tutor';
+import { Lesson } from '../../entities/lesson';
+import LessonModel from '../../../frameworks/database/models/lesson';
+import { Types } from 'mongoose';
 const jwt = require('jsonwebtoken')
+import mongoose from 'mongoose';
+
+const ObjectId = mongoose.Types.ObjectId;
 
 
 
@@ -126,6 +132,11 @@ export class UserRepositoryImpl implements UserRepository {
                     message = 'Invalid Password'
                 } else {
                     token = await genAccessToken(user, 'user')
+                    let refreshToken = await genRefreshToken(user, 'user')
+                    user.RefreshToken = refreshToken
+                    await user.save()
+                    //  await UserModel.save(refreshToken)
+
                     console.log('token', token);
                 }
 
@@ -157,14 +168,14 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async getUserById (userId:string):Promise<User|null>{
+    async getUserById(userId: string): Promise<User | null> {
         try {
             return await UserModel.findById(userId);
-            
+
         } catch (error) {
             console.log(error);
             return null
-            
+
         }
     }
 
@@ -230,7 +241,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async getAllOrder():Promise<Order[]|[]> {
+    async getAllOrder(): Promise<Order[] | []> {
         try {
             return await OrderModel.find() ?? [];
         } catch (error) {
@@ -288,8 +299,32 @@ export class UserRepositoryImpl implements UserRepository {
             return []
 
         }
+
+    }
+    async videoSeen(userId: string, lessonId: string): Promise<{ lesson: Lesson | null; message: string }> {
+        try {
+            const lesson = await LessonModel.findByIdAndUpdate(lessonId, { $addToSet: { Seen: userId } });
+
+
+
+            return { lesson, message: 'User ID added to views' };
+        } catch (error) {
+            console.log(error);
+
+            return { lesson: null, message: `An error occurred: ${error}` };
+        }
+    }
+
+    async getCertificate(userId: string, courseId: string): Promise<{ unseenCount: number }> {
+        try {
+            const lessons = await LessonModel.find({Course:courseId,Seen:{$ne:new Types.ObjectId(userId)}});           
+
+            return { unseenCount: lessons.length };
+        } catch (error) {
+            console.log(error)
+            return { unseenCount: 0 };
+        }
     }
 
 }
 
-  
