@@ -16,7 +16,11 @@ exports.adminAuth = exports.tutorAuth = exports.userAuth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = require("dotenv");
 const Functions_1 = require("../../frameworks/database/Functions");
+const CommonFunctions_1 = require("../../application/functions/CommonFunctions");
 (0, dotenv_1.config)();
+const getPayload = (token) => {
+    return jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET + '');
+};
 const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const authHeader = req.headers.authorization;
@@ -36,8 +40,23 @@ const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
                     return res.status(401).json({ error: 'Invalid token' });
                 }
                 else if (err.name === 'TokenExpiredError') {
-                    console.log(err);
-                    return res.status(402).json({ error: 'Token expired' });
+                    const userData = yield (0, Functions_1.getUsers)(data === null || data === void 0 ? void 0 : data._id);
+                    const refresh = getPayload(userData.RefreshToken);
+                    if (refresh && typeof refresh !== 'string' && (refresh === null || refresh === void 0 ? void 0 : refresh.exp)) {
+                        const currentTime = Math.floor(Date.now() / 1000);
+                        if (refresh.exp < currentTime) {
+                            console.log("Token is expired");
+                            return res.status(206).json({});
+                        }
+                        else {
+                            const token = (0, CommonFunctions_1.genAccessToken)(userData.RefreshToken, 'user');
+                            return res.status(205).json({ accessToken: token, user: userData });
+                        }
+                    }
+                    else {
+                        console.error("Invalid token payload");
+                    }
+                    // return res.status(402).json({ error: 'Token expired' });
                 }
                 else {
                     console.log(err);
