@@ -134,5 +134,18 @@ class AdminController {
             }
         });
     }
+    getRevenueDetails(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log('keriiiiiiiiiii');
+                const revenueDetails = yield this.interactor.getRevenueDetails();
+                res.status(200).json(revenueDetails);
+            }
+            catch (error) {
+                res.status(500).json({ error: error });
+                console.log(error);
+            }
+        });
+    }
 }
 exports.AdminController = AdminController;

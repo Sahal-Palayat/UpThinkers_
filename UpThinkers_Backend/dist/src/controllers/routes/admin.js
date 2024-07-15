@@ -17,4 +17,5 @@ adminRouter.patch('/tutorslist/blockTutor/:id', controller.blockTutor.bind(contr
 adminRouter.post('/addcategory', authmiddleware_1.adminAuth, controller.addCategory.bind(controller));
 adminRouter.get('/categorylist', authmiddleware_1.adminAuth, controller.getCategory.bind(controller));
 adminRouter.put('/editcategory/:id', authmiddleware_1.adminAuth, controller.editCategory.bind(controller));
+adminRouter.get('/getrevuenuadmin', authmiddleware_1.adminAuth, controller.getRevenueDetails.bind(controller));
 exports.default = adminRouter;

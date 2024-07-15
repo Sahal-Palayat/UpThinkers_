@@ -163,10 +163,10 @@ class TutorRepositoryImpl {
             }
         });
     }
-    getCourse() {
+    getCourse(tutorId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const courses = yield course_1.default.find();
+                const courses = (yield course_1.default.find({ isDeleted: false })).filter(item => item.TutorId + "" === tutorId);
                 return courses;
             }
             catch (error) {
@@ -190,7 +190,7 @@ class TutorRepositoryImpl {
     deleteCourse(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const deletedCourse = yield course_1.default.findOneAndDelete({ _id: id });
+                const deletedCourse = yield course_1.default.findOneAndUpdate({ _id: id }, { isDeleted: true, deletedAt: new Date() }, { new: true });
                 return deletedCourse;
             }
             catch (error) {
@@ -261,14 +261,98 @@ class TutorRepositoryImpl {
                 const data = yield Promise.all(order.map((item) => __awaiter(this, void 0, void 0, function* () {
                     const student = yield user_1.default.findById(item.StudentId);
                     const course = yield course_1.default.findById(item.CourseId);
-                    return { studentName: (student === null || student === void 0 ? void 0 : student.Name) + "", courseName: (course === null || course === void 0 ? void 0 : course.Name) + "" };
+                    return {
+                        studentName: (student === null || student === void 0 ? void 0 : student.Name) + "",
+                        courseName: (course === null || course === void 0 ? void 0 : course.Name) + "",
+                        studentId: (student === null || student === void 0 ? void 0 : student._id) + ""
+                    };
                 })));
-                console.log(data);
                 return data;
             }
             catch (error) {
                 console.error('Error fetching users:', error);
                 return [];
+            }
+        });
+    }
+    getTutorById(tutorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                return yield tutor_1.default.findById(tutorId);
+            }
+            catch (error) {
+                console.log(error);
+                return null;
+            }
+        });
+    }
+    getRevenueDetails(tutorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const orders = yield order_1.default.find({ TutorId: tutorId });
+                const countOrder = orders.length;
+                if (countOrder === 0)
+                    return null;
+                let totalRevenue = 0;
+                let weeklySales = 0;
+                let monthlySales = 0;
+                const currentDate = new Date();
+                const oneWeekAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
+                const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+                const courseDetails = [];
+                const studentDetails = [];
+                const studentIds = new Set();
+                for (const order of orders) {
+                    const orderDate = new Date(order.CreatedAt);
+                    const price = Number(order.Price);
+                    totalRevenue += price;
+                    if (orderDate >= oneWeekAgo) {
+                        weeklySales += price;
+                    }
+                    if (orderDate >= oneMonthAgo) {
+                        monthlySales += price;
+                    }
+                    studentIds.add(order.StudentId.toString());
+                    const student = yield user_1.default.findById(order.StudentId);
+                    if (student) {
+                        studentDetails.push({
+                            _id: student._id,
+                            Name: student.Name,
+                            Password: student.Password,
+                            Email: student.Email,
+                            Mobile: student.Mobile,
+                            Image: student.Image,
+                            CreatedAt: student.CreatedAt,
+                        });
+                    }
+                    const course = yield course_1.default.findById(order.CourseId);
+                    if (course) {
+                        courseDetails.push({
+                            Name: course.Name,
+                            Description: course.Description,
+                            Price: course.Price,
+                            Duration: course.Duration,
+                            CreatedAt: course.CreatedAt,
+                            UpdatedAt: course.UpdatedAt,
+                        });
+                    }
+                }
+                const uniqueStudentCount = studentIds.size;
+                const tutorsCount = yield tutor_1.default.countDocuments();
+                return {
+                    countOrder,
+                    totalRevenue,
+                    weeklySales,
+                    monthlySales,
+                    courses: courseDetails,
+                    uniqueStudentCount,
+                    students: studentDetails,
+                    tutorsCount
+                };
+            }
+            catch (error) {
+                console.error(error);
+                return null;
             }
         });
     }

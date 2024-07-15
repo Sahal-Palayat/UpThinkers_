@@ -4,6 +4,7 @@ import { Category } from "../../entities/category";
 import { Course } from "../../entities/course";
 import { Order } from "../../entities/order";
 import { Tutor } from "../../entities/tutor";
+import { Lesson } from "../../entities/lesson";
 
 
 export interface UserInteractor {
@@ -20,4 +21,8 @@ export interface UserInteractor {
     getTutors(): Promise<Tutor[] | []>;
     getTutorCourse(tutorId:string):Promise<Course[]|[]>
     getEnrolledCourse(studentId:string):Promise<Course[]|[]>
+    addImage(studentId:string, image:string):Promise<User[]|[]>
+    getUserById(userId:string):Promise<User|null>
+    videoSeen(userId:string,lessonId:string):Promise<{lesson:Lesson|null,message:string}>
+    getCertificate(userId:string,courseId:string): Promise<{ unseenCount: number }>
 } 

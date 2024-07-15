@@ -40,6 +40,9 @@ export function genAccessToken(user: any, role: string): string {
     return jwt.sign({ id: user._id, role: role }, secret, { expiresIn: '1d' });
 }
 
+
+
+
 // export function genAccessTokenTutor(user:any,role:string):string {
 //     const secret = process.env.JWT_SECRET || ' ';
 //      return jwt.sign({ id: user._id, role:role }, secret, { expiresIn: '1d' });

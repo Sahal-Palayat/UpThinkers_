@@ -15,12 +15,13 @@ const orderSchema = new Schema <OrderDocument>({
         ref: 'TutorModel',
    },
     CourseId:{ 
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'CourseModel',
    },
     Price:Number,
     Payment:String,
     CreatedAt:Date, 
+    
     
 })
 

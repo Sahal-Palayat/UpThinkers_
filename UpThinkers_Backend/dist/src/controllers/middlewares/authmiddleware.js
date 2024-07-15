@@ -24,7 +24,6 @@ const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             return res.status(401).json({ error: 'No token found' });
         }
         const token = authHeader.split(' ')[1];
-        console.log(token, 'tokennnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
         if (!token) {
             return res.status(401).json({ error: 'No token found' });
         }

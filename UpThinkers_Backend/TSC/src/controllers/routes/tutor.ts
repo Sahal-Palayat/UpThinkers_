@@ -7,6 +7,8 @@ import { TutorRepositoryImpl } from '../../application/repository/Tutor/TutorRep
 import { tutorAuth } from '../middlewares/authmiddleware';
 import { CourseController } from '../controller/CourseController';
 import {} from 'util-functions-nodejs'
+import * as chatController from '../controller/ChatController'
+
 
 const repository = new TutorRepositoryImpl()
 const mailer= new MailerImp()
@@ -30,13 +32,16 @@ tutorRouter.delete('/deletecourse/:id', tutorAuth,courseController.deleteCourse.
 tutorRouter.put('/editcourse/:id',tutorAuth,courseController.editCourse.bind((courseController)))
 tutorRouter.post('/addlesson/:id',tutorAuth,courseController.addLesson.bind(courseController))
 tutorRouter.get('/getlessons/:id',tutorAuth,courseController.getLessons.bind(courseController))
-
 tutorRouter.get('/getstudents/:courseId',tutorAuth,courseController.getStudents.bind(courseController))
+tutorRouter.get('/gettutorbyid',tutorAuth,controller.getByTutorId.bind(controller))
+
+tutorRouter.get('/getrevuenu',tutorAuth,controller.getRevenueDetails.bind(controller))
 
 
-
-
+tutorRouter.get('/getExistingChatsOfUser',tutorAuth,chatController.getNewChats)
+tutorRouter.get('/getChatOfUser',tutorAuth,chatController.getChatOfUser)
+tutorRouter.get('/getuserbyid',tutorAuth,chatController.getUserById)
   
 
 
-export default tutorRouter;
+export default tutorRouter;  

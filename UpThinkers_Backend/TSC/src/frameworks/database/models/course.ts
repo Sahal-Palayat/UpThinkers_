@@ -29,6 +29,7 @@ const courseSchema= new Schema<CourseDocument>({
             type: Boolean ,
             default : false
     },
+    isDeleted:{ type: Boolean, default: false },
     CreatedAt:Date, 
     UpdatedAt:Date,
 

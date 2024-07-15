@@ -14,6 +14,8 @@ export const config = {
     PAYPAL_CLIENT_ID: import.meta.env.VITE_APP_PAYPAL_CLIENT_ID,
     PAYPAL_SECRET_ID: import.meta.env.VITE_APP_PAYPAL_SECRET_ID,
     RAZORPAY_ID_KEY: import.meta.env.VITE_APP_RAZORPAY_ID_KEY,
-    RAZORPAY_SECRET_KEY: import.meta.env.VITE_APP_RAZORPAY_SECRET_KEY
+    RAZORPAY_SECRET_KEY: import.meta.env.VITE_APP_RAZORPAY_SECRET_KEY,
+    ZEGO_APP_ID:import.meta.env.VITE_APP_ZEGO_APP_ID,
+    ZEGO_SERVER_ID:import.meta.env.VITE_APP_ZEGO_SERVER_ID
 };
 

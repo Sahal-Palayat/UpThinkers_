@@ -10,7 +10,7 @@ import EditCourse from '../Assets/Tutor/Courses/EditCourse';
 import CourseDetails from '../Assets/Tutor/Courses/CourseDetails';
 import AddLessons from '../Assets/Tutor/Courses/AddLessons';
 import EnrolledStudents from '../Assets/Tutor/Courses/EnrolledStudents';
-import ChatPageTutor from '../Assets/Tutor/ChatPage/ChatPageTutor';
+import ChatPageTutor from '../Assets/Tutor/ChatPage/ChatHomeTutor';
 
 const TutorRouter = () => {
   const { tutorToken } = useContext(AuthContext);

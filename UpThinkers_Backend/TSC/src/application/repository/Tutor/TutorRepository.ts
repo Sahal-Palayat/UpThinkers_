@@ -15,7 +15,7 @@ import { User } from "../../entities/user";
 import UserModel from "../../../frameworks/database/models/user";
 import OrderModel from "../../../frameworks/database/models/order";
 import { Order } from "../../entities/order";
-import { studCourse } from "../../interfaces/CustomInterfaces/customInterface";
+import { CourseDetails, RevenueDetails, studCourse } from "../../interfaces/customInterfaces/customInterface";
 
 
 
@@ -171,16 +171,15 @@ export class TutorRepositoryImpl implements TutorRepository {
         }
     }
 
-    async getCourse(): Promise<Course[] | []> {
-
+    async getCourse(tutorId:string): Promise<Course[] | []> {
         try {
-            const courses: Course[] = await CourseModel.find();
+            const courses: Course[] = (await CourseModel.find({isDeleted: false})).filter(item => item.TutorId+"" === tutorId);
             return courses
 
         } catch (error) {
             console.log(error);
             throw error
-
+ 
         }
 
     }
@@ -201,9 +200,12 @@ export class TutorRepositoryImpl implements TutorRepository {
 
     async deleteCourse(id: string): Promise<Course | null> {
         try {
-            const deletedCourse = await CourseModel.findOneAndDelete({ _id: id });
-            return deletedCourse as Course | null;
-
+            const deletedCourse = await CourseModel.findOneAndUpdate(
+                { _id: id },
+                { isDeleted: true, deletedAt: new Date() },
+                { new: true }
+              );
+              return deletedCourse as Course | null;
         } catch (error) {
             console.log(error);
             throw error
@@ -263,7 +265,7 @@ export class TutorRepositoryImpl implements TutorRepository {
         }
     }
 
-  
+
 
     async getStudents(courseId: string): Promise<studCourse[] | []> {
         try {
@@ -271,9 +273,12 @@ export class TutorRepositoryImpl implements TutorRepository {
             const data = await Promise.all(order.map(async (item) => {
                 const student = await UserModel.findById(item.StudentId);
                 const course = await CourseModel.findById(item.CourseId)
-                return { studentName: student?.Name+"", courseName: course?.Name+"" }
+                return {
+                    studentName: student?.Name + "",
+                    courseName: course?.Name + "",
+                    studentId:student?._id+""
+                }
             }))
-            console.log(data);
             return data
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -281,6 +286,105 @@ export class TutorRepositoryImpl implements TutorRepository {
         }
     }
 
+    async getTutorById(tutorId: string): Promise<Tutor|null>{
+        try {
+            return await TutorModel.findById(tutorId);
+            
+        } catch (error) {
+            console.log(error);
+            return null   
+        }
+
+    }
 
 
+
+     async  getRevenueDetails(tutorId: string): Promise<RevenueDetails | null> {
+      try {
+        
+        const orders = await OrderModel.find({ TutorId: tutorId });
+        
+       
+        const countOrder = orders.length;
+        if (countOrder === 0) return null;
+    
+        let totalRevenue = 0;
+        let weeklySales = 0;
+        let monthlySales = 0;
+        
+        const currentDate = new Date();
+        const oneWeekAgo = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
+        const oneMonthAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+    
+        const courseDetails: CourseDetails[] = [];
+        const studentDetails: User[] = [];
+        const studentIds = new Set<string>();
+    
+        for (const order of orders) {
+          const orderDate = new Date(order.CreatedAt);
+          const price = Number(order.Price);
+    
+          totalRevenue += price;
+    
+          if (orderDate >= oneWeekAgo) {
+            weeklySales += price;
+          }
+    
+          if (orderDate >= oneMonthAgo) {
+            monthlySales += price;
+          }
+    
+       
+          studentIds.add(order.StudentId.toString());
+    
+
+
+         const student=await UserModel.findById(order.StudentId);
+          if(student){
+            studentDetails.push({
+              _id: student._id,
+              Name: student.Name,
+              Password: student.Password,
+              Email: student.Email,
+              Mobile: student.Mobile,
+              Image: student.Image,
+              CreatedAt: student.CreatedAt,
+            });
+          }
+
+
+          const course = await CourseModel.findById(order.CourseId);
+          if (course) {
+            courseDetails.push({
+              Name: course.Name,
+              Description: course.Description,
+              Price: course.Price,
+              Duration: course.Duration,
+              CreatedAt: course.CreatedAt,
+              UpdatedAt: course.UpdatedAt,
+            });
+          }
+        }
+    
+        const uniqueStudentCount = studentIds.size;
+        const tutorsCount = await TutorModel.countDocuments();
+
+    
+        return {
+          countOrder,
+          totalRevenue,
+          weeklySales,
+          monthlySales,
+          courses: courseDetails,
+          uniqueStudentCount,
+          students: studentDetails,
+          tutorsCount
+        };
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    }
+
+   
 }

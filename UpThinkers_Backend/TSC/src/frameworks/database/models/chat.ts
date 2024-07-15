@@ -1,22 +1,14 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema } from "mongoose";
+import { ChatDocument, messageSchema } from "../../../entities/chat";
 
-const chatSchema = mongoose.Schema({
-    ChatName: { type: String, trim: true },
-    Students: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'UserModel',
-        }
-    ],
-    LatestMessage: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Message', 
-    },
-},
-{
-    timestamps: true
+
+
+const chatSchema: Schema<ChatDocument> = new Schema<ChatDocument>({
+    userId: { type: [String], default: [], required: true },
+    archived: { type: Boolean, default: false, required: true },
+    details: { type: [messageSchema], default: [], required: true }
 });
 
-const ChatModel = mongoose.model('Chat', chatSchema);
 
-export default ChatModel;
+
+export const ChatModel = mongoose.model<ChatDocument>('chats', chatSchema)

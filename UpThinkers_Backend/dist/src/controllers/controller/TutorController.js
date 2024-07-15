@@ -137,5 +137,34 @@ class TutorController {
             }
         });
     }
+    getByTutorId(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tutorId = req.query.tutorId;
+                console.log(tutorId, 'ITH CONTRRR');
+                const tutor = yield this.interactor.getTutorById(tutorId);
+                res.status(200).json(tutor);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ error: error });
+            }
+        });
+    }
+    getRevenueDetails(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const tutorId = req.query.tutorId;
+                console.log(tutorId, 'ITH CONTRRR');
+                const revenueDetails = yield this.interactor.getRevenueDetails(tutorId);
+                console.log(revenueDetails);
+                res.status(200).json(revenueDetails);
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ error: error });
+            }
+        });
+    }
 }
 exports.TutorController = TutorController;

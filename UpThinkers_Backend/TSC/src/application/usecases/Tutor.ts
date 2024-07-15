@@ -9,7 +9,7 @@ import { genRefreshToken } from "../functions/CommonFunctions";
 import { Lesson } from "../entities/lesson";
 import { User } from "../entities/user";
 import { Order } from "../entities/order";
-import { studCourse } from "../interfaces/CustomInterfaces/customInterface";
+import { RevenueDetails, studCourse } from "../interfaces/customInterfaces/customInterface";
 
 export class TutorInteractorImpl implements TutorInteractor {
     constructor(private readonly Repository: TutorRepository, private readonly mailer: IMailer) { }
@@ -185,9 +185,9 @@ export class TutorInteractorImpl implements TutorInteractor {
         }
     }
 
-    async getCourse(): Promise<Course[] | []> {
+    async getCourse(tutorId:string): Promise<Course[] | []> {
         try {
-            const course = await this.Repository.getCourse()
+            const course = await this.Repository.getCourse(tutorId)
             if (course) {
                 return course
             } else {
@@ -295,6 +295,43 @@ export class TutorInteractorImpl implements TutorInteractor {
             return []
         }
         
+    }
+
+    async getTutorById(tutorId:string): Promise<Tutor|null>{
+        try {
+            const tutor = await this.Repository.getTutorById(tutorId)
+            console.log(tutorId,'ithan titiphij');
+            
+            if (tutor) {
+                
+                return tutor
+            } else {
+                return null
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return null
+            
+        }
+    }
+
+     async getRevenueDetails(tutorId: string): Promise<RevenueDetails | null> {
+        try {
+            const revenueDetails = await this.Repository.getRevenueDetails(tutorId)
+            
+            if (revenueDetails) {
+                
+                return revenueDetails
+            } else {
+                return null
+            }
+            
+        } catch (error) {
+            
+            console.log(error);
+            return null
+        }
     }
 }
 

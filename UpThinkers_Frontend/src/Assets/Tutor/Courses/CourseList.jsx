@@ -4,16 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { axiosApiTutor } from '../../../Services/axios';
 import Cookies from 'js-cookie';
 import Swal from 'sweetalert2';
+import { useSelector } from 'react-redux';
 
 const CourseList = () => {
     const navigate = useNavigate();
     const [course, setCourse] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(null);
 
+    const {tutor}=useSelector((state)=>state.tutor)
+
+
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const { data } = await axiosApiTutor.get('/courselist');
+                const { data } = await axiosApiTutor.get('/courselist?tutorId='+tutor._id);
                 setCourse(data);
             } catch (error) {
                 console.error('Error fetching courses:', error);

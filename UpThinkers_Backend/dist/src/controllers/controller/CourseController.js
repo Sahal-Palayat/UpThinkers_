@@ -38,7 +38,7 @@ class CourseController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log('coursilek keri');
-                const course = yield this.interactor.getCourse();
+                const course = yield this.interactor.getCourse(req.query.tutorId);
                 res.status(200).json(course);
             }
             catch (error) {

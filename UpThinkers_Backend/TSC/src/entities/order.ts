@@ -1,9 +1,9 @@
-import { Document,ObjectId } from "mongoose";
+import mongoose,{ Document,ObjectId } from "mongoose";
 
 export  default interface OrderDocument extends Document {
     TutorId:ObjectId;
     StudentId:ObjectId;
-    CourseId:ObjectId;
+    CourseId: mongoose.Types.ObjectId;
     Price:number;
     Payment :string;
     CreatedAt :Date;

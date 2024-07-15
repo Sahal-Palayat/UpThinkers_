@@ -14,7 +14,6 @@ import TutorsPage from '../Assets/User/TutorDetails/TutorsPage';
 import TutorDetails from '../Assets/User/TutorDetails/TutorDetails';
 import UserCourse from '../Assets/User/UserCourse/UserCourse';
 import UserCourseDetails from '../Assets/User/UserCourse/UserCourseDetails';
-import ChatPage from '../Assets/User/ChatPage/ChatPage';
 
 
 const UserRouter = () => {
@@ -38,7 +37,6 @@ const UserRouter = () => {
     <Route path="/tutordetails" element={<PrivateRoute><TutorDetails /></PrivateRoute>} />
     <Route path='/profile/usercourses' element={<PrivateRoute><UserCourse/></PrivateRoute>}/>
     <Route path='/singlecourse' element={<PrivateRoute><UserCourseDetails/></PrivateRoute>}/>
-    <Route path='/chatpage' element={<PrivateRoute><ChatPage/></PrivateRoute>}/>
   </Routes>
   );
 };

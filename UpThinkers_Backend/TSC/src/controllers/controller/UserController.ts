@@ -226,6 +226,72 @@ export class UserController {
         }
     }
 
+
+    async addImage(req: Request, res: Response,next: NextFunction){
+        try {
+            const studentId= req.params.userId
+            const { img } = req.body
+            console.log(img,studentId,'saaaaaaaaaaaaaaaaaaaaa');
+            const uploadImage = await this.interactor.addImage(studentId, img)
+            res.status(200).json({ uploadImage })
+
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
+            
+        }
+    }
+
+    async getUserById(req: Request, res: Response, next:NextFunction){
+        try {
+            const userId:string= req.query.userId as string
+            const user= await this.interactor.getUserById(userId )
+            res.status(200).json({user})
+            
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error');
+            
+        }
+    }
+
+
+  async videoSeen(req: Request, res: Response, next:NextFunction) {
+    try {
+        
+        const userId= req.params.userId 
+        const lessonId= req.params.lessonId 
+
+        const result = await this.interactor.videoSeen(userId, lessonId)
+        res.status(200).json(result);
+        
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+        
+  }
+    
+
+  async getCertificate(req: Request, res:Response, next:NextFunction) {
+    try {
+        const userId= req.params.userId 
+        const courseId= req.params.courseId
+        const certificate= await this.interactor.getCertificate(userId, courseId)
+        console.log(certificate,'[][][][][][][]][]');
+        
+        res.status(200).json(certificate);
+       
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+        
+    }
+  }
+
 }
 
 

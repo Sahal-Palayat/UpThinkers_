@@ -12,34 +12,40 @@ import { Order } from '../../entities/order';
 import OrderModel from '../../../frameworks/database/models/order';
 import { Tutor } from '../../entities/tutor';
 import TutorModel from '../../../frameworks/database/models/tutor';
+import { Lesson } from '../../entities/lesson';
+import LessonModel from '../../../frameworks/database/models/lesson';
+import { Types } from 'mongoose';
 const jwt = require('jsonwebtoken')
+import mongoose from 'mongoose';
+
+const ObjectId = mongoose.Types.ObjectId;
 
 
 
 export class UserRepositoryImpl implements UserRepository {
 
     async save(user: User): Promise<{ user: User | null, token: string | null, refreshToken: string | null }> {
-      
-      try {
-        console.log('repositoryy');
 
-        const { Name, Email, Mobile, Password } = user
-        console.log(user, 'lasttt');
+        try {
+            console.log('repositoryy');
+
+            const { Name, Email, Mobile, Password } = user
+            console.log(user, 'lasttt');
 
 
-        const newUser = new UserModel({ Name, Email, Mobile, Password })
-        console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
+            const newUser = new UserModel({ Name, Email, Mobile, Password })
+            console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
 
-        await newUser.save()
+            await newUser.save()
 
-        let token = await genAccessToken(user,'user')
-        let refreshToken = await genRefreshToken(user,'user')
-        console.log('tokennn', token);
-        return { user: newUser ? newUser.toObject() as User : null, token, refreshToken }
+            let token = await genAccessToken(user, 'user')
+            let refreshToken = await genRefreshToken(user, 'user')
+            console.log('tokennn', token);
+            return { user: newUser ? newUser.toObject() as User : null, token, refreshToken }
         } catch (error) {
             console.log(error);
             throw error
-            
+
         }
     }
 
@@ -79,7 +85,7 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async googleAuth(user: User): Promise<{ user: User | null, token: string | null, refreshToken: string | null }>{
+    async googleAuth(user: User): Promise<{ user: User | null, token: string | null, refreshToken: string | null }> {
         try {
             const { Name, Email, Mobile, Password } = user
             console.log(user, 'lasttt');
@@ -88,60 +94,65 @@ export class UserRepositoryImpl implements UserRepository {
 
             await newUser.save()
 
-            let token = await genAccessToken(user,'user')
-            let refreshToken = await genRefreshToken(user,'user')
+            let token = await genAccessToken(user, 'user')
+            let refreshToken = await genRefreshToken(user, 'user')
             console.log('tokennn', token);
-            return { user: newUser? newUser.toObject() as User : null, token, refreshToken }
-            
+            return { user: newUser ? newUser.toObject() as User : null, token, refreshToken }
+
         } catch (error) {
             console.log(error);
-            return {user:null,token:null,refreshToken:null}
-            
+            return { user: null, token: null, refreshToken: null }
+
         }
     }
 
     async findCredentials(email: string, password: string): Promise<{ user: User | null, token: string | null, message: string }> {
 
         try {
-            
-        
-        console.log('user repositoryyyy');
-        console.log(email, password);
-
-        const user = await UserModel.findOne({ Email: email})
-
-        console.log(user)
-
-        let message = ''
-        let token = null
 
 
-        if (!user) {
-            message = ' invalid user'
-        } else if (user.isBlocked===true) {
-            message='user blocked'
-        }else{
-            if (password !== user.Password) {
-                console.log('invalid password');
-                message = 'Invalid Password'
+            console.log('user repositoryyyy');
+            console.log(email, password);
+
+            const user = await UserModel.findOne({ Email: email })
+
+            console.log(user)
+
+            let message = ''
+            let token = null
+
+
+            if (!user) {
+                message = ' invalid user'
+            } else if (user.isBlocked === true) {
+                message = 'user blocked'
             } else {
-                token = await genAccessToken(user,'user')
-                console.log('token', token);
+                if (password !== user.Password) {
+                    console.log('invalid password');
+                    message = 'Invalid Password'
+                } else {
+                    token = await genAccessToken(user, 'user')
+                    let refreshToken = await genRefreshToken(user, 'user')
+                    user.RefreshToken = refreshToken
+                    await user.save()
+                    //  await UserModel.save(refreshToken)
+
+                    console.log('token', token);
+                }
+
             }
 
-        }
+            if (user?.isBlocked === false && !message) {
+                return { user: user.toObject() as User, message, token }
+            } else {
+                console.log('message222', message);
 
-        if (user?.isBlocked===false && !message) {
-            return { user: user.toObject() as User, message, token }
-        } else {
-            console.log('message222', message);
-
-            return { user: null, message, token };
-        }
+                return { user: null, message, token };
+            }
         } catch (error) {
-                console.log(error);
-                throw error
-                
+            console.log(error);
+            throw error
+
         }
 
     }
@@ -157,6 +168,16 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    async getUserById(userId: string): Promise<User | null> {
+        try {
+            return await UserModel.findById(userId);
+
+        } catch (error) {
+            console.log(error);
+            return null
+
+        }
+    }
 
     async updateOTP(emailId: string, newOtp: string): Promise<boolean> {
         try {
@@ -186,29 +207,46 @@ export class UserRepositoryImpl implements UserRepository {
     }
 
 
-    async getCourse():Promise <Course[] | []> {
+    async getCourse(): Promise<Course[] | []> {
         try {
-            const course: Course[] = await CourseModel.find();
+            const course: Course[] = await CourseModel.find({ isDeleted: false });
             return course
-            
         } catch (error) {
             console.log(error);
             return []
-            
+
         }
     }
 
-    async placeOrder(order:Order):Promise<{order:Order | null} > {
+    async getCourseById(id: string): Promise<Course | null> {
         try {
-            const {CourseId,TutorId,StudentId,Price,Payment} = order
-            const newOrder = new OrderModel({CourseId,TutorId,StudentId,Price,Payment})
+            return await CourseModel.findById(id)
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    }
+
+    async placeOrder(order: Order): Promise<{ order: Order | null }> {
+        try {
+            const { CourseId, TutorId, StudentId, Price, Payment } = order
+            const newOrder = new OrderModel({ CourseId, TutorId, StudentId, Price, Payment })
             await newOrder.save()
-            return {order: newOrder? newOrder.toObject() as Order : null}
-            
+            return { order: newOrder ? newOrder.toObject() as Order : null }
+
         } catch (error) {
             console.log(error);
 
-            return {order: null}
+            return { order: null }
+        }
+    }
+
+    async getAllOrder(): Promise<Order[] | []> {
+        try {
+            return await OrderModel.find() ?? [];
+        } catch (error) {
+            console.log(error);
+            return []
         }
     }
 
@@ -223,9 +261,9 @@ export class UserRepositoryImpl implements UserRepository {
     }
 
 
-    async getTutorCourse(tutorId: string): Promise<Course[]|[]>{
+    async getTutorCourse(tutorId: string): Promise<Course[] | []> {
         try {
-            const tutorCourse: Course[] = await CourseModel.find({TutorId:tutorId});
+            const tutorCourse: Course[] = await CourseModel.find({ TutorId: tutorId });
             return tutorCourse
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -233,19 +271,60 @@ export class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    async getEnrolledCourse(studentId: string): Promise<Course[]|[]>{
-        try {
-            const enrolledStudents: Order[] = await OrderModel.find({StudentId:studentId});
 
-            
-            const enrolledCourse: Course[] = await CourseModel.find({_id:{$in:enrolledStudents.map(order=>order.CourseId)}});
+    async getEnrolledCourse(studentId: string): Promise<Course[] | []> {
+        try {
+            const enrolledStudents: Order[] = await OrderModel.find({ StudentId: studentId });
+
+
+            const enrolledCourse: Course[] = await CourseModel.find({ _id: { $in: enrolledStudents.map(order => order.CourseId) } });
             return enrolledCourse
         } catch (error) {
             console.log(error);
             return []
-            
+
         }
     }
 
-} 
+    async addImage(studentId: string, image: string): Promise<User[] | []> {
+        try {
+            const updatedUser = await UserModel.findOneAndUpdate(
+                { _id: studentId },
+                { $set: { Image: image } },
+                { new: true }
+            );
+            return updatedUser ? [updatedUser.toObject() as User] : [];
+        } catch (error) {
+            console.log(error);
+            return []
+
+        }
+
+    }
+    async videoSeen(userId: string, lessonId: string): Promise<{ lesson: Lesson | null; message: string }> {
+        try {
+            const lesson = await LessonModel.findByIdAndUpdate(lessonId, { $addToSet: { Seen: userId } });
+
+
+
+            return { lesson, message: 'User ID added to views' };
+        } catch (error) {
+            console.log(error);
+
+            return { lesson: null, message: `An error occurred: ${error}` };
+        }
+    }
+
+    async getCertificate(userId: string, courseId: string): Promise<{ unseenCount: number }> {
+        try {
+            const lessons = await LessonModel.find({Course:courseId,Seen:{$ne:new Types.ObjectId(userId)}});           
+
+            return { unseenCount: lessons.length };
+        } catch (error) {
+            console.log(error)
+            return { unseenCount: 0 };
+        }
+    }
+
+}
 

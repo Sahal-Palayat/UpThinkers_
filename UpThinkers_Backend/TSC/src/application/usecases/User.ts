@@ -9,6 +9,7 @@ import { Category } from '../entities/category'
 import { Course } from '../entities/course'
 import { Order } from '../entities/order'
 import { Tutor } from '../entities/tutor'
+import { Lesson } from '../entities/lesson'
 
 export class UserInteractorImpl implements UserInteractor {
     constructor(private readonly repository: UserRepository, private readonly mailer: IMailer) {
@@ -261,5 +262,67 @@ export class UserInteractorImpl implements UserInteractor {
             return []
         }
     }
+
+     async addImage(studentId: string, image: string): Promise<User[] | []> {
+        try {
+            const user = await this.repository.addImage(studentId, image)
+            if (user) {
+                return user
+            } else {
+                return []
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return []
+            
+        }
+    }
+
+    async getUserById(userId: string): Promise<User | null> {
+        try {
+            const user = await this.repository.getUserById(userId)
+            if (user) {
+                return user
+            } else {
+                return null
+            }
+        } catch (error) {
+            console.log(error);
+            return null
+        }
+    }
+
+
+    async videoSeen(userId: string, lessonId: string): Promise<{ lesson: Lesson | null, message: string }> {
+        try {
+            const lesson = await this.repository.videoSeen(userId, lessonId)
+            if (lesson) {
+                return lesson
+            } else {
+                return { lesson: null, message: 'Video not found' }
+            }
+        } catch (error) {
+            console.log(error);
+            return { lesson: null, message: 'Error occurred while updating video status' }
+        }
+    } 
+
+    async getCertificate(userId:string,courseId:string): Promise<{ unseenCount: number }>{
+        try {
+            const lesson = await this.repository.getCertificate(userId, courseId)
+            if (lesson) {
+                return lesson
+            } else {
+                return { unseenCount: 0 }
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return {unseenCount:0}
+            
+        }
+    }
+
 }
 
