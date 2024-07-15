@@ -42,7 +42,7 @@ function AdminSidebar() {
                     <input type="text" placeholder='Search ' className='text-[15px] ml-4 w-full bg-transparent focus:outline-none' />
 
                 </div>
-                <div className='p-2.5 mt-3  flex items-center rounded-md px-4 duration-300 cursor-pointer bg-customBlue text-white hover:bg-customGreen'>
+                <div onClick={() => navigate('/admin/home')} className='p-2.5 mt-3  flex items-center rounded-md px-4 duration-300 cursor-pointer bg-customBlue text-white hover:bg-customGreen'>
                     <i className='bi bi-house-door-fill text-sm'></i>
                     <span className='text-[15px] ml-4 text-gray-200'>Home</span>
 

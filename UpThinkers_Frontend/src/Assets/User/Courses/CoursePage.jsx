@@ -1,28 +1,70 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../../Components/UserComponents/Navbar'
+import React, { useEffect, useState } from 'react';
+import Navbar from '../../Components/UserComponents/Navbar';
 import { axiosApiUser } from '../../../Services/axios';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../../Components/UserComponents/Footer';
 
 function CoursePage() {
+    const navigate = useNavigate();
+    const [query, setQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [courses, setCourses] = useState([]);
+    const [filteredCourses, setFilteredCourses] = useState([]);
+    const [initialLoad, setInitialLoad] = useState(true);
 
-
-    const navigate = useNavigate()
-
-    const [course, setCourse] = useState([])
     useEffect(() => {
         const fetchCourses = async () => {
             try {
                 const { data } = await axiosApiUser.get('/courselist');
-                setCourse(data.course);
-                console.log(data);
+                setCourses(data.course);
+                setFilteredCourses(data.course);
+                setInitialLoad(false);
             } catch (error) {
-                console.error('Error fetching courses:', error);
+                console.error('Error fetching courses', error);
             }
-        }
+        };
         fetchCourses();
     }, []);
-    console.log(course);
+
+    useEffect(() => {
+        if (!initialLoad) {
+            filterCourses(query, selectedCategory);
+        }
+    }, [query, selectedCategory, courses, initialLoad]);
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        setQuery(value);
+    };
+
+    const handleCategoryChange = (e) => {
+        const category = e.target.value;
+        setSelectedCategory(category);
+    };
+
+    const filterCourses = (searchQuery, category) => {
+        let filtered = courses;
+
+        if (searchQuery) {
+            filtered = filtered.filter((course) =>
+                course.Name.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+
+        if (category) {
+            filtered = filtered.filter((course) =>
+                course.Category === category
+            );
+        }
+
+        setFilteredCourses(filtered);
+    };
+
+    const uniqueCategories = [...new Set(courses.map((course) => course.Category))];
+
+    // Determine if "No courses available" should be displayed
+    const showNoCoursesMessage = !initialLoad && filteredCourses.length === 0;
+
     return (
         <div>
             <Navbar />
@@ -34,170 +76,83 @@ function CoursePage() {
                 <h1 className="text-5xl font-bold text-black">Courses</h1>
             </div>
 
+            <div>
+                <div className="flex justify-start items-start w-full mt-5 space-x-4">
+                    <div className="relative w-40 ml-10">
+                        <select
+                            value={selectedCategory}
+                            onChange={handleCategoryChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                        >
+                            <option value="">All Categories</option>
+                            {uniqueCategories.map((category) => (
+                                <option key={category} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="relative w-80">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg
+                                className="w-5 h-5 text-gray-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M21 21l-4.35-4.35M8.5 15a6.5 6.5 0 100-13 6.5 6.5 0 000 13z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <input
+                            type="text"
+                            value={query}
+                            onChange={handleInputChange}
+                            placeholder="Type a command or search"
+                            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                        />
+                    </div>
+                </div>
 
-           
-            <section id="Projects"
-                class="w-fit mx-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
-                {course.length > 0 && course.map((course, index) => (
-
-
-                    <div key={index}>
-
-                        <div onClick={() => navigate('/coursedetails', { state: { course: course } })} class="w-72 cursor-pointer bg-white shadow-md  duration-500 hover:scale-105 hover:shadow-xl">
-                            <p >
-                                <img src={course.Image}
-                                    alt="Product" class="h-60 w-72 object-cover " />
-                                <div class="px-4 py-3 w-72">
-                                    <span class="text-gray-400 mr-3 uppercase text-xs">{course.Category}</span>
-                                    <p class="text-lg font-bold text-black truncate block capitalize">{course.Name}</p>
-                                    <div class="flex items-center">
-                                        <p class="text-lg font-semibold text-black cursor-auto my-3">${course.Price}</p>
-                                        <del>
-                                            <p class="text-sm text-gray-600 cursor-auto ml-2">${course.OfferPrice}</p>
-                                        </del>
-                                        <div class="ml-auto"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                            fill="currentColor" class="bi bi-bag-plus" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd"
-                                                d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-                                            <path
-                                                d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-                                        </svg></div>
+                <section id="Projects" className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-5">
+                    {showNoCoursesMessage ? (
+                        <div className="text-center text-gray-500">No courses available</div>
+                    ) : (
+                        filteredCourses.map((course, index) => (
+                            <div key={index}>
+                                <div onClick={() => navigate('/coursedetails', { state: { course: course } })} className="w-72 cursor-pointer bg-white shadow-md duration-500 hover:scale-105 hover:shadow-xl">
+                                    <img src={course.Image} alt="Product" className="h-60 w-72 object-cover" />
+                                    <div className="px-4 py-3 w-72">
+                                        <span className="text-gray-400 mr-3 uppercase text-xs">{course.Category}</span>
+                                        <p className="text-lg font-bold text-black truncate block capitalize">{course.Name}</p>
+                                        <div className="flex items-center">
+                                            <p className="text-lg font-semibold text-black cursor-auto my-3">${course.Price}</p>
+                                            <del>
+                                                <p className="text-sm text-gray-600 cursor-auto ml-2">${course.OfferPrice}</p>
+                                            </del>
+                                            <div className="ml-auto">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-bag-plus" viewBox="0 0 16 16">
+                                                    <path fillRule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
+                                                    <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                                </svg>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </p>
-                        </div>
-
-
-
-                    </div>
-                ))}
-            </section>
-
-
+                            </div>
+                        ))
+                    )}
+                </section>
+            </div>
 
             <Footer />
         </div>
-    )
-
+    );
 }
 
-
-
-export default CoursePage
-
-
-
-
-
-
-
-// import React, { useState } from 'react';
-
-// const categories = [
-//   { name: 'IT and Software' },
-//   { name: 'Finance & Accounting' },
-//   { name: 'Data Science' },
-//   { name: 'System Analyst' },
-//   { name: 'Personal Dev' },
-//   { name: 'Health & Fitness' },
-//   { name: 'Design & Illustration' },
-//   { name: 'Photo & Video' },
-//   { name: 'Teach & Academics' }
-// ];
-
-// const courses = [
-//   {
-//     image: 'https://source.unsplash.com/random/200x200?sig=1',
-//     title: 'IT Troubleshooting Skill Training',
-//     tutor: 'Noel Temena',
-//     popularity: 'Most Popular',
-//     students: 1934,
-//     duration: '2h 45m'
-//   },
-//   {
-//     image: 'https://source.unsplash.com/random/200x200?sig=2',
-//     title: 'Information Technology Essentials',
-//     tutor: 'Destin Learning',
-//     popularity: 'Most Popular',
-//     students: 1881,
-//     duration: '1h 44m'
-//   },
-//   {
-//     image: 'https://source.unsplash.com/random/200x200?sig=3',
-//     title: 'Computer Forensics Fundamentals',
-//     tutor: 'John Boyle',
-//     students: 186,
-//     duration: '3h 49m'
-//   },
-//   {
-//     image: 'https://source.unsplash.com/random/200x200?sig=4',
-//     title: 'Linux Command Line Basics',
-//     tutor: 'Abdullah Tarek and Ahmed',
-//     popularity: 'Most Popular',
-//     students: 300,
-//     duration: '2h 40m'
-//   }
-// ];
-
-// const Courses = () => {
-//   const [selectedCategory, setSelectedCategory] = useState('IT and Software');
-//   const [selectedFilter, setSelectedFilter] = useState('Most Popular');
-
-//   return (
-//     <div className="p-6">
-//   <div className="text-sm text-gray-500">
-//     <span>Home</span> / <span>Courses</span>
-//   </div>
-//   <h1 className="text-3xl font-semibold my-4">
-//     Find Courses <span className="text-orange-500">"127 results"</span>
-//   </h1>
-//   <div className="flex flex-wrap gap-2 mb-4">
-//     {categories.map(category => (
-//       <button
-//         key={category.name}
-//         className={`px-4 py-2 border rounded ${selectedCategory === category.name ? 'border-orange-500 bg-gray-100' : 'border-gray-300'}`}
-//         onClick={() => setSelectedCategory(category.name)}
-//       >
-//         {category.name}
-//       </button>
-//     ))}
-//   </div>
-//   <div className="flex justify-between items-center mb-4">
-//     <button className="px-4 py-2 border border-gray-300 rounded">Filter</button>
-//     <div className="flex items-center">
-//       <span className="mr-2">Sort by</span>
-//       <select
-//         value={selectedFilter}
-//         onChange={(e) => setSelectedFilter(e.target.value)}
-//         className="border border-gray-300 rounded px-2 py-1"
-//       >
-//         <option value="Recommended">Recommended</option>
-//         <option value="Most Popular">Most Popular</option>
-//         <option value="New">New</option>
-//         <option value="Best Seller">Best Seller</option>
-//       </select>
-//     </div>
-//   </div>
-//       <div className="flex gap-2 mb-4">
-//         <button className={`px-4 py-2 ${selectedFilter === 'Most Popular' ? 'border-b-2 border-orange-500' : ''}`} onClick={() => setSelectedFilter('Most Popular')}>Most Popular</button>
-//         <button className={`px-4 py-2 ${selectedFilter === 'New' ? 'border-b-2 border-orange-500' : ''}`} onClick={() => setSelectedFilter('New')}>New</button>
-//         <button className={`px-4 py-2 ${selectedFilter === 'Best Seller' ? 'border-b-2 border-orange-500' : ''}`} onClick={() => setSelectedFilter('Best Seller')}>Best Seller</button>
-//       </div>
-//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-//         {courses.map(course => (
-//           <div key={course.title} className="border border-gray-300 rounded overflow-hidden bg-white">
-//             <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
-//             <div className="p-4">
-//               <p className="text-sm text-gray-500">{course.students} students</p>
-//               <h2 className="text-lg font-semibold my-2">{course.title}</h2>
-//               <p className="text-sm text-gray-500">{course.tutor} <span className="text-orange-500">{course.popularity}</span></p>
-//               <p className="text-sm text-gray-500">{course.duration}</p>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Courses;
+export default CoursePage;

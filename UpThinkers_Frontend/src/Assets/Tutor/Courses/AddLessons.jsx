@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import TutorSidebar from "../../Components/TutorComponents/TutorSidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { uploadImages } from "../../../Services/uploadImages";
-import { uploadVideo } from "../../../Services/uploadVideo";
+import { uploadToS3Bucket } from "../../../Services/uploadVideo";
 import { axiosApiTutor } from "../../../Services/axios";
 import { uploadPDF } from "../../../Services/uploadPdf";
 import { ToastContainer, toast } from "react-toastify";
@@ -18,6 +18,7 @@ const AddLessons = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { course } = location.state || {};
+    const [progress, setProgress] = useState(-1)
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -71,7 +72,8 @@ const AddLessons = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let img = await uploadImages(image);
-        let vdo = await uploadVideo(video);
+        // let vdo = await uploadVideo(video);
+        let vdo = await uploadToS3Bucket(video, setProgress)
         const pdf = [];
         for (let i = 0; i < documents.length; i++) {
             const Pdf = await uploadPDF(documents[i]);
@@ -109,12 +111,12 @@ const AddLessons = () => {
                 });
 
                 if (response.status === 200) {
-                    toast.success('Course added successfully');
-                    console.log('Course added successfully');
+                    toast.success('lesson added successfully');
+                    console.log('lesson added successfully');
                     setTimeout(() => {
                         navigate('/tutor/courselist');
                     }, 2000);
-                   
+
                 } else if (response.status === 302) {
                     toast.error('Course adding error');
                     console.log('Course adding error');
@@ -248,6 +250,12 @@ const AddLessons = () => {
                                                         />
                                                     </div>
                                                 </div>
+                                                {progress !== -1 && <div className='progressDiv flex'>
+
+                                                    <progress value={progress} style={{ width: '100% ', marginTop: '7%' }} max='100' />
+                                                    <p className='success ml-2 mb-1'>{progress.toString() === '100' ? 'completed' : progress + '%'}</p>
+                                                </div>
+                                                }
                                                 <div className="mb-6 text-center">
                                                     <button
                                                         className="w-full px-4 py-2 font-bold text-white bg-customGreen rounded-full hover:bg-customGreen dark:bg-customGreen dark:text-white dark:hover:bg-customGreen focus:outline-none focus:shadow-outline"

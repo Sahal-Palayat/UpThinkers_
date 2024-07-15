@@ -25,9 +25,9 @@ function TutorsPage() {
 
                 <div
                     style={{ backgroundImage: 'url(https://img.freepik.com/free-vector/modern-soft-green-watercolor-texture-background_1055-17888.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}
-                    className="h-40 w-full mt-7 flex flex-col items-center justify-center p-4"
+                    className="h-auto w-full mt-7 flex flex-col items-center justify-center p-4"
                 >
-                    <h1 className="text-5xl font-bold text-black">Our Tutors</h1>
+                    <h1 className="md:text-4xl sm:text-3xl font-bold text-black">Our Tutors</h1>
                     <p className=" text-center  mt-4 ml-10 mr-10">
                         At our online learning platform, we pride ourselves on our team of experienced industrial
                         experts who are passionate about teaching. Our tutors bring real-world knowledge and practical

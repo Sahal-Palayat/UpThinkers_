@@ -15,9 +15,11 @@ const CourseDetails = () => {
     const location = useLocation();
     const { course } = location.state || {};
     // console.log(course);
+    const { user } = useSelector((state) => state.user)
 
-    const {tutor}=useSelector((state)=>state.tutor)
-    console.log(tutor,'tttttttttttttttttuuuuuuuuuuuuuuuuuu');
+
+    const { tutor } = useSelector((state) => state.tutor)
+    console.log(tutor, 'tttttttttttttttttuuuuuuuuuuuuuuuuuu');
 
     useEffect(() => {
         const fetchLessons = async () => {
@@ -38,13 +40,18 @@ const CourseDetails = () => {
         <div>
             <TutorSidebar />
             <div className="pt-28 lg:w-[80] lg:ml-64 py-6">
-               <span  onClick={() => navigate('/tutor/coursedetails/enrolledstudents',{ state: { course: course,tutor:tutor } })}  className="float-right pr-20">
-                <p href="#" className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group hover:bg-gradient-to-r hover:from-customGreen hover:to-cyan-400 hover:text-white">
-                    <i className="fas fa-user"></i>
-                    <span>Enrolled Students</span>
-                </p>
-               
+
+                <span onClick={() => navigate('/tutor/coursedetails/enrolledstudents', { state: { course: course, tutor: tutor } })} className="float-right pr-20">
+                    <p href="#" className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group hover:bg-gradient-to-r hover:from-customGreen hover:to-cyan-400 hover:text-white">
+                        <i className="fas fa-user"></i>
+                        <span>Enrolled Students</span>
+                    </p>
+
                 </span>
+
+
+
+
                 <h1 class="text-4xl font-bold text-gray-800 dark:text-customBlue mb-3 ml-6">Course Details...</h1>
                 <div class="bg-gray-100 dark:bg-white py-8">
                     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

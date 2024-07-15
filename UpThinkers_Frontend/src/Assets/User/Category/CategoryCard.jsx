@@ -20,7 +20,7 @@ function CategoryCard() {
     return (
         <>
             <h1 className="text-4xl font-bold text-customBlue pb-8 ml-20 mt-10">Course Categories</h1>
-            <div className="ml-20 mr-20 flex overflow-x-scroll scrollbar-hide  space-x-8 px-4">
+            <div className="ml-12 mr-20 flex overflow-x-scroll scrollbar-hide  space-x-8 px-4">
                 {category.length > 0 && category.map((cat, index) => (
                     <div key={index} className="flex-shrink-0 w-80 flex flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
                         <div className="p-6 ">
@@ -42,7 +42,7 @@ function CategoryCard() {
                                 {cat.Name}
                             </h5>
                             <p className="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
-                            {cat.Description} Because it's about motivating the doers. Because I'm here to follow my
+                                {cat.Description} Because it's about motivating the doers. Because I'm here to follow my
                                 dreams and inspire others.
                             </p>
                         </div>

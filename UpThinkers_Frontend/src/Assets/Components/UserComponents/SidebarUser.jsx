@@ -19,7 +19,7 @@ function SidebarUser() {
                     </div>
                     <div href="#" className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group hover:bg-gradient-to-r hover:from-customGreen hover:to-cyan-400 hover:text-white">
                         <i className="fas fa-wallet"></i>
-                        <span>Revenue</span>
+                        <span>Certificates</span>
                     </div>
                     <div href="#" onClick={()=>navigate('/chatpage')} className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group hover:bg-gradient-to-r hover:from-customGreen hover:to-cyan-400 hover:text-white">
                         <i className="fas fa-exchange-alt"></i>

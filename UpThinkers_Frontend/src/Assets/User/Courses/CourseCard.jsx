@@ -47,7 +47,7 @@ function CourseCard() {
                     <div className="bg-cover w-full flex flex-wrap">
                         {course.length > 0 && course.map((courses) => (
                             <div key={courses._id} className="w-full md:w-3/12 lg:w-3/12 xl:w-3/12 p-2">
-                                <div className="w-full ml-10 bg-white p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg ">
+                                <div className="w-full ml-2 bg-white p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg ">
                                     <article className=" bg-white p-6 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl  border">
                                         <div onClick={() => navigate(`/user/coursedetails`, { state: { course: courses } })}
 
@@ -75,7 +75,7 @@ function CourseCard() {
                                                 <div className="flex flex-1">
                                                     <div>
                                                         <p className="text-sm font-semibold">Morris Muthigani</p>
-                                                        <p className="text-sm text-gray-500">Published on 19/03/2024</p>
+                                                        {/* <p className="text-sm text-gray-500">Published on 19/03/2024</p> */}
                                                     </div>
                                                 </div>
                                             </div>

@@ -10,6 +10,7 @@ import { persistStore } from 'redux-persist'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { config } from './config.jsx'
 
+
 const persistor= persistStore(store)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
