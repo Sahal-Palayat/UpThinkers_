@@ -1,14 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { TokenExpiredError, Secret } from 'jsonwebtoken';
+import jwt, { TokenExpiredError, Secret, JwtPayload } from 'jsonwebtoken';
 import UserModel from '../../frameworks/database/models/user';
 import { User } from '../../application/entities/user'
 import { config } from 'dotenv'
 import { checkobjectId, getUsers } from '../../frameworks/database/Functions';
 import UserDocument from '../../entities/user';
+import { genAccessToken } from '../../application/functions/CommonFunctions';
 config()
 
 export interface customReq extends Request {
     user: UserDocument;
+}
+
+const getPayload = (token: string) => {
+    return jwt.verify(token, process.env.JWT_SECRET + '');
 }
 
 
@@ -18,28 +23,40 @@ export const userAuth = async (req: Request, res: Response, next: NextFunction) 
         if (!authHeader || !authHeader.startsWith('Bearer')) {
             return res.status(401).json({ error: 'No token found' });
         }
-
         const token = authHeader.split(' ')[1];
-
-
         if (!token) {
             return res.status(401).json({ error: 'No token found' });
         }
-
-
-
         // let decoded: any = null
         const secret = process.env.JWT_SECRET || ''
         jwt.verify(token, secret, async (err, data: any) => {
             if (err) {
                 if (err.name === 'JsonWebTokenError') {
-                    console.log(err);
+                    console.log(err);   
 
                     return res.status(401).json({ error: 'Invalid token' });
                 } else if (err.name === 'TokenExpiredError') {
-                    console.log(err);
+                   
+                    const userData = await getUsers(data?._id)
+                    const refresh = getPayload(userData.RefreshToken)
+                  
+                    if (refresh && typeof refresh !== 'string' && refresh?.exp) {
+                        const currentTime = Math.floor(Date.now() / 1000);
+                       
+                        if (refresh.exp < currentTime) {
+                            console.log("Token is expired");
+                            return res.status(206).json({})
+                        } else {
+                            const token = genAccessToken(userData.RefreshToken, 'user');
+                            return res.status(205).json({ accessToken: token, user: userData })
+                        }
+                
+                    } else {
+                        console.error("Invalid token payload");
+                    }
 
-                    return res.status(402).json({ error: 'Token expired' });
+                    // return res.status(402).json({ error: 'Token expired' });
+
                 } else {
                     console.log(err);
                     return res.status(403).json({ error: 'Token verification failed' });

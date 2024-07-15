@@ -42,8 +42,8 @@ userRouter.post('/resendMail/:emailId', controller.resendMail.bind(controller));
 userRouter.post('/login', controller.login.bind(controller));
 userRouter.post('/googlauth', controller.googleAuth.bind(controller));
 // userRouter.get('/home',userAuth,controller.getHome.bind(controller))
-userRouter.get('/categorylist', authmiddleware_1.userAuth, controller.getCategory.bind(controller));
-userRouter.get('/courselist', authmiddleware_1.userAuth, controller.getCourse.bind(controller));
+userRouter.get('/categorylist', controller.getCategory.bind(controller));
+userRouter.get('/courselist', controller.getCourse.bind(controller));
 userRouter.post('/placeorder', authmiddleware_1.userAuth, controller.placeOrder.bind(controller));
 userRouter.get('/tutorslist', authmiddleware_1.userAuth, controller.getTutors.bind(controller));
 userRouter.get('/tutorcourses/:tutorId', authmiddleware_1.userAuth, controller.getTutorCourse.bind(controller));
