@@ -6,7 +6,7 @@ import expressConfig from './src/frameworks/server/express';
 import { connectSocket } from './src/application/functions/Socket/SocketCode';
 
 const { app, server } = serverFunc(config)
-
+ 
 
 expressConfig(app)
 RouterConfig(app);
