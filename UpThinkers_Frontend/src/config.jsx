@@ -19,3 +19,4 @@ export const config = {
     ZEGO_SERVER_ID:import.meta.env.VITE_APP_ZEGO_SERVER_ID
 };
 
+console.log(config)
