@@ -22,7 +22,7 @@ function LoginPage() {
     const {token,setToken} = useContext(AuthContext)
 
     useEffect(()=>{
-        console.log('okkkk');
+        console.log('okkkk',process.env.VITE_APP_IS_ENV_AVAILABLE);
         dispatch(userLoginFailure(null))
     },[dispatch])
 
