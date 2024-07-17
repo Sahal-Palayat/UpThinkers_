@@ -38,8 +38,11 @@ export class UserRepositoryImpl implements UserRepository {
 
             await newUser.save()
 
-            let token = await genAccessToken(user, 'user')
-            let refreshToken = await genRefreshToken(user, 'user')
+            const token = await genAccessToken(user, 'user')
+            const refreshToken = await genRefreshToken(user, 'user')
+
+            newUser.RefreshToken = refreshToken
+            await newUser.save()
             console.log('tokennn', token);
             return { user: newUser ? newUser.toObject() as User : null, token, refreshToken }
         } catch (error) {

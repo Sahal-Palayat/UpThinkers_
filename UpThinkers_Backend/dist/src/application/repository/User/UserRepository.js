@@ -35,8 +35,10 @@ class UserRepositoryImpl {
                 const newUser = new user_1.default({ Name, Email, Mobile, Password });
                 console.log(newUser, 'new userrrrrrrrrrrrrrrrrr');
                 yield newUser.save();
-                let token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
-                let refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user, 'user');
+                const token = yield (0, CommonFunctions_1.genAccessToken)(user, 'user');
+                const refreshToken = yield (0, CommonFunctions_1.genRefreshToken)(user, 'user');
+                newUser.RefreshToken = refreshToken;
+                yield newUser.save();
                 console.log('tokennn', token);
                 return { user: newUser ? newUser.toObject() : null, token, refreshToken };
             }
