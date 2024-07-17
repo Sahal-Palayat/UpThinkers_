@@ -332,13 +332,13 @@ function Navbar() {
                       clipRule="evenodd"
                     />
                   </svg>
-                </ListItemPrefix>
+                </ListItemPrefix> 
                 My Courses
               </ListItem>
             </List>
             <Button onClick={logout} className="mt-3 ml-5" size="sm">
               Signout
-            </Button>
+            </Button> 
           </Drawer>
 
 
