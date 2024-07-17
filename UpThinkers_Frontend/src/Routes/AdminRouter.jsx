@@ -9,6 +9,7 @@ import TutorsList from '../Assets/Admin/ListTutor/TutorsList';
 import AddCategory from '../Assets/Admin/Category/AddCategory';
 import CategoryList from '../Assets/Admin/Category/CategoryList';
 import AdminNavbar from '../Assets/Components/AdminComponents/AdminNavbar';
+import AdminRevenuePage from '../Assets/Admin/AdminRevenuePage/AdminRevenuePage';
 
 const AdminRouter = () => {
   const { adminToken } = useContext(AuthContext);
@@ -16,7 +17,7 @@ const AdminRouter = () => {
   return (
     <Routes>
       <Route path="/login" element={adminToken ? <Navigate to="/admin/home" /> : <AdminLogin />} />
-      <Route path="/home" element={adminToken ? <AdminHome /> : <Navigate to="/admin/login" />} />
+      <Route path="/home" element={adminToken ? <AdminRevenuePage /> : <Navigate to="/admin/login" />} />
       <Route path="/studentslist" element={adminToken ? <StudentsList /> : <Navigate to="/admin/login" />} />
       <Route path="/tutorslist" element={adminToken ? <TutorsList /> : <Navigate to="/admin/login" />} />
       <Route path="/addcategory" element={adminToken ? <AddCategory /> : <Navigate to="/admin/login" />} />

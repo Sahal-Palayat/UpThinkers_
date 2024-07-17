@@ -45,13 +45,17 @@ axiosApiUser.interceptors.request.use((config) => {
 });
 
 
+
 axiosApiUser.interceptors.response.use((response) => {
     if(token){
         response.headers.Authorization=token
       }
-    if (response.status === 208) {
+    if (response.status === 208 || response.status === 206) {
         Cookies.remove('token')
         window.location.href = '/login'
+    }
+    if (response.status === 205) {
+        Cookies.set('token',response.data.accessToken+'')
     }
     return response
 }, (err) => {

@@ -40,7 +40,14 @@ const UserCourseDetails = () => {
         <div>
             <Navbar/>
             <SidebarUser />
-            <div className=" lg:w-[80] lg:ml-64 py-6">
+            <div className=" lg:w-[80] lg:ml-64 py-10">
+            <span onClick={() => navigate('/getcertificate', { state: { course: course } })} className="float-right pr-20">
+                    <p href="#" className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group hover:bg-gradient-to-r hover:from-customGreen hover:to-cyan-400 hover:text-white">
+                        <i className="fas fa-user"></i>
+                        <span>Get Certificate</span>
+                    </p>
+
+                </span>
              
                 <h1 class="text-4xl font-bold text-gray-800 dark:text-customBlue mb-3 ml-6">Course Details...</h1>
                 <div class="bg-gray-100 dark:bg-white py-8">
