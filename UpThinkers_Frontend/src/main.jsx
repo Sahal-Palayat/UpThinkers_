@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   
       <Provider store={store}>
         <PersistGate persistor={persistor} >
-          <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
+          <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID ?? import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}>
           <App />
           </GoogleOAuthProvider>
         </PersistGate>

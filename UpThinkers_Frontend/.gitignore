@@ -1,4 +1,8 @@
 # Logs
+node_modules/
+.env.development
+.env.production
+
 logs
 *.log
 npm-debug.log*
@@ -9,7 +13,8 @@ lerna-debug.log*
 
 node_modules/
 .env.development
-# .env.production
+.env.production
+
 dist
 dist-ssr
 *.local

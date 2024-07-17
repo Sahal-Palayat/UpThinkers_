@@ -22,7 +22,6 @@ function LoginPage() {
     const {token,setToken} = useContext(AuthContext)
 
     useEffect(()=>{
-        console.log('okkkk');
         dispatch(userLoginFailure(null))
     },[dispatch])
 

@@ -13,7 +13,7 @@ import AdminRevenuePage from '../Assets/Admin/AdminRevenuePage/AdminRevenuePage'
 
 const AdminRouter = () => {
   const { adminToken } = useContext(AuthContext);
-
+    
   return (
     <Routes>
       <Route path="/login" element={adminToken ? <Navigate to="/admin/home" /> : <AdminLogin />} />
