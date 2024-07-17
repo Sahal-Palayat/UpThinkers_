@@ -31,9 +31,9 @@ tutorRouter.get('/courselist',courseController.getCourse.bind(courseController))
 tutorRouter.delete('/deletecourse/:id', tutorAuth,courseController.deleteCourse.bind(courseController));
 tutorRouter.put('/editcourse/:id',tutorAuth,courseController.editCourse.bind((courseController)))
 tutorRouter.post('/addlesson/:id',tutorAuth,courseController.addLesson.bind(courseController))
-tutorRouter.get('/getlessons/:id',tutorAuth,courseController.getLessons.bind(courseController))
+tutorRouter.get('/getlessons/:id',courseController.getLessons.bind(courseController))
 tutorRouter.get('/getstudents/:courseId',tutorAuth,courseController.getStudents.bind(courseController))
-tutorRouter.get('/gettutorbyid',tutorAuth,controller.getByTutorId.bind(controller))
+tutorRouter.get('/gettutorbyid',controller.getByTutorId.bind(controller))
 
 tutorRouter.get('/getrevuenu',tutorAuth,controller.getRevenueDetails.bind(controller))
 

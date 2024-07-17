@@ -21,7 +21,7 @@ export const uploadPDF = async (pdfFile) => {
     console.log("res from cloud", res);
 
     // Extract the URL of the uploaded PDF
-    const pdfUrl = res.data.url;
+    const pdfUrl = res.data.secure_url;
     console.log("pdfUrl", pdfUrl);
     return pdfUrl;
   } catch (error) {

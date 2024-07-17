@@ -21,10 +21,10 @@ console.log(config.CLOUDINARY_PRESET_KEY,config.CLOUDINARY);
       `https://api.cloudinary.com/v1_1/${userKey}/image/upload`,
       formData
     );
-    console.log("res from cloud", res);
+    console.log("res from cloud", res.data);
 
     // Extract the URL of the uploaded image
-    const imageUrl = res.data.url;
+    const imageUrl = res.data.secure_url
     console.log("imageUrl", imageUrl);
     return imageUrl;
   } catch (error) {

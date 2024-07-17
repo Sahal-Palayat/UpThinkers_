@@ -6,7 +6,7 @@ const chatRepository_1 = require("../../repository/chatRepository");
 const connectSocket = (server) => {
     const io = new socket_io_1.Server(server, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: "https://up-thinkers.vercel.app",
             methods: ["GET", "POST"],
         },
     });
