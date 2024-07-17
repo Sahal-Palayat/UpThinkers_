@@ -45,3 +45,4 @@ userSchema.methods.matchPassword = async function (enteredPassword: string) {
 
 const UserModel = model <UserDocument>('users',userSchema);
 export default UserModel;
+

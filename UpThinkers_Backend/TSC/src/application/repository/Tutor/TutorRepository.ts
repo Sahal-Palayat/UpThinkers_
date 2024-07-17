@@ -16,6 +16,7 @@ import UserModel from "../../../frameworks/database/models/user";
 import OrderModel from "../../../frameworks/database/models/order";
 import { Order } from "../../entities/order";
 import { CourseDetails, RevenueDetails, studCourse } from "../../interfaces/customInterfaces/customInterface";
+import { compare } from "bcrypt";
 
 
 
@@ -100,7 +101,7 @@ export class TutorRepositoryImpl implements TutorRepository {
             if (!tutor) {
                 message = ' invalid user'
             } else {
-                if (password !== tutor.Password) {
+                if (!await compare(password,tutor.Password)) {
                     console.log('invalid password');
                     message = 'Invalid Password'
                 } else {

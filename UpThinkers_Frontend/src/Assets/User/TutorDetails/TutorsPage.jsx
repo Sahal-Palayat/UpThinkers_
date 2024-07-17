@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../Components/UserComponents/Navbar';
 import { axiosApiUser } from '../../../Services/axios';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../../Components/UserComponents/Footer';
 
 function TutorsPage() {
 
@@ -48,6 +49,7 @@ function TutorsPage() {
                     ))}
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }

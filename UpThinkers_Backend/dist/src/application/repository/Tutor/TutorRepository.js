@@ -22,6 +22,7 @@ const lesson_1 = __importDefault(require("../../../frameworks/database/models/le
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_1 = __importDefault(require("../../../frameworks/database/models/user"));
 const order_1 = __importDefault(require("../../../frameworks/database/models/order"));
+const bcrypt_1 = require("bcrypt");
 class TutorRepositoryImpl {
     save(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -91,7 +92,7 @@ class TutorRepositoryImpl {
                     message = ' invalid user';
                 }
                 else {
-                    if (password !== tutor.Password) {
+                    if (!(yield (0, bcrypt_1.compare)(password, tutor.Password))) {
                         console.log('invalid password');
                         message = 'Invalid Password';
                     }
