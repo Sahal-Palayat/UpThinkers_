@@ -24,6 +24,7 @@ const lesson_1 = __importDefault(require("../../../frameworks/database/models/le
 const mongoose_1 = require("mongoose");
 const jwt = require('jsonwebtoken');
 const mongoose_2 = __importDefault(require("mongoose"));
+const bcrypt_1 = require("bcrypt");
 const ObjectId = mongoose_2.default.Types.ObjectId;
 class UserRepositoryImpl {
     save(user) {
@@ -118,7 +119,7 @@ class UserRepositoryImpl {
                     message = 'user blocked';
                 }
                 else {
-                    if (password !== user.Password) {
+                    if (!(yield (0, bcrypt_1.compare)(password, user.Password))) {
                         console.log('invalid password');
                         message = 'Invalid Password';
                     }
@@ -316,3 +317,9 @@ class UserRepositoryImpl {
     }
 }
 exports.UserRepositoryImpl = UserRepositoryImpl;
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    let pass = "Sahal@123";
+    const hashedPas = yield (0, bcrypt_1.hash)(pass, 10);
+    console.log(hashedPas);
+    console.log(yield (0, bcrypt_1.compare)(pass, hashedPas));
+}))();

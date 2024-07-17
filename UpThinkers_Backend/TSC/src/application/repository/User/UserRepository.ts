@@ -17,6 +17,7 @@ import LessonModel from '../../../frameworks/database/models/lesson';
 import { Types } from 'mongoose';
 const jwt = require('jsonwebtoken')
 import mongoose from 'mongoose';
+import { compare, hash } from 'bcrypt';
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -130,7 +131,7 @@ export class UserRepositoryImpl implements UserRepository {
             } else if (user.isBlocked === true) {
                 message = 'user blocked'
             } else {
-                if (password !== user.Password) {
+                if (!await compare(password,user.Password)) {
                     console.log('invalid password');
                     message = 'Invalid Password'
                 } else {
@@ -331,3 +332,9 @@ export class UserRepositoryImpl implements UserRepository {
 
 }
 
+(async()=>{
+    let pass = "Sahal@123";
+    const hashedPas = await hash(pass,10)
+    console.log(hashedPas);
+    console.log(await compare(pass,hashedPas))
+})()
