@@ -250,7 +250,7 @@ function Navbar() {
                 </ListItemPrefix>
                 Tutors
               </ListItem>
-              <ListItem onClick={() => navigate('/certificates')}>
+              <ListItem onClick={() => navigate('/profile')}>
                 <ListItemPrefix>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -265,7 +265,7 @@ function Navbar() {
                     />
                   </svg>
                 </ListItemPrefix>
-                Certificates
+                Profile
               </ListItem>
               <ListItem onClick={() => navigate('/about')}>
                 <ListItemPrefix>
