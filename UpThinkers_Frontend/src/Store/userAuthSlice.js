@@ -24,7 +24,7 @@ export const userRegister= createAsyncThunk('user/register',async ( signupData,t
 
         const data= await response.data
 
-        Cookies.set('token',data.token,{expires:7})
+        Cookies.set('token',data.token)
         return data
     } catch (error) {
         throw error

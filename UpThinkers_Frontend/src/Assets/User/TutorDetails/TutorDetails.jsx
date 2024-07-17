@@ -63,22 +63,22 @@ function TutorDetails() {
                     <div className="mt-8">
                         <h3 className="text-3xl font-semibold mb-4">Courses</h3>
                         {courses.length > 0 ? (
-                            courses.map((course) => (
-                                <div key={course._id} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                {courses.map((course) => (
+                                    <div key={course._id} className="bg-white shadow-md rounded-lg overflow-hidden">
                                         <img src={course.Image} alt={course.Name} className="w-full h-32 object-cover" />
                                         <div className="p-4">
                                             <h4 className="text-lg font-semibold">{course.Name}</h4>
                                             <p className="mt-2">{course.Description}</p>
                                         </div>
                                     </div>
-                                </div>
-                            ))
+                                ))}
+                            </div>
                         ) : (
                             <p className="text-lg text-gray-500">Courses not available</p>
                         )}
-                        
                     </div>
+
 
                 </div>
                 <div className="w-full lg:w-5/12 bg-white shadow-md rounded-lg overflow-hidden">

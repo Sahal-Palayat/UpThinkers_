@@ -36,6 +36,7 @@ const RazorpayPayment = ({ course, user }) => {
         try {
             const paymentData = {
                 payment: 'Razorpay',
+                tutorId:course.TutorId,
                 studentId: user._id,
                 courseId: course._id,
                 paymentId: response.razorpay_payment_id,
@@ -43,9 +44,8 @@ const RazorpayPayment = ({ course, user }) => {
                 amount: course.Price
             };
             await axiosApiUser.post('/placeorder', paymentData); 
-            alert('Payment details saved successfully!');
             setTimeout(() => {
-                navigate('/courselist')
+                navigate('/profile/usercourses')
             }, 1000);
         } catch (error) {
             console.error('Error saving payment details:', error);
@@ -54,7 +54,7 @@ const RazorpayPayment = ({ course, user }) => {
     };
 
     const handlePayment = () => {
-        console.log(course, 'Course details for payment');
+        console.log(course, 'Course details for payment')
         const options = {
             key: config.RAZORPAY_ID_KEY,
             amount: course.Price * 100, 

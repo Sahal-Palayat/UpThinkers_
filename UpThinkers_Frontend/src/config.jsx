@@ -16,7 +16,11 @@ export const config = {
     RAZORPAY_ID_KEY: import.meta.env.VITE_APP_RAZORPAY_ID_KEY,
     RAZORPAY_SECRET_KEY: import.meta.env.VITE_APP_RAZORPAY_SECRET_KEY,
     ZEGO_APP_ID:import.meta.env.VITE_APP_ZEGO_APP_ID,
-    ZEGO_SERVER_ID:import.meta.env.VITE_APP_ZEGO_SERVER_ID
+    ZEGO_SERVER_ID:import.meta.env.VITE_APP_ZEGO_SERVER_ID,
+    S3_ACCESS_KEY:import.meta.env.VITE_APP_S3_ACCESS_KEY,
+    S3_SECRET_KEY: import.meta.env.VITE_APP_S3_SECRET_KEY,
+    S3_REGION: import.meta.env.VITE_APP_S3_AWS_REGION,
+    S3_BUCKET_NAME: import.meta.env.VITE_APP_S3_AWS_BUCKET,
+    HUGGINGFACE_SECRET_KEY:import.meta.env.VITE_APP_HUGGINGFACE_KEY
 };
 
-console.log(config,"this are the envs")

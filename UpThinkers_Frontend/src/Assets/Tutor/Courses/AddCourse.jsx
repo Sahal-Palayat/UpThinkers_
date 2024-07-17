@@ -11,6 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { uploadImages } from '../../../Services/uploadImages';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { Progress } from '@material-tailwind/react';
 
 const AddCourse = () => {
     const [name, setName] = useState('');
@@ -22,7 +23,6 @@ const AddCourse = () => {
     const [image, setImage] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
 
-
     const [nameError, setNameError] = useState('');
     const [descriptionError, setDescriptionError] = useState('');
     const [priceError, setPriceError] = useState('');
@@ -33,7 +33,7 @@ const AddCourse = () => {
 
     const { tutor } = useSelector((state) => state.tutor)
 
-    console.log(tutor._id,'llllllllllllllllllllllllllllllllllllll');
+    console.log(tutor._id, 'llllllllllllllllllllllllllllllllllllll');
 
 
     const navigate = useNavigate()
@@ -96,8 +96,8 @@ const AddCourse = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let img = await uploadImages(image);
-        console.log(img,'imaaaaaaaaaaaaaaaaaaaaaaaaaaage');
-        const tutorId= tutor._id
+        console.log(img, 'imaaaaaaaaaaaaaaaaaaaaaaaaaaage');
+        const tutorId = tutor._id
 
         let hasError = false;
 
@@ -128,11 +128,11 @@ const AddCourse = () => {
 
         if (!hasError) {
             try {
-                const courseData = { name, description, price, duration, selectedCategory, img,tutorId };
+                const courseData = { name, description, price, duration, selectedCategory, img, tutorId };
 
                 const response = await axiosApiTutor.post(`/addcourse`, courseData, {
                     headers: {
-                       
+
                         'Content-Type': 'application/json'
                     },
                 });
@@ -160,6 +160,7 @@ const AddCourse = () => {
             <TutorSidebar />
             <ToastContainer position="top-center" autoClose={1500} />
             <div className="lg:w-[80%] lg:ml-64 px-6 py-8">
+                
                 <h1 className="p-8 text-customBlue text-3xl font-bold">Add New Course..</h1>
                 <div className="h-full bg-gray-400 dark:bg-white">
                     <div className="mx-auto">

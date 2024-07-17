@@ -41,7 +41,7 @@ function AdminNavbar() {
                             <a href="#" class="text-gray-800 flex items-end text-sm font-semibold hover:text-purple-600">Pricing</a> */}
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center">
+                        {/* <div class="hidden sm:flex sm:items-center">
                             {!user ? (
                                 <>
                                     <button className={`text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2`} onClick={() => navigate('/login')}>Login</button>
@@ -55,7 +55,7 @@ function AdminNavbar() {
 
 
                             )}
-                        </div>
+                        </div> */}
 
                         <div class="sm:hidden cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-600" viewBox="0 0 24 24">

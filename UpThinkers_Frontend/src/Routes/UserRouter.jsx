@@ -14,6 +14,12 @@ import TutorsPage from '../Assets/User/TutorDetails/TutorsPage';
 import TutorDetails from '../Assets/User/TutorDetails/TutorDetails';
 import UserCourse from '../Assets/User/UserCourse/UserCourse';
 import UserCourseDetails from '../Assets/User/UserCourse/UserCourseDetails';
+import About from '../Assets/Components/UserComponents/About';
+import ContactPage from '../Assets/Components/UserComponents/ContactPage';
+import ChatWithOpenAI from '../Assets/Components/OpenAi/ChatWithOpenAI';
+import VideoTag from '../Assets/User/VideoTag/VideoTag';
+import GetCertificate from '../Assets/User/Certificates/GetCertificate';
+import MainPage from '../Assets/User/UserHome/MainPage';
 
 
 const UserRouter = () => {
@@ -25,9 +31,12 @@ const UserRouter = () => {
     {/* Public Routes */}
     <Route path="/login" element={token ? <Navigate to="/home" /> : <LoginPage />} />
     <Route path="/register" element={token ? <Navigate to="/home" /> : <RegisterPage />} />
+    <Route path="/" element={ <MainPage />} />
+
+
 
     {/* Private Routes */}
-    <Route path="/" element={<PrivateRoute><UserHome /></PrivateRoute>} />
+    {/* <Route path="/" element={<PrivateRoute><UserHome /></PrivateRoute>} /> */}
     <Route path="/home" element={<PrivateRoute><UserHome /></PrivateRoute>} />
     <Route path="/courselist" element={<PrivateRoute><CoursePage /></PrivateRoute>} />
     <Route path="/coursedetails" element={<PrivateRoute><SingleCourse /></PrivateRoute>} />
@@ -37,6 +46,13 @@ const UserRouter = () => {
     <Route path="/tutordetails" element={<PrivateRoute><TutorDetails /></PrivateRoute>} />
     <Route path='/profile/usercourses' element={<PrivateRoute><UserCourse/></PrivateRoute>}/>
     <Route path='/singlecourse' element={<PrivateRoute><UserCourseDetails/></PrivateRoute>}/>
+    <Route path='/about' element={<PrivateRoute><About/></PrivateRoute>}/>
+    <Route path='/contact' element={<PrivateRoute><ContactPage/></PrivateRoute>}/>
+    <Route path='/chatwithopenai' element={<PrivateRoute><ChatWithOpenAI/></PrivateRoute>}/>
+    <Route path='/videotag' element={<PrivateRoute><VideoTag/></PrivateRoute>}/>
+    <Route path='/getcertificate' element={<PrivateRoute><GetCertificate/></PrivateRoute>}/>
+
+
   </Routes>
   );
 };
